@@ -35,6 +35,12 @@ DJ505.init = function () {
     DJ505.leftDeck = new DJ505.Deck([1,3], 0);
     DJ505.rightDeck = new DJ505.Deck([2,4], 1);
     DJ505.deck = [DJ505.leftDeck, DJ505.rightDeck];
+    DJ505.deck3Button = new DJ505.DeckToggleButton({
+        midi: [0x90, 0x08],
+    });
+    DJ505.deck4Button = new DJ505.DeckToggleButton({
+        midi: [0x91, 0x08],
+    });
 
     DJ505.sampler = new DJ505.Sampler();
 
@@ -541,51 +547,38 @@ DJ505.Deck = function (deckNumbers, offset) {
         midi: [0xB0 + offset, 0x1C],
         inKey: "volume",
     });
-
-    this.setDeck = new components.Button({
-        midi: [0x90 + offset, 0x08],
-        deck: this,
-        input: function (channel, control, value, status, group) {
-            var currentDeck = script.deckFromGroup(this.deck.currentDeck);
-            var otherDeck = currentDeck == deckNumbers[0] ? deckNumbers[1] : deckNumbers[0];
-
-            otherDeck = "[Channel" + otherDeck + "]";
-
-            if (value) {                                        // Button press.
-                this.longPressTimer = engine.beginTimer(
-                    this.longPressTimeout,
-                    function () { this.isLongPressed = true; },
-                    true
-                );
-                this.deck.setCurrentDeck(otherDeck);
-                return;
-            }                                           // Else: Button release.
-
-            if (this.longPressTimer) {
-                engine.stopTimer(this.longPressTimer);
-                this.longPressTimer = null;
-            }
-
-            // Since we are in the release phase, currentDeck still reflects the
-            // switched decks. So if we are now using deck 1/3, we were
-            // originally using deck 2/4 and vice versa.
-            var deckWasVanilla = currentDeck == deckNumbers[1];
-
-            if (this.isLongPressed) {                     // Release long press.
-                this.isLongPressed = false;
-                // Return to the original state.
-                this.send(deckWasVanilla ? 0 : 0x7f);
-                this.deck.setCurrentDeck(otherDeck);
-                return;
-            }                                      // Else: Release short press.
-
-            // Invert the deck state.
-            this.send(deckWasVanilla ? 0x7f : 0);
-        }
-    });
 };
 
 DJ505.Deck.prototype = Object.create(components.Deck.prototype);
+
+
+DJ505.DeckToggleButton = function(options) {
+    this.secondaryDeck = false;
+    components.Button.call(this, options);
+};
+DJ505.DeckToggleButton.prototype = Object.create(components.Button.prototype);
+DJ505.DeckToggleButton.prototype.input = function (channel, control, value, status, group) {
+    if (this.isPress(channel, control, value, status)) {
+        // Button was pressed
+        this.longPressTimer = engine.beginTimer(
+            this.longPressTimeout,
+            function () { this.isLongPressed = true; },
+            true
+        );
+        this.secondaryDeck = !this.secondaryDeck;
+    } else if (this.isLongPressed) {
+        // Button was released after long press
+        this.isLongPressed = false;
+        this.secondaryDeck = !this.secondaryDeck;
+    } else {
+        // Button was released after short press
+        engine.stopTimer(this.longPressTimer);
+        this.longPressTimer = null;
+        return;
+    }
+
+    this.send(this.secondaryDeck ? this.on : this.off);
+};
 
 
 //////////////////////////////

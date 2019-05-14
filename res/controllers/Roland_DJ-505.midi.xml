@@ -2856,7 +2856,7 @@
             <!-- Deck 3/4 Buttons -->
             <control>
                 <group>[Channel1]</group>
-                <key>DJ505.leftDeck.setDeck.input</key>
+                <key>DJ505.deck3Button.input</key>
                 <description>DECK 3 ENABLE</description>
                 <status>0x90</status>
                 <midino>0x08</midino>
@@ -2866,7 +2866,7 @@
             </control>
             <control>
                 <group>[Channel4]</group>
-                <key>DJ505.rightDeck.setDeck.input</key>
+                <key>DJ505.deck4Button.input</key>
                 <description>DECK 4 ENABLE</description>
                 <status>0x91</status>
                 <midino>0x08</midino>
