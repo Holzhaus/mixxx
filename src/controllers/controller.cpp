@@ -49,6 +49,14 @@ void Controller::stopEngine() {
     m_pEngine = NULL;
 }
 
+void Controller::startClockGenerator() {
+    return;
+}
+
+void Controller::stopClockGenerator() {
+    return;
+}
+
 bool Controller::applyPreset(QList<QString> scriptPaths, bool initializeScripts) {
     qDebug() << "Applying controller preset...";
 

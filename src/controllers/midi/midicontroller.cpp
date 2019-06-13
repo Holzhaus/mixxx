@@ -59,6 +59,28 @@ bool MidiController::savePreset(const QString fileName) const {
     return handler.save(m_preset, getName(), fileName);
 }
 
+void MidiController::startClockGenerator() {
+    controllerDebug("  Starting engine");
+    if (m_clockGenerator != NULL) {
+        qWarning() << "Controller: Clock generator already exists! Restarting:";
+        stopClockGenerator();
+    }
+    m_clockGenerator = new MidiClockGenerator(this);
+    m_clockGenerator->start();
+}
+
+void MidiController::stopClockGenerator() {
+    controllerDebug("  Shutting down engine");
+    if (m_clockGenerator == NULL) {
+        qWarning() << "Controller::stopClockGenerator(): No clock generator exists!";
+        return;
+    }
+    m_clockGenerator->stop();
+    delete m_clockGenerator;
+    m_clockGenerator = NULL;
+    return;
+}
+
 bool MidiController::applyPreset(QList<QString> scriptPaths, bool initializeScripts) {
     // Handles the engine
     bool result = Controller::applyPreset(scriptPaths, initializeScripts);

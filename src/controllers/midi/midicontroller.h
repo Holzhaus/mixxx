@@ -14,6 +14,7 @@
 #define MIDICONTROLLER_H
 
 #include "controllers/controller.h"
+#include "controllers/midi/midiclockgenerator.h"
 #include "controllers/midi/midicontrollerpreset.h"
 #include "controllers/midi/midicontrollerpresetfilehandler.h"
 #include "controllers/midi/midimessage.h"
@@ -51,6 +52,10 @@ class MidiController : public Controller {
 
     bool matchPreset(const PresetInfo& preset)  override;
 
+    inline void sendClockMsg() {
+        sendShortMsg(MIDI_TIMING_CLK, 0, 0);
+    }
+
   signals:
     void messageReceived(unsigned char status, unsigned char control,
                          unsigned char value);
@@ -83,6 +88,9 @@ class MidiController : public Controller {
     void commitTemporaryInputMappings();
 
   private:
+    void startClockGenerator() override;
+    void stopClockGenerator() override;
+
     void processInputMapping(const MidiInputMapping& mapping,
                              unsigned char status,
                              unsigned char control,
@@ -108,6 +116,8 @@ class MidiController : public Controller {
     MidiControllerPreset m_preset;
     SoftTakeoverCtrl m_st;
     QList<QPair<MidiInputMapping, unsigned char> > m_fourteen_bit_queued_mappings;
+    MidiClockGenerator *m_clockGenerator;
+
 
     // So it can access sendShortMsg()
     friend class MidiOutputHandler;
