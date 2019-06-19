@@ -1025,6 +1025,7 @@ DJ505.PadSection = function (deck, offset) {
         "cueloop": new DJ505.CueLoopMode(deck, offset),
         "roll": new DJ505.RollMode(deck, offset),
         "loop": new DJ505.LoopMode(deck, offset),
+        "slicer": new DJ505.SlicerMode(deck, offset),
         "sampler": new DJ505.SamplerMode(deck, offset),
         "velocitysampler": new DJ505.VelocitySamplerMode(deck, offset),
         "pitchplay": new DJ505.PitchPlayMode(deck, offset),
@@ -1060,9 +1061,9 @@ DJ505.PadSection.prototype.controlToPadMode = function (control) {
     case DJ505.PadMode.ROLL:
         mode = this.modes.roll;
         break;
-    //case DJ505.PadMode.SLICER:
-    //    mode = this.modes.slicer;
-    //    break;
+    case DJ505.PadMode.SLICER:
+        mode = this.modes.slicer;
+        break;
     //case DJ505.PadMode.SLICERLOOP:
     //    mode = this.modes.slicerloop;
     //    break;
@@ -1349,6 +1350,28 @@ DJ505.LoopMode = function (deck, offset) {
     }
 };
 DJ505.LoopMode.prototype = Object.create(components.ComponentContainer.prototype);
+
+DJ505.SlicerMode = function (deck, offset) {
+    components.ComponentContainer.call(this);
+    this.ledControl = DJ505.PadMode.ROLL;
+    this.color = DJ505.PadColor.RED;
+    this.pads = new components.ComponentContainer();
+    for (var i = 0; i <= 7; i++) {
+        this.pads[i] = new components.Button({
+            midi: [0x94 + offset, 0x14 + i],
+            sendShifted: true,
+            shiftControl: true,
+            shiftOffset: 8,
+            group: deck.currentDeck,
+            outKey: "beatloop_" + (0.03125 * Math.pow(2, i)) + "_enabled",
+            inKey: "beatloop_" + (0.03125 * Math.pow(2, i)) + "_toggle",
+            outConnect: false,
+            on: this.color,
+            off: this.color + DJ505.PadColor.DIM_MODIFIER,
+        });
+    }
+};
+DJ505.SlicerMode.prototype = Object.create(components.ComponentContainer.prototype);
 
 DJ505.SamplerMode = function (deck, offset) {
     components.ComponentContainer.call(this);
