@@ -114,7 +114,7 @@ void WaveformRenderMark::slotCuesUpdated() {
 
     QList<CuePointer> loadedCues = trackInfo->getCuePoints();
     for (const CuePointer pCue: loadedCues) {
-        int hotCue = pCue->getHotCue();
+        int hotCue = pCue->getNumber();
         if (hotCue < 0) {
             continue;
         }
@@ -162,11 +162,11 @@ void WaveformRenderMark::generateMarkImage(WaveformMark* pMark) {
     if (!markProperties.m_text.isNull()) {
         // Determine mark text.
         QString label = markProperties.m_text;
-        if (pMark->getHotCue() >= 0) {
+        if (pMark->getNumber() >= 0) {
             if (!label.isEmpty()) {
                 label.prepend(": ");
             }
-            label.prepend(QString::number(pMark->getHotCue() + 1));
+            label.prepend(QString::number(pMark->getNumber() + 1));
             if (label.size() > kMaxCueLabelLength) {
                 label = label.left(kMaxCueLabelLength - 3) + "...";
             }

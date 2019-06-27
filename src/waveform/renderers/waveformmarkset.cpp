@@ -39,8 +39,8 @@ void WaveformMarkSet::setup(const QString& group, const QDomNode& node,
                     qWarning() << "WaveformRenderMark::setup - redefinition of" << item;
                 } else  {
                     m_marks.push_back(pMark);
-                    if (pMark->getHotCue() >= 0) {
-                        m_hotCueMarks.insert(pMark->getHotCue(), pMark);
+                    if (pMark->getNumber() >= 0) {
+                        m_hotCueMarks.insert(pMark->getNumber(), pMark);
                     }
                 }
             }
@@ -56,7 +56,7 @@ void WaveformMarkSet::setup(const QString& group, const QDomNode& node,
                 //qDebug() << "WaveformRenderMark::setup - Automatic mark" << hotCueControlItem;
                 WaveformMarkPointer pMark(new WaveformMark(group, defaultChild, context, signalColors, i));
                 m_marks.push_back(pMark);
-                m_hotCueMarks.insert(pMark->getHotCue(), pMark);
+                m_hotCueMarks.insert(pMark->getNumber(), pMark);
             }
         }
     }

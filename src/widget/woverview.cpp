@@ -293,7 +293,7 @@ void WOverview::onRateSliderChange(double /*v*/) {
 // currently only updates the mark color but it could be easily extended.
 void WOverview::updateCues(const QList<CuePointer> &loadedCues) {
     for (CuePointer currentCue: loadedCues) {
-        const WaveformMarkPointer currentMark = m_marks.getHotCueMark(currentCue->getHotCue());
+        const WaveformMarkPointer currentMark = m_marks.getHotCueMark(currentCue->getNumber());
 
         if (currentMark && currentMark->isValid()) {
             WaveformMarkProperties markProperties = currentMark->getProperties();
