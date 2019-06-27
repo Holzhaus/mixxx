@@ -34,6 +34,7 @@ CueControl::CueControl(QString group,
         m_iCurrentlyPreviewingHotcues(0),
         m_bypassCueSetByPlay(false),
         m_iNumHotCues(NUM_HOT_CUES),
+        m_iNumSavedLoops(NUM_SAVED_LOOPS),
         m_pLoadedTrack(),
         m_mutex(QMutex::Recursive) {
     // To silence a compiler warning about CUE_MODE_PIONEER.
@@ -50,6 +51,8 @@ CueControl::CueControl(QString group,
     m_pPrevBeat = ControlObject::getControl(ConfigKey(group, "beat_prev"));
     m_pNextBeat = ControlObject::getControl(ConfigKey(group, "beat_next"));
     m_pClosestBeat = ControlObject::getControl(ConfigKey(group, "beat_closest"));
+    m_pLoopStartPosition = ControlObject::getControl(ConfigKey(group, "loop_start_position"));
+    m_pLoopEndPosition = ControlObject::getControl(ConfigKey(group, "loop_end_position"));
 
     m_pCuePoint = new ControlObject(ConfigKey(group, "cue_point"));
     m_pCuePoint->set(-1.0);
@@ -276,6 +279,31 @@ void CueControl::createControls() {
 
         m_hotcueControls.append(pControl);
     }
+
+    for (int i = 0; i < m_iNumSavedLoops; ++i) {
+        SavedLoopControl* pControl = new SavedLoopControl(getGroup(), i);
+
+        connect(pControl, &SavedLoopControl::savedLoopPositionChanged,
+                this, &CueControl::savedLoopPositionChanged,
+                Qt::DirectConnection);
+        connect(pControl, &SavedLoopControl::savedLoopLengthChanged,
+                this, &CueControl::savedLoopLengthChanged,
+                Qt::DirectConnection);
+        connect(pControl, &SavedLoopControl::savedLoopSet,
+                this, &CueControl::savedLoopSet,
+                Qt::DirectConnection);
+        connect(pControl, &SavedLoopControl::savedLoopApply,
+                this, &CueControl::savedLoopApply,
+                Qt::DirectConnection);
+        connect(pControl, &SavedLoopControl::savedLoopActivate,
+                this, &CueControl::savedLoopActivate,
+                Qt::DirectConnection);
+        connect(pControl, &SavedLoopControl::savedLoopClear,
+                this, &CueControl::savedLoopClear,
+                Qt::DirectConnection);
+
+        m_savedLoopControls.append(pControl);
+    }
 }
 
 void CueControl::attachHotcue(CuePointer pCue, int hotCue) {
@@ -305,6 +333,35 @@ void CueControl::detachHotcue(int hotCue) {
     disconnect(pCue.get(), 0, this, 0);
     pControl->resetCue();
 }
+
+void CueControl::attachSavedLoop(CuePointer pCue, int number) {
+    SavedLoopControl* pControl = m_savedLoopControls.value(number, NULL);
+    if (pControl == NULL) {
+        return;
+    }
+    if (pControl->getCue() != NULL) {
+        detachSavedLoop(pControl->getSavedLoopNumber());
+    }
+    connect(pCue.get(), &Cue::updated,
+            this, &CueControl::cueUpdated,
+            Qt::DirectConnection);
+
+    pControl->setCue(pCue);
+
+}
+
+void CueControl::detachSavedLoop(int number) {
+    SavedLoopControl* pControl = m_savedLoopControls.value(number, NULL);
+    if (pControl == NULL) {
+        return;
+    }
+    CuePointer pCue(pControl->getCue());
+    if (!pCue)
+        return;
+    disconnect(pCue.get(), 0, this, 0);
+    pControl->resetCue();
+}
+
 
 void CueControl::trackLoaded(TrackPointer pNewTrack) {
     QMutexLocker lock(&m_mutex);
@@ -382,6 +439,7 @@ void CueControl::cueUpdated() {
 void CueControl::loadCuesFromTrack() {
     QMutexLocker lock(&m_mutex);
     QSet<int> active_hotcues;
+    QSet<int> active_savedloops;
     CuePointer pLoadCue, pIntroCue, pOutroCue;
 
     if (!m_pLoadedTrack)
@@ -422,6 +480,31 @@ void CueControl::loadCuesFromTrack() {
             }
             // Add the hotcue to the list of active hotcues
             active_hotcues.insert(hotcue);
+        } else if (pCue->getType() == Cue::LOOP && pCue->getNumber() != -1) {
+            int hotcue = pCue->getNumber();
+            SavedLoopControl* pControl = m_savedLoopControls.value(hotcue, NULL);
+
+            // Cue's saved loop doesn't have a saved loop control.
+            if (pControl == NULL) {
+                continue;
+            }
+
+            CuePointer pOldCue(pControl->getCue());
+
+            // If the old saved loop is different than this one.
+            if (pOldCue != pCue) {
+                // If the old hotcue exists, detach it
+                if (pOldCue) {
+                    detachSavedLoop(hotcue);
+                }
+                attachSavedLoop(pCue, hotcue);
+            } else {
+                // If the old saved loop is the same, then we only need to update
+                pControl->setPosition(pCue->getPosition());
+                pControl->setColor(pCue->getColor());
+            }
+            // Add the saved loop to the list of active saved loops
+            active_savedloops.insert(hotcue);
         }
     }
 
@@ -470,6 +553,13 @@ void CueControl::loadCuesFromTrack() {
     for (int i = 0; i < m_iNumHotCues; ++i) {
         if (!active_hotcues.contains(i)) {
             detachHotcue(i);
+        }
+    }
+
+    // Detach all saved loops that are no longer present
+    for (int i = 0; i < m_iNumSavedLoops; ++i) {
+        if (!active_savedloops.contains(i)) {
+            detachSavedLoop(i);
         }
     }
 }
@@ -753,6 +843,149 @@ void CueControl::hotcuePositionChanged(HotcueControl* pControl, double newPositi
             detachHotcue(pControl->getHotcueNumber());
         } else if (newPosition > 0 && newPosition < m_pTrackSamples->get()) {
             pCue->setPosition(newPosition);
+        }
+    }
+}
+
+void CueControl::savedLoopSet(SavedLoopControl* pControl, double v) {
+    //qDebug() << "CueControl::savedLoopSet" << v;
+
+    if (!v)
+        return;
+
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack)
+        return;
+
+    int number = pControl->getSavedLoopNumber();
+    // Note: the cue is just detached from the saved loop control
+    // It remains in the database for later use
+    // TODO: find a rule, that allows us to delete the cue as well
+    // https://bugs.launchpad.net/mixxx/+bug/1653276
+    savedLoopClear(pControl, v);
+
+    CuePointer pCue(m_pLoadedTrack->createAndAddCue());
+    double loopStartPosition = m_pLoopStartPosition->get();
+    double loopEndPosition = m_pLoopEndPosition->get();
+
+    if (loopStartPosition < 0 || loopEndPosition < 0 || loopEndPosition <= loopStartPosition) {
+        return;
+    }
+
+    pCue->setPosition(loopStartPosition);
+    pCue->setLength(loopEndPosition - loopStartPosition);
+    pCue->setNumber(number);
+    pCue->setLabel("");
+    pCue->setType(Cue::LOOP);
+    pCue->setSource(Cue::MANUAL);
+    // TODO(XXX) deal with spurious signals
+    attachSavedLoop(pCue, number);
+
+    //if (getConfig()->getValue(ConfigKey("[Controls]", "auto_savedloop_colors"), false)) {
+    //    const QList<PredefinedColorPointer> predefinedColors = Color::kPredefinedColorsSet.allColors;
+    //    pCue->setColor(predefinedColors.at((number % (predefinedColors.count() - 1)) + 1));
+    //};
+}
+
+void CueControl::savedLoopApply(SavedLoopControl* pControl, double v) {
+    if (!v)
+        return;
+
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack) {
+        return;
+    }
+
+    CuePointer pCue(pControl->getCue());
+
+    // Need to unlock before emitting any signals to prevent deadlock.
+    lock.unlock();
+
+    if (pCue) {
+        int position = pCue->getPosition();
+        int length = pCue->getLength();
+        if (position != -1 && length > 0) {
+            m_pLoopStartPosition->set(position);
+            m_pLoopEndPosition->set(position + length);
+        }
+    }
+}
+
+
+void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
+    //qDebug() << "CueControl::hotcueActivate" << v;
+
+    QMutexLocker lock(&m_mutex);
+
+    if (!m_pLoadedTrack) {
+        return;
+    }
+
+    CuePointer pCue(pControl->getCue());
+
+    lock.unlock();
+
+    if (pCue) {
+        if (v) {
+            if (pCue->getPosition() == -1) {
+                savedLoopSet(pControl, v);
+            } else {
+                savedLoopApply(pControl, v);
+            }
+        }
+    } else {
+        if (v) {
+            // just in case
+            savedLoopSet(pControl, v);
+        }
+    }
+}
+
+
+void CueControl::savedLoopClear(SavedLoopControl* pControl, double v) {
+    if (!v)
+        return;
+
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack) {
+        return;
+    }
+
+    CuePointer pCue(pControl->getCue());
+    detachSavedLoop(pControl->getSavedLoopNumber());
+    m_pLoadedTrack->removeCue(pCue);
+}
+
+void CueControl::savedLoopPositionChanged(SavedLoopControl* pControl, double newPosition) {
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack)
+        return;
+
+    CuePointer pCue(pControl->getCue());
+    if (pCue) {
+        // Setting the position to -1 is the same as calling hotcue_x_clear
+        if (newPosition == -1) {
+            pCue->setNumber(-1);
+            detachSavedLoop(pControl->getSavedLoopNumber());
+        } else if (newPosition >= 0 && pCue->getLength() > 0 && (newPosition + pCue->getLength()) < m_pTrackSamples->get()) {
+            pCue->setPosition(newPosition);
+        }
+    }
+}
+
+void CueControl::savedLoopLengthChanged(SavedLoopControl* pControl, double newLength) {
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack)
+        return;
+
+    CuePointer pCue(pControl->getCue());
+    if (pCue) {
+        // Setting the length to <= 0 is the same as calling hotcue_x_clear
+        if (newLength <= 0) {
+            pCue->setNumber(-1);
+            detachSavedLoop(pControl->getSavedLoopNumber());
+        } else if (newLength > 0 && pCue->getPosition() >= 0 && (pCue->getPosition() + newLength) < m_pTrackSamples->get()) {
+            pCue->setLength(newLength);
         }
     }
 }
@@ -1792,4 +2025,142 @@ void HotcueControl::resetCue() {
 void HotcueControl::setPosition(double position) {
     m_hotcuePosition->set(position);
     m_hotcueEnabled->forceSet(position == -1.0 ? 0.0 : 1.0);
+}
+
+ConfigKey SavedLoopControl::keyForControl(int savedLoop, const char* name) {
+    ConfigKey key;
+    key.group = m_group;
+    // Add one to savedLoop so that we don't have a savedLoop_0
+    key.item = QLatin1String("savedloop_") % QString::number(savedLoop+1) % "_" % name;
+    return key;
+}
+
+SavedLoopControl::SavedLoopControl(QString group, int i)
+        : m_group(group),
+          m_iSavedLoopNumber(i),
+          m_pCue(NULL),
+          m_previewingPosition(-1) {
+    m_savedLoopPosition = new ControlObject(keyForControl(i, "position"));
+    connect(m_savedLoopPosition, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopPositionChanged,
+            Qt::DirectConnection);
+    m_savedLoopPosition->set(-1);
+
+    m_savedLoopLength = new ControlObject(keyForControl(i, "length"));
+    connect(m_savedLoopLength, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopLengthChanged,
+            Qt::DirectConnection);
+    m_savedLoopLength->set(-1);
+
+    m_savedLoopEnabled = new ControlObject(keyForControl(i, "enabled"));
+    m_savedLoopEnabled->setReadOnly();
+
+    // The id of the predefined color assigned to this color.
+    m_savedLoopColor = new ControlObject(keyForControl(i, "color_id"));
+    connect(m_savedLoopColor, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSavedLoopColorChanged(double)),
+            Qt::DirectConnection);
+
+    m_savedLoopSet = new ControlPushButton(keyForControl(i, "set"));
+    connect(m_savedLoopSet, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopSet,
+            Qt::DirectConnection);
+
+    m_savedLoopApply = new ControlPushButton(keyForControl(i, "apply"));
+    connect(m_savedLoopApply, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopApply,
+            Qt::DirectConnection);
+
+    m_savedLoopActivate = new ControlPushButton(keyForControl(i, "activate"));
+    connect(m_savedLoopActivate, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopActivate,
+            Qt::DirectConnection);
+
+    m_savedLoopClear = new ControlPushButton(keyForControl(i, "clear"));
+    connect(m_savedLoopClear, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopClear,
+            Qt::DirectConnection);
+}
+
+SavedLoopControl::~SavedLoopControl() {
+    delete m_savedLoopPosition;
+    delete m_savedLoopLength;
+    delete m_savedLoopEnabled;
+    delete m_savedLoopColor;
+    delete m_savedLoopSet;
+    delete m_savedLoopApply;
+    delete m_savedLoopActivate;
+    delete m_savedLoopClear;
+}
+
+void SavedLoopControl::slotSavedLoopSet(double v) {
+    emit(savedLoopSet(this, v));
+}
+
+void SavedLoopControl::slotSavedLoopApply(double v) {
+    emit(savedLoopApply(this, v));
+}
+
+void SavedLoopControl::slotSavedLoopActivate(double v) {
+    emit(savedLoopActivate(this, v));
+}
+
+void SavedLoopControl::slotSavedLoopClear(double v) {
+    emit(savedLoopClear(this, v));
+}
+
+void SavedLoopControl::slotSavedLoopPositionChanged(double newPosition) {
+    m_savedLoopEnabled->forceSet((newPosition == -1.0 || m_savedLoopLength->get() <= 0)  ? 0.0 : 1.0);
+    emit(savedLoopPositionChanged(this, newPosition));
+}
+
+void SavedLoopControl::slotSavedLoopLengthChanged(double newLength) {
+    m_savedLoopEnabled->forceSet((newLength <= 0 || m_savedLoopPosition->get() == -1) ? 0.0 : 1.0);
+    emit(savedLoopLengthChanged(this, newLength));
+}
+
+void SavedLoopControl::slotSavedLoopColorChanged(double newColorId) {
+    m_pCue->setColor(Color::kPredefinedColorsSet.predefinedColorFromId(newColorId));
+    emit(savedLoopColorChanged(this, newColorId));
+}
+
+double SavedLoopControl::getPosition() const {
+    return m_savedLoopPosition->get();
+}
+
+double SavedLoopControl::getLength() const {
+    return m_savedLoopLength->get();
+}
+
+void SavedLoopControl::setCue(CuePointer pCue) {
+    setPosition(pCue->getPosition());
+    setLength(pCue->getLength());
+    setColor(pCue->getColor());
+    // set pCue only if all other data is in place
+    // because we have a null check for valid data else where in the code
+    m_pCue = pCue;
+}
+PredefinedColorPointer SavedLoopControl::getColor() const {
+    return Color::kPredefinedColorsSet.predefinedColorFromId(m_savedLoopColor->get());
+}
+
+void SavedLoopControl::setColor(PredefinedColorPointer newColor) {
+    m_savedLoopColor->set(static_cast<double>(newColor->m_iId));
+}
+void SavedLoopControl::resetCue() {
+    // clear pCue first because we have a null check for valid data else where
+    // in the code
+    m_pCue.reset();
+    setPosition(-1.0);
+    setLength(-1.0);
+}
+
+void SavedLoopControl::setPosition(double position) {
+    m_savedLoopPosition->set(position);
+    m_savedLoopEnabled->forceSet((position == -1.0 || m_savedLoopLength->get() <= 0)  ? 0.0 : 1.0);
+}
+
+void SavedLoopControl::setLength(double length) {
+    m_savedLoopLength->set(length);
+    m_savedLoopEnabled->forceSet((length <= 0 || m_savedLoopPosition->get() == -1) ? 0.0 : 1.0);
 }
