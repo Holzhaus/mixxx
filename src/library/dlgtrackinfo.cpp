@@ -293,7 +293,7 @@ void DlgTrackInfo::populateCues(TrackPointer pTrack) {
 
         // All hotcues are stored in Cue's as 0-indexed, but the GUI presents
         // them to the user as 1-indexex. Add 1 here. rryan 9/2010
-        int iHotcue = pCue->getHotCue() + 1;
+        int iHotcue = pCue->getNumber() + 1;
         QString hotcue = "";
         if (iHotcue != -1) {
             hotcue = QString("%1").arg(iHotcue);
@@ -431,9 +431,9 @@ void DlgTrackInfo::saveTrack() {
             int iTableHotcue = vHotcue.toInt();
             // The GUI shows hotcues as 1-indexed, but they are actually
             // 0-indexed, so subtract 1
-            pCue->setHotCue(iTableHotcue - 1);
+            pCue->setNumber(iTableHotcue - 1);
         } else {
-            pCue->setHotCue(-1);
+            pCue->setNumber(-1);
         }
 
         auto colorComboBox = qobject_cast<QComboBox*>(colorWidget);
@@ -460,7 +460,7 @@ void DlgTrackInfo::saveTrack() {
         }
         CuePointer pCue(it.value());
         it.remove();
-        qDebug() << "Deleting cue" << pCue->getId() << pCue->getHotCue();
+        qDebug() << "Deleting cue" << pCue->getId() << pCue->getNumber();
         m_pLoadedTrack->removeCue(pCue);
     }
 

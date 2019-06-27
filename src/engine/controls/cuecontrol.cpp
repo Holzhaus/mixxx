@@ -397,8 +397,8 @@ void CueControl::loadCuesFromTrack() {
         } else if (pCue->getType() == Cue::OUTRO) {
             DEBUG_ASSERT(!pOutroCue);  // There should be only one OUTRO cue
             pOutroCue = pCue;
-        } else if (pCue->getType() == Cue::CUE && pCue->getHotCue() != -1) {
-            int hotcue = pCue->getHotCue();
+        } else if (pCue->getType() == Cue::CUE && pCue->getNumber() != -1) {
+            int hotcue = pCue->getNumber();
             HotcueControl* pControl = m_hotcueControls.value(hotcue, NULL);
 
             // Cue's hotcue doesn't have a hotcue control.
@@ -544,7 +544,7 @@ void CueControl::hotcueSet(HotcueControl* pControl, double v) {
             (m_pQuantizeEnabled->toBool() && closestBeat != -1) ?
                     closestBeat : getSampleOfTrack().current;
     pCue->setPosition(cuePosition);
-    pCue->setHotCue(hotcue);
+    pCue->setNumber(hotcue);
     pCue->setLabel("");
     pCue->setType(Cue::CUE);
     pCue->setSource(Cue::MANUAL);
@@ -749,7 +749,7 @@ void CueControl::hotcuePositionChanged(HotcueControl* pControl, double newPositi
     if (pCue) {
         // Setting the position to -1 is the same as calling hotcue_x_clear
         if (newPosition == -1) {
-            pCue->setHotCue(-1);
+            pCue->setNumber(-1);
             detachHotcue(pControl->getHotcueNumber());
         } else if (newPosition > 0 && newPosition < m_pTrackSamples->get()) {
             pCue->setPosition(newPosition);

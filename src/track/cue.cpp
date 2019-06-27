@@ -27,14 +27,14 @@ Cue::Cue(TrackId trackId)
           m_type(INVALID),
           m_samplePosition(-1.0),
           m_length(0.0),
-          m_iHotCue(-1),
+          m_iNumber(-1),
           m_label(kDefaultLabel),
           m_color(Color::kPredefinedColorsSet.noColor) {
     DEBUG_ASSERT(!m_label.isNull());
 }
 
 Cue::Cue(int id, TrackId trackId, Cue::CueSource source, Cue::CueType type, double position, double length,
-         int hotCue, QString label, PredefinedColorPointer color)
+         int number, QString label, PredefinedColorPointer color)
         : m_bDirty(false),
           m_iId(id),
           m_trackId(trackId),
@@ -42,7 +42,7 @@ Cue::Cue(int id, TrackId trackId, Cue::CueSource source, Cue::CueType type, doub
           m_type(type),
           m_samplePosition(position),
           m_length(length),
-          m_iHotCue(hotCue),
+          m_iNumber(number),
           m_label(label),
           m_color(color) {
     DEBUG_ASSERT(!m_label.isNull());
@@ -126,15 +126,15 @@ void Cue::setLength(double length) {
     emit(updated());
 }
 
-int Cue::getHotCue() const {
+int Cue::getNumber() const {
     QMutexLocker lock(&m_mutex);
-    return m_iHotCue;
+    return m_iNumber;
 }
 
-void Cue::setHotCue(int hotCue) {
+void Cue::setNumber(int number) {
     QMutexLocker lock(&m_mutex);
     // TODO(XXX) enforce uniqueness?
-    m_iHotCue = hotCue;
+    m_iNumber = number;
     m_bDirty = true;
     lock.unlock();
     emit(updated());

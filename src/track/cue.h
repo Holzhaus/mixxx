@@ -52,8 +52,8 @@ class Cue : public QObject {
     double getLength() const;
     void setLength(double length);
 
-    int getHotCue() const;
-    void setHotCue(int hotCue);
+    int getNumber() const;
+    void setNumber(int number);
 
     QString getLabel() const;
     void setLabel(QString label);
@@ -83,7 +83,7 @@ class Cue : public QObject {
     CueType m_type;
     double m_samplePosition;
     double m_length;
-    int m_iHotCue;
+    int m_iNumber;
     QString m_label;
     PredefinedColorPointer m_color;
 

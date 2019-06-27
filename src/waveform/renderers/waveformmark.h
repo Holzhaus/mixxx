@@ -43,7 +43,7 @@ class WaveformMark {
         m_properties = properties;
     };
 
-    int getHotCue() const { return m_iHotCue; };
+    int getNumber() const { return m_iHotCue; };
 
     //The m_pPointCos related function
     bool isValid() const { return m_pPointCos && m_pPointCos->valid(); }

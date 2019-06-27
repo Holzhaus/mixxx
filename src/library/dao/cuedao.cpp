@@ -147,7 +147,7 @@ bool CueDAO::saveCue(Cue* cue) {
         query.bindValue(":type", cue->getType());
         query.bindValue(":position", cue->getPosition());
         query.bindValue(":length", cue->getLength());
-        query.bindValue(":hotcue", cue->getHotCue());
+        query.bindValue(":hotcue", cue->getNumber());
         query.bindValue(":label", cue->getLabel());
         query.bindValue(":color", cue->getColor()->m_iId);
 
@@ -177,7 +177,7 @@ bool CueDAO::saveCue(Cue* cue) {
         query.bindValue(":type", cue->getType());
         query.bindValue(":position", cue->getPosition());
         query.bindValue(":length", cue->getLength());
-        query.bindValue(":hotcue", cue->getHotCue());
+        query.bindValue(":hotcue", cue->getNumber());
         query.bindValue(":label", cue->getLabel());
         query.bindValue(":color", cue->getColor()->m_iId);
 
