@@ -293,10 +293,10 @@ void DlgTrackInfo::populateCues(TrackPointer pTrack) {
 
         // All hotcues are stored in Cue's as 0-indexed, but the GUI presents
         // them to the user as 1-indexex. Add 1 here. rryan 9/2010
-        int iHotcue = pCue->getNumber() + 1;
-        QString hotcue = "";
-        if (iHotcue != -1) {
-            hotcue = QString("%1").arg(iHotcue);
+        int iNumber = pCue->getNumber() + 1;
+        QString number = "";
+        if (iNumber != -1) {
+            number = QString("%1").arg(iNumber);
         }
 
         int position = pCue->getPosition();
@@ -363,7 +363,7 @@ void DlgTrackInfo::populateCues(TrackPointer pTrack) {
         cueTable->setItem(row, 0, new QTableWidgetItem(rowStr));
         cueTable->setItem(row, 1, durationItem);
         cueTable->setItem(row, 2, typeItem);
-        cueTable->setItem(row, 3, new QTableWidgetItem(hotcue));
+        cueTable->setItem(row, 3, new QTableWidgetItem(number));
         cueTable->setCellWidget(row, 4, colorComboBox);
         cueTable->setItem(row, 5, new QTableWidgetItem(pCue->getLabel()));
         row += 1;
