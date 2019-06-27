@@ -186,8 +186,8 @@ class CueControl : public EngineControl {
 
     // These methods are not thread safe, only call them when the lock is held.
     void createControls();
-    void attachCue(CuePointer pCue, int hotcueNumber);
-    void detachCue(int hotcueNumber);
+    void attachHotcue(CuePointer pCue, int hotcueNumber);
+    void detachHotcue(int hotcueNumber);
     void loadCuesFromTrack();
     void reloadCuesFromTrack();
     double quantizeCuePoint(double position, Cue::CueSource source, QuantizeMode mode);
