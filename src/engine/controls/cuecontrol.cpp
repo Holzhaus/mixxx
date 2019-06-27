@@ -278,13 +278,13 @@ void CueControl::createControls() {
     }
 }
 
-void CueControl::attachCue(CuePointer pCue, int hotCue) {
+void CueControl::attachHotcue(CuePointer pCue, int hotCue) {
     HotcueControl* pControl = m_hotcueControls.value(hotCue, NULL);
     if (pControl == NULL) {
         return;
     }
     if (pControl->getCue() != NULL) {
-        detachCue(pControl->getHotcueNumber());
+        detachHotcue(pControl->getHotcueNumber());
     }
     connect(pCue.get(), &Cue::updated,
             this, &CueControl::cueUpdated,
@@ -294,7 +294,7 @@ void CueControl::attachCue(CuePointer pCue, int hotCue) {
 
 }
 
-void CueControl::detachCue(int hotCue) {
+void CueControl::detachHotcue(int hotCue) {
     HotcueControl* pControl = m_hotcueControls.value(hotCue, NULL);
     if (pControl == NULL) {
         return;
@@ -311,7 +311,7 @@ void CueControl::trackLoaded(TrackPointer pNewTrack) {
     if (m_pLoadedTrack) {
         disconnect(m_pLoadedTrack.get(), 0, this, 0);
         for (int i = 0; i < m_iNumHotCues; ++i) {
-            detachCue(i);
+            detachHotcue(i);
         }
 
         m_pCueIndicator->setBlinkValue(ControlIndicator::OFF);
@@ -412,9 +412,9 @@ void CueControl::loadCuesFromTrack() {
             if (pOldCue != pCue) {
                 // If the old hotcue exists, detach it
                 if (pOldCue) {
-                    detachCue(hotcue);
+                    detachHotcue(hotcue);
                 }
-                attachCue(pCue, hotcue);
+                attachHotcue(pCue, hotcue);
             } else {
                 // If the old hotcue is the same, then we only need to update
                 pControl->setPosition(pCue->getPosition());
@@ -469,7 +469,7 @@ void CueControl::loadCuesFromTrack() {
     // Detach all hotcues that are no longer present
     for (int i = 0; i < m_iNumHotCues; ++i) {
         if (!active_hotcues.contains(i)) {
-            detachCue(i);
+            detachHotcue(i);
         }
     }
 }
@@ -549,7 +549,7 @@ void CueControl::hotcueSet(HotcueControl* pControl, double v) {
     pCue->setType(Cue::CUE);
     pCue->setSource(Cue::MANUAL);
     // TODO(XXX) deal with spurious signals
-    attachCue(pCue, hotcue);
+    attachHotcue(pCue, hotcue);
 
     if (getConfig()->getValue(ConfigKey("[Controls]", "auto_hotcue_colors"), false)) {
         const QList<PredefinedColorPointer> predefinedColors = Color::kPredefinedColorsSet.allColors;
@@ -736,7 +736,7 @@ void CueControl::hotcueClear(HotcueControl* pControl, double v) {
     }
 
     CuePointer pCue(pControl->getCue());
-    detachCue(pControl->getHotcueNumber());
+    detachHotcue(pControl->getHotcueNumber());
     m_pLoadedTrack->removeCue(pCue);
 }
 
@@ -750,7 +750,7 @@ void CueControl::hotcuePositionChanged(HotcueControl* pControl, double newPositi
         // Setting the position to -1 is the same as calling hotcue_x_clear
         if (newPosition == -1) {
             pCue->setHotCue(-1);
-            detachCue(pControl->getHotcueNumber());
+            detachHotcue(pControl->getHotcueNumber());
         } else if (newPosition > 0 && newPosition < m_pTrackSamples->get()) {
             pCue->setPosition(newPosition);
         }
