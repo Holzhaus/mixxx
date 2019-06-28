@@ -131,7 +131,6 @@ class SavedLoopControl : public QObject {
 
   private slots:
     void slotSavedLoopSet(double v);
-    void slotSavedLoopApply(double v);
     void slotSavedLoopActivate(double v);
     void slotSavedLoopClear(double v);
     void slotSavedLoopPositionChanged(double newPosition);
@@ -140,7 +139,6 @@ class SavedLoopControl : public QObject {
 
   signals:
     void savedLoopSet(SavedLoopControl* pSavedLoop, double v);
-    void savedLoopApply(SavedLoopControl* pSavedLoop, double v);
     void savedLoopActivate(SavedLoopControl* pSavedLoop, double v);
     void savedLoopClear(SavedLoopControl* pSavedLoop, double v);
     void savedLoopPositionChanged(SavedLoopControl* pSavedLoop, double newPosition);
@@ -161,7 +159,6 @@ class SavedLoopControl : public QObject {
     ControlObject* m_savedLoopColor;
     // SavedLoop button controls
     ControlObject* m_savedLoopSet;
-    ControlObject* m_savedLoopApply;
     ControlObject* m_savedLoopActivate;
     ControlObject* m_savedLoopClear;
 
@@ -204,7 +201,6 @@ class CueControl : public EngineControl {
     void hotcuePositionChanged(HotcueControl* pControl, double newPosition);
 
     void savedLoopSet(SavedLoopControl* pControl, double v);
-    void savedLoopApply(SavedLoopControl* pControl, double v);
     void savedLoopActivate(SavedLoopControl* pControl, double v);
     void savedLoopClear(SavedLoopControl* pControl, double v);
     void savedLoopPositionChanged(SavedLoopControl* pControl, double newPosition);
