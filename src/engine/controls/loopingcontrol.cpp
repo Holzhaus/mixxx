@@ -459,6 +459,32 @@ void LoopingControl::hintReader(HintVector* pHintList) {
     }
 }
 
+void LoopingControl::setLoop(double startPosition, double endPosition, bool reloop) {
+    qDebug() << "setLoop" << startPosition << endPosition << reloop;
+
+    LoopSamples loopSamples = m_loopSamples.getValue();
+    if (loopSamples.start != startPosition || loopSamples.end != endPosition || loopSamples.seekMode != LoopSeekMode::NONE) {
+        loopSamples.start = startPosition;
+        loopSamples.end = endPosition;
+        loopSamples.seekMode = LoopSeekMode::NONE;
+
+        clearActiveBeatLoop();
+
+        m_loopSamples.setValue(loopSamples);
+        m_pCOLoopStartPosition->set(loopSamples.start);
+        m_pCOLoopEndPosition->set(loopSamples.end);
+        setLoopingEnabled(true);
+    } else {
+        setLoopingEnabled(m_bLoopingEnabled ? reloop : true);
+    }
+
+    if (reloop) {
+        // seekExact is necessary here to prevent notifySeek() from disabling our loop
+        seekExact(static_cast<double>(
+            m_loopSamples.getValue().start));
+    }
+}
+
 void LoopingControl::setLoopInToCurrentPosition() {
     // set loop-in position
     BeatsPointer pBeats = m_pBeats;

@@ -269,8 +269,9 @@ class CueControl : public EngineControl {
     ControlObject* m_pPrevBeat;
     ControlObject* m_pNextBeat;
     ControlObject* m_pClosestBeat;
-    ControlObject* m_pLoopStartPosition;
-    ControlObject* m_pLoopEndPosition;
+    ControlProxy* m_pLoopStartPosition;
+    ControlProxy* m_pLoopEndPosition;
+    ControlProxy* m_pLoopEnabled;
     bool m_bypassCueSetByPlay;
 
     const int m_iNumHotCues;
