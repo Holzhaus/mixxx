@@ -50,6 +50,8 @@ class LoopingControl : public EngineControl {
 
     void notifySeek(double dNewPlaypos, bool adjustingPhase) override;
 
+    void setLoop(double startPosition, double endPosition, bool reloop);
+
     bool isLoopingEnabled();
 
   public slots:

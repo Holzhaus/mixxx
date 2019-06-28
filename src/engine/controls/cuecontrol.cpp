@@ -51,8 +51,9 @@ CueControl::CueControl(QString group,
     m_pPrevBeat = ControlObject::getControl(ConfigKey(group, "beat_prev"));
     m_pNextBeat = ControlObject::getControl(ConfigKey(group, "beat_next"));
     m_pClosestBeat = ControlObject::getControl(ConfigKey(group, "beat_closest"));
-    m_pLoopStartPosition = ControlObject::getControl(ConfigKey(group, "loop_start_position"));
-    m_pLoopEndPosition = ControlObject::getControl(ConfigKey(group, "loop_end_position"));
+    m_pLoopStartPosition = new ControlProxy(group, "loop_start_position");
+    m_pLoopEndPosition = new ControlProxy(group, "loop_end_position");
+    m_pLoopEnabled = new ControlProxy(group, "loop_enabled");
 
     m_pCuePoint = new ControlObject(ConfigKey(group, "cue_point"));
     m_pCuePoint->set(-1.0);
@@ -906,8 +907,7 @@ void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
             int position = pCue->getPosition();
             int length = pCue->getLength();
             if (position != -1 && length > 0) {
-                m_pLoopStartPosition->set(position);
-                m_pLoopEndPosition->set(position + length);
+                setLoop(position, position + length, false);
             } else {
                 savedLoopSet(pControl, v);
             }
@@ -921,25 +921,32 @@ void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
 }
 
 void CueControl::savedLoopReloop(SavedLoopControl* pControl, double v) {
-    if (!v)
-        return;
-
-    savedLoopActivate(pControl, v);
+    //qDebug() << "CueControl::savedLoopReloop" << v;
 
     QMutexLocker lock(&m_mutex);
+
     if (!m_pLoadedTrack) {
         return;
     }
 
     CuePointer pCue(pControl->getCue());
 
-    // Need to unlock before emitting any signals to prevent deadlock.
     lock.unlock();
 
     if (pCue) {
-        int position = pCue->getPosition();
-        if (position != -1) {
-            seekAbs(position);
+        if (v) {
+            int position = pCue->getPosition();
+            int length = pCue->getLength();
+            if (position != -1 && length > 0) {
+                setLoop(position, position + length, true);
+            } else {
+                savedLoopSet(pControl, v);
+            }
+        }
+    } else {
+        if (v) {
+            // just in case
+            savedLoopSet(pControl, v);
         }
     }
 }
