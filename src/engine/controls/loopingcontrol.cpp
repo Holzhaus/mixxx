@@ -48,7 +48,7 @@ LoopingControl::LoopingControl(QString group,
           m_bAdjustingLoopInOld(false),
           m_bAdjustingLoopOutOld(false),
           m_bLoopOutPressedWhileLoopDisabled(false) {
-    m_oldLoopSamples = { kNoTrigger, kNoTrigger, false };
+    m_oldLoopSamples = { kNoTrigger, kNoTrigger, LoopSeekMode::MOVED_OUT };
     m_loopSamples.setValue(m_oldLoopSamples);
     m_currentSample.setValue(0.0);
     m_pActiveBeatLoop = NULL;
@@ -279,7 +279,7 @@ void LoopingControl::slotLoopScale(double scaleFactor) {
     }
 
     // Reseek if the loop shrank out from under the playposition.
-    loopSamples.seek = (m_bLoopingEnabled && scaleFactor < 1.0);
+    loopSamples.seekMode = (m_bLoopingEnabled && scaleFactor < 1.0) ? LoopSeekMode::CHANGED : LoopSeekMode::MOVED_OUT;
 
     m_loopSamples.setValue(loopSamples);
 
@@ -324,7 +324,7 @@ void LoopingControl::process(const double dRate,
             if (loopSamples.start != m_oldLoopSamples.start ||
                     loopSamples.end != m_oldLoopSamples.end) {
                 // bool seek is only valid after the loop has changed
-                if (loopSamples.seek) {
+                if (loopSamples.seekMode == LoopSeekMode::CHANGED) {
                     // here the loop has changed and the play position
                     // should be moved with it
                     double target = seekInsideAdjustedLoop(currentSample,
@@ -379,27 +379,34 @@ double LoopingControl::nextTrigger(bool reverse,
         if (loopSamples.start != m_oldLoopSamples.start ||
                 loopSamples.end != m_oldLoopSamples.end) {
             // bool seek is only valid after the loop has changed
-            if (loopSamples.seek) {
-                // here the loop has changed and the play position
-                // should be moved with it
-                *pTarget = seekInsideAdjustedLoop(currentSample,
-                        m_oldLoopSamples.start, loopSamples.start, loopSamples.end);
-            } else {
-                bool movedOut = false;
-                // Check if we have moved out of the loop, before we could enable it
-                if (reverse) {
-                    if (loopSamples.start > currentSample) {
-                        movedOut = true;
-                    }
-                } else {
-                    if (loopSamples.end < currentSample) {
-                        movedOut = true;
-                    }
-                }
-                if (movedOut) {
+            bool movedOut;
+            switch(loopSamples.seekMode) {
+                case LoopSeekMode::CHANGED:
+                    // here the loop has changed and the play position
+                    // should be moved with it
                     *pTarget = seekInsideAdjustedLoop(currentSample,
-                            loopSamples.start, loopSamples.start, loopSamples.end);
-                }
+                            m_oldLoopSamples.start, loopSamples.start, loopSamples.end);
+                    break;
+                case LoopSeekMode::MOVED_OUT:
+                    movedOut = false;
+                    // Check if we have moved out of the loop, before we could enable it
+                    if (reverse) {
+                        if (loopSamples.start > currentSample) {
+                            movedOut = true;
+                        }
+                    } else {
+                        if (loopSamples.end < currentSample) {
+                            movedOut = true;
+                        }
+                    }
+                    if (movedOut) {
+                        *pTarget = seekInsideAdjustedLoop(currentSample,
+                                loopSamples.start, loopSamples.start, loopSamples.end);
+                    }
+                    break;
+                case LoopSeekMode::NONE:
+                    // Nothing to do here
+                    break;
             }
             m_oldLoopSamples = loopSamples;
             if (*pTarget != kNoTrigger) {
@@ -505,9 +512,9 @@ void LoopingControl::setLoopInToCurrentPosition() {
     if (loopSamples.start != kNoTrigger &&
             loopSamples.end != kNoTrigger) {
         setLoopingEnabled(true);
-        loopSamples.seek = true;
+        loopSamples.seekMode = LoopSeekMode::CHANGED;
     } else {
-        loopSamples.seek = false;
+        loopSamples.seekMode = LoopSeekMode::MOVED_OUT;
     }
 
     if (m_pQuantizeEnabled->toBool()
@@ -605,9 +612,9 @@ void LoopingControl::setLoopOutToCurrentPosition() {
     if (loopSamples.start != kNoTrigger &&
             loopSamples.end != kNoTrigger) {
         setLoopingEnabled(true);
-        loopSamples.seek = true;
+        loopSamples.seekMode = LoopSeekMode::CHANGED;
     } else {
-        loopSamples.seek = false;
+        loopSamples.seekMode = LoopSeekMode::MOVED_OUT;
     }
 
     if (m_pQuantizeEnabled->toBool() && pBeats) {
@@ -726,7 +733,7 @@ void LoopingControl::slotLoopStartPos(double pos) {
         setLoopingEnabled(false);
     }
 
-    loopSamples.seek = false;
+    loopSamples.seekMode = LoopSeekMode::MOVED_OUT;
     loopSamples.start = pos;
     m_pCOLoopStartPosition->set(pos);
 
@@ -762,7 +769,7 @@ void LoopingControl::slotLoopEndPos(double pos) {
         setLoopingEnabled(false);
     }
     loopSamples.end = pos;
-    loopSamples.seek = false;
+    loopSamples.seekMode = LoopSeekMode::MOVED_OUT;
     m_pCOLoopEndPosition->set(pos);
     m_loopSamples.setValue(loopSamples);
 }
@@ -980,7 +987,7 @@ void LoopingControl::slotBeatLoop(double beats, bool keepStartPoint, bool enable
 
     // Calculate the new loop start and end samples
     // give start and end defaults so we can detect problems
-    LoopSamples newloopSamples = {kNoTrigger, kNoTrigger, false};
+    LoopSamples newloopSamples = {kNoTrigger, kNoTrigger, LoopSeekMode::MOVED_OUT};
     LoopSamples loopSamples = m_loopSamples.getValue();
     double currentSample = m_currentSample.getValue();
 
@@ -1067,7 +1074,7 @@ void LoopingControl::slotBeatLoop(double beats, bool keepStartPoint, bool enable
 
     // If resizing an inactive loop by changing beatloop_size,
     // do not seek to the adjusted loop.
-    newloopSamples.seek = (keepStartPoint && (enable || m_bLoopingEnabled));
+    newloopSamples.seekMode = (keepStartPoint && (enable || m_bLoopingEnabled)) ? LoopSeekMode::CHANGED : LoopSeekMode::MOVED_OUT;
 
     m_loopSamples.setValue(newloopSamples);
     m_pCOLoopStartPosition->set(newloopSamples.start);
@@ -1169,7 +1176,7 @@ void LoopingControl::slotLoopMove(double beats) {
 
         // If we are looping make sure that the play head does not leave the
         // loop as a result of our adjustment.
-        loopSamples.seek = m_bLoopingEnabled;
+        loopSamples.seekMode = m_bLoopingEnabled ? LoopSeekMode::CHANGED : LoopSeekMode::MOVED_OUT;
 
         loopSamples.start = new_loop_in;
         loopSamples.end = new_loop_out;
