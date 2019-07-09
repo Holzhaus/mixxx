@@ -143,7 +143,6 @@ class SavedLoopControl : public QObject {
   private slots:
     void slotSavedLoopSet(double v);
     void slotSavedLoopActivate(double v);
-    void slotSavedLoopReloop(double v);
     void slotSavedLoopClear(double v);
     void slotSavedLoopPositionChanged(double newPosition);
     void slotSavedLoopLengthChanged(double newLength);
@@ -152,7 +151,6 @@ class SavedLoopControl : public QObject {
   signals:
     void savedLoopSet(SavedLoopControl* pSavedLoop, double v);
     void savedLoopActivate(SavedLoopControl* pSavedLoop, double v);
-    void savedLoopReloop(SavedLoopControl* pSavedLoop, double v);
     void savedLoopClear(SavedLoopControl* pSavedLoop, double v);
     void savedLoopPositionChanged(SavedLoopControl* pSavedLoop, double newPosition);
     void savedLoopLengthChanged(SavedLoopControl* pSavedLoop, double newLength);
@@ -173,7 +171,6 @@ class SavedLoopControl : public QObject {
     // SavedLoop button controls
     ControlObject* m_savedLoopSet;
     ControlObject* m_savedLoopActivate;
-    ControlObject* m_savedLoopReloop;
     ControlObject* m_savedLoopClear;
 
     bool m_bPreviewing;
@@ -220,7 +217,6 @@ class CueControl : public EngineControl {
 
     void savedLoopSet(SavedLoopControl* pControl, double v);
     void savedLoopActivate(SavedLoopControl* pControl, double v);
-    void savedLoopReloop(SavedLoopControl* pControl, double v);
     void savedLoopClear(SavedLoopControl* pControl, double v);
     void savedLoopPositionChanged(SavedLoopControl* pControl, double newPosition);
     void savedLoopLengthChanged(SavedLoopControl* pControl, double newPosition);

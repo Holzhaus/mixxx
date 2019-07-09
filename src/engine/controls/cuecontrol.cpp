@@ -306,9 +306,6 @@ void CueControl::createControls() {
         connect(pControl, &SavedLoopControl::savedLoopActivate,
                 this, &CueControl::savedLoopActivate,
                 Qt::DirectConnection);
-        connect(pControl, &SavedLoopControl::savedLoopReloop,
-                this, &CueControl::savedLoopReloop,
-                Qt::DirectConnection);
         connect(pControl, &SavedLoopControl::savedLoopClear,
                 this, &CueControl::savedLoopClear,
                 Qt::DirectConnection);
@@ -1065,37 +1062,6 @@ void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
             int length = pCue->getLength();
             if (position != -1 && length > 0) {
                 setLoop(position, position + length, false);
-            } else {
-                savedLoopSet(pControl, v);
-            }
-        }
-    } else {
-        if (v) {
-            // just in case
-            savedLoopSet(pControl, v);
-        }
-    }
-}
-
-void CueControl::savedLoopReloop(SavedLoopControl* pControl, double v) {
-    //qDebug() << "CueControl::savedLoopReloop" << v;
-
-    QMutexLocker lock(&m_mutex);
-
-    if (!m_pLoadedTrack) {
-        return;
-    }
-
-    CuePointer pCue(pControl->getCue());
-
-    lock.unlock();
-
-    if (pCue) {
-        if (v) {
-            int position = pCue->getPosition();
-            int length = pCue->getLength();
-            if (position != -1 && length > 0) {
-                setLoop(position, position + length, true);
             } else {
                 savedLoopSet(pControl, v);
             }
@@ -2276,11 +2242,6 @@ SavedLoopControl::SavedLoopControl(QString group, int i)
             this, &SavedLoopControl::slotSavedLoopActivate,
             Qt::DirectConnection);
 
-    m_savedLoopReloop = new ControlPushButton(keyForControl(i, "reloop"));
-    connect(m_savedLoopReloop, &ControlObject::valueChanged,
-            this, &SavedLoopControl::slotSavedLoopReloop,
-            Qt::DirectConnection);
-
     m_savedLoopClear = new ControlPushButton(keyForControl(i, "clear"));
     connect(m_savedLoopClear, &ControlObject::valueChanged,
             this, &SavedLoopControl::slotSavedLoopClear,
@@ -2294,7 +2255,6 @@ SavedLoopControl::~SavedLoopControl() {
     delete m_savedLoopColor;
     delete m_savedLoopSet;
     delete m_savedLoopActivate;
-    delete m_savedLoopReloop;
     delete m_savedLoopClear;
 }
 
@@ -2304,10 +2264,6 @@ void SavedLoopControl::slotSavedLoopSet(double v) {
 
 void SavedLoopControl::slotSavedLoopActivate(double v) {
     emit(savedLoopActivate(this, v));
-}
-
-void SavedLoopControl::slotSavedLoopReloop(double v) {
-    emit(savedLoopReloop(this, v));
 }
 
 void SavedLoopControl::slotSavedLoopClear(double v) {
