@@ -323,14 +323,9 @@ void DlgTrackInfo::populateCues(TrackPointer pTrack) {
         positionItem->setFlags(Qt::NoItemFlags);
 
         QString length;
-        if (pCue->getType() == Cue::LOOP) {
-            int iLength = pCue->getLength();
-            if (iLength < 0) {
-                continue;
-            } else {
-                totalSeconds = float(iLength) / float(sampleRate) / 2.0;
-            }
-
+        int iLength = pCue->getLength();
+        if (iLength > 0) {
+            totalSeconds = float(iLength) / float(sampleRate) / 2.0;
             fraction = 100*(totalSeconds - floor(totalSeconds));
             seconds = int(totalSeconds) % 60;
 
