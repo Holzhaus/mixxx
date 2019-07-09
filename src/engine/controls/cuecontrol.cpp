@@ -52,6 +52,7 @@ CueControl::CueControl(QString group,
     m_pClosestBeat = ControlObject::getControl(ConfigKey(group, "beat_closest"));
     m_pLoopStartPosition = new ControlProxy(group, "loop_start_position", this);
     m_pLoopEndPosition = new ControlProxy(group, "loop_end_position", this);
+    m_pLoopEnabled = new ControlProxy(group, "loop_enabled", this);
     m_pLoopToggle = new ControlProxy(group, "loop_toggle", this);
 
     m_pCuePoint = new ControlObject(ConfigKey(group, "cue_point"));
@@ -261,6 +262,9 @@ void CueControl::createControls() {
         connect(pControl, &HotcueControl::hotcueSet,
                 this, &CueControl::hotcueSet,
                 Qt::DirectConnection);
+        connect(pControl, &HotcueControl::hotcueSetCue,
+                this, &CueControl::hotcueSetCue,
+                Qt::DirectConnection);
         connect(pControl, &HotcueControl::hotcueSetLoop,
                 this, &CueControl::hotcueSetLoop,
                 Qt::DirectConnection);
@@ -278,6 +282,9 @@ void CueControl::createControls() {
                 Qt::DirectConnection);
         connect(pControl, &HotcueControl::hotcueActivate,
                 this, &CueControl::hotcueActivate,
+                Qt::DirectConnection);
+        connect(pControl, &HotcueControl::hotcueActivateCue,
+                this, &CueControl::hotcueActivateCue,
                 Qt::DirectConnection);
         connect(pControl, &HotcueControl::hotcueActivateLoop,
                 this, &CueControl::hotcueActivateLoop,
@@ -555,11 +562,72 @@ void CueControl::hotcueSet(HotcueControl* pControl, double v) {
     hotcueClear(pControl, v);
 
     CuePointer pCue(m_pLoadedTrack->createAndAddCue());
+
+    double cuePosition;
+    double cueLength;
+    if (m_pLoopEnabled->get()) {
+        cuePosition = m_pLoopStartPosition->get();
+        cueLength = m_pLoopEndPosition->get() - cuePosition;
+        if (cuePosition < 0 || cueLength <= 0) {
+            return;
+        }
+    } else {
+        double closestBeat = m_pClosestBeat->get();
+        cuePosition =
+                (m_pQuantizeEnabled->toBool() && closestBeat != -1) ?
+                        closestBeat : getSampleOfTrack().current;
+        cueLength = -1;
+    }
+
+    pCue->setPosition(cuePosition);
+    pCue->setLength(cueLength);
+    pCue->setNumber(hotcue);
+    pCue->setLabel("");
+    pCue->setType(Cue::CUE);
+    pCue->setSource(Cue::MANUAL);
+    // TODO(XXX) deal with spurious signals
+    attachHotcue(pCue, hotcue);
+
+    if (getConfig()->getValue(ConfigKey("[Controls]", "auto_hotcue_colors"), false)) {
+        const QList<PredefinedColorPointer> predefinedColors = Color::kPredefinedColorsSet.allColors;
+        pCue->setColor(predefinedColors.at((hotcue % (predefinedColors.count() - 1)) + 1));
+    };
+
+    // If quantize is enabled and we are not playing, jump to the cue point
+    // since it's not necessarily where we currently are. TODO(XXX) is this
+    // potentially invalid for vinyl control?
+    bool playing = m_pPlay->toBool();
+    if (!playing && m_pQuantizeEnabled->toBool()) {
+        lock.unlock();  // prevent deadlock.
+        // Enginebuffer will quantize more exactly than we can.
+        seekAbs(cuePosition);
+    }
+}
+
+void CueControl::hotcueSetCue(HotcueControl* pControl, double v) {
+    //qDebug() << "CueControl::hotcueSetCue" << v;
+
+    if (!v)
+        return;
+
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack)
+        return;
+
+    int hotcue = pControl->getHotcueNumber();
+    // Note: the cue is just detached from the hotcue control
+    // It remains in the database for later use
+    // TODO: find a rule, that allows us to delete the cue as well
+    // https://bugs.launchpad.net/mixxx/+bug/1653276
+    hotcueClear(pControl, v);
+
+    CuePointer pCue(m_pLoadedTrack->createAndAddCue());
     double closestBeat = m_pClosestBeat->get();
     double cuePosition =
             (m_pQuantizeEnabled->toBool() && closestBeat != -1) ?
                     closestBeat : getSampleOfTrack().current;
     pCue->setPosition(cuePosition);
+    pCue->setLength(-1);
     pCue->setNumber(hotcue);
     pCue->setLabel("");
     pCue->setType(Cue::CUE);
@@ -809,6 +877,53 @@ void CueControl::hotcueActivate(HotcueControl* pControl, double v) {
         if (v) {
             // just in case
             hotcueSet(pControl, v);
+        } else if (m_iCurrentlyPreviewingHotcues) {
+            // The cue is non-existent, yet we got a release for it and are
+            // currently previewing a hotcue. This is indicative of a corner
+            // case where the cue was detached while we were pressing it. Let
+            // hotcueActivatePreview handle it.
+            hotcueActivatePreview(pControl, v);
+        }
+    }
+}
+
+void CueControl::hotcueActivateCue(HotcueControl* pControl, double v) {
+    //qDebug() << "CueControl::hotcueActivateCue" << v;
+
+    QMutexLocker lock(&m_mutex);
+
+    if (!m_pLoadedTrack) {
+        return;
+    }
+
+    CuePointer pCue(pControl->getCue());
+
+    lock.unlock();
+
+    if (pCue) {
+        if (v) {
+            if (pCue->getPosition() == -1) {
+                hotcueSetCue(pControl, v);
+            } else {
+                if (isPlayingByPlayButton()) {
+                    if (pCue->getLength() > 0) {
+                        hotcueLoopToggle(pControl, v);
+                    } else {
+                        hotcueGoto(pControl, v);
+                    }
+                } else {
+                    hotcueActivatePreview(pControl, v);
+                }
+            }
+        } else {
+            if (pCue->getPosition() != -1) {
+                hotcueActivatePreview(pControl, v);
+            }
+        }
+    } else {
+        if (v) {
+            // just in case
+            hotcueSetCue(pControl, v);
         } else if (m_iCurrentlyPreviewingHotcues) {
             // The cue is non-existent, yet we got a release for it and are
             // currently previewing a hotcue. This is indicative of a corner
@@ -1890,6 +2005,11 @@ HotcueControl::HotcueControl(QString group, int i)
             this, &HotcueControl::slotHotcueSet,
             Qt::DirectConnection);
 
+    m_hotcueSetCue = new ControlPushButton(keyForControl(i, "setcue"));
+    connect(m_hotcueSetCue, &ControlObject::valueChanged,
+            this, &HotcueControl::slotHotcueSetCue,
+            Qt::DirectConnection);
+
     m_hotcueSetLoop = new ControlPushButton(keyForControl(i, "setloop"));
     connect(m_hotcueSetLoop, &ControlObject::valueChanged,
             this, &HotcueControl::slotHotcueSetLoop,
@@ -1920,6 +2040,11 @@ HotcueControl::HotcueControl(QString group, int i)
             this, &HotcueControl::slotHotcueActivate,
             Qt::DirectConnection);
 
+    m_hotcueActivateCue = new ControlPushButton(keyForControl(i, "activatecue"));
+    connect(m_hotcueActivateCue, &ControlObject::valueChanged,
+            this, &HotcueControl::slotHotcueActivateCue,
+            Qt::DirectConnection);
+
     m_hotcueActivateLoop = new ControlPushButton(keyForControl(i, "activateloop"));
     connect(m_hotcueActivateLoop, &ControlObject::valueChanged,
             this, &HotcueControl::slotHotcueActivateLoop,
@@ -1942,12 +2067,14 @@ HotcueControl::~HotcueControl() {
     delete m_hotcueEnabled;
     delete m_hotcueColor;
     delete m_hotcueSet;
+    delete m_hotcueSetCue;
     delete m_hotcueSetLoop;
     delete m_hotcueGoto;
     delete m_hotcueGotoAndPlay;
     delete m_hotcueGotoAndStop;
     delete m_hotcueReloop;
     delete m_hotcueActivate;
+    delete m_hotcueActivateCue;
     delete m_hotcueActivateLoop;
     delete m_hotcueActivatePreview;
     delete m_hotcueClear;
@@ -1955,6 +2082,10 @@ HotcueControl::~HotcueControl() {
 
 void HotcueControl::slotHotcueSet(double v) {
     emit(hotcueSet(this, v));
+}
+
+void HotcueControl::slotHotcueSetCue(double v) {
+    emit(hotcueSetCue(this, v));
 }
 
 void HotcueControl::slotHotcueSetLoop(double v) {
@@ -1979,6 +2110,10 @@ void HotcueControl::slotHotcueReloop(double v) {
 
 void HotcueControl::slotHotcueActivate(double v) {
     emit(hotcueActivate(this, v));
+}
+
+void HotcueControl::slotHotcueActivateCue(double v) {
+    emit(hotcueActivateCue(this, v));
 }
 
 void HotcueControl::slotHotcueActivateLoop(double v) {
