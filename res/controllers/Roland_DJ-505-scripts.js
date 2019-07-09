@@ -1168,6 +1168,9 @@ DJ505.HotcueMode = function (deck, offset) {
             off: this.color + DJ505.PadColor.DIM_MODIFIER,
             colors: hotcueColors,
             outConnect: false,
+            unshift: function () {
+                this.inKey = 'hotcue_' + this.number + '_activatecue';
+            },
         });
     }
     this.paramMinusButton = new components.Button({
@@ -1214,7 +1217,7 @@ DJ505.CueLoopMode = function (deck, offset) {
                     if (!engine.getValue(group, "hotcue_" + this.number + "_enabled")) {
                         // set a new cue point and loop
                         enabled = false;
-                        script.triggerControl(group, "hotcue_" + this.number + "_activate");
+                        script.triggerControl(group, "hotcue_" + this.number + "_activatecue");
                     }
                     // jump to existing cue and loop
                     var startpos = engine.getValue(group, "hotcue_" + this.number + "_position");
