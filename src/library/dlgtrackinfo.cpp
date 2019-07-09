@@ -278,7 +278,7 @@ void DlgTrackInfo::populateCues(TrackPointer pTrack) {
     while (it.hasNext()) {
         CuePointer pCue = it.next();
         Cue::CueType type = pCue->getType();
-        if (type == Cue::CUE || type == Cue::INTRO || type == Cue::OUTRO || Cue::LOOP) {
+        if (type == Cue::CUE || type == Cue::INTRO || type == Cue::OUTRO || type == Cue::LOOP) {
             listPoints.push_back(pCue);
         }
     }
