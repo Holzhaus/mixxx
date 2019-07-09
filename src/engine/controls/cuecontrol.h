@@ -13,7 +13,6 @@
 #include "track/track.h"
 
 #define NUM_HOT_CUES 37
-#define NUM_SAVED_LOOPS 37
 
 class ControlObject;
 class ControlPushButton;
@@ -123,63 +122,6 @@ class HotcueControl : public QObject {
     double m_previewingPosition;
 };
 
-class SavedLoopControl : public QObject {
-    Q_OBJECT
-  public:
-    SavedLoopControl(QString group, int savedLoopNumber);
-    virtual ~SavedLoopControl();
-
-    inline int getSavedLoopNumber() { return m_iSavedLoopNumber; }
-    inline CuePointer getCue() { return m_pCue; }
-    double getPosition() const;
-    double getLength() const;
-    void setCue(CuePointer pCue);
-    void resetCue();
-    void setPosition(double position);
-    void setLength(double length);
-    void setColor(PredefinedColorPointer newColor);
-    PredefinedColorPointer getColor() const;
-
-  private slots:
-    void slotSavedLoopSet(double v);
-    void slotSavedLoopApply(double v);
-    void slotSavedLoopActivate(double v);
-    void slotSavedLoopClear(double v);
-    void slotSavedLoopPositionChanged(double newPosition);
-    void slotSavedLoopLengthChanged(double newLength);
-    void slotSavedLoopColorChanged(double newColorId);
-
-  signals:
-    void savedLoopSet(SavedLoopControl* pSavedLoop, double v);
-    void savedLoopApply(SavedLoopControl* pSavedLoop, double v);
-    void savedLoopActivate(SavedLoopControl* pSavedLoop, double v);
-    void savedLoopClear(SavedLoopControl* pSavedLoop, double v);
-    void savedLoopPositionChanged(SavedLoopControl* pSavedLoop, double newPosition);
-    void savedLoopLengthChanged(SavedLoopControl* pSavedLoop, double newLength);
-    void savedLoopColorChanged(SavedLoopControl* pSavedLoop, double newColorId);
-
-  private:
-    ConfigKey keyForControl(int savedLoop, const char* name);
-
-    QString m_group;
-    int m_iSavedLoopNumber;
-    CuePointer m_pCue;
-
-    // SavedLoop state controls
-    ControlObject* m_savedLoopPosition;
-    ControlObject* m_savedLoopLength;
-    ControlObject* m_savedLoopEnabled;
-    ControlObject* m_savedLoopColor;
-    // SavedLoop button controls
-    ControlObject* m_savedLoopSet;
-    ControlObject* m_savedLoopApply;
-    ControlObject* m_savedLoopActivate;
-    ControlObject* m_savedLoopClear;
-
-    bool m_bPreviewing;
-    double m_previewingPosition;
-};
-
 class CueControl : public EngineControl {
     Q_OBJECT
   public:
@@ -217,13 +159,6 @@ class CueControl : public EngineControl {
     void hotcueClear(HotcueControl* pControl, double v);
     void hotcuePositionChanged(HotcueControl* pControl, double newPosition);
     void hotcueLengthChanged(HotcueControl* pControl, double newLength);
-
-    void savedLoopSet(SavedLoopControl* pControl, double v);
-    void savedLoopApply(SavedLoopControl* pControl, double v);
-    void savedLoopActivate(SavedLoopControl* pControl, double v);
-    void savedLoopClear(SavedLoopControl* pControl, double v);
-    void savedLoopPositionChanged(SavedLoopControl* pControl, double newPosition);
-    void savedLoopLengthChanged(SavedLoopControl* pControl, double newPosition);
 
     void cueSet(double v);
     void cueClear(double v);
@@ -268,8 +203,6 @@ class CueControl : public EngineControl {
     void createControls();
     void attachHotcue(CuePointer pCue, int hotcueNumber);
     void detachHotcue(int hotcueNumber);
-    void attachSavedLoop(CuePointer pCue, int savedLoopNumber);
-    void detachSavedLoop(int savedLoopNumber);
     void loadCuesFromTrack();
     void reloadCuesFromTrack();
     double quantizeCuePoint(double position, Cue::CueSource source, QuantizeMode mode);
@@ -292,9 +225,6 @@ class CueControl : public EngineControl {
 
     const int m_iNumHotCues;
     QList<HotcueControl*> m_hotcueControls;
-
-    const int m_iNumSavedLoops;
-    QList<SavedLoopControl*> m_savedLoopControls;
 
     ControlObject* m_pTrackSamples;
     ControlObject* m_pCuePoint;
