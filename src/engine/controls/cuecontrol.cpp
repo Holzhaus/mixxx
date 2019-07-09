@@ -303,6 +303,9 @@ void CueControl::createControls() {
         connect(pControl, &SavedLoopControl::savedLoopSet,
                 this, &CueControl::savedLoopSet,
                 Qt::DirectConnection);
+        connect(pControl, &SavedLoopControl::savedLoopApply,
+                this, &CueControl::savedLoopApply,
+                Qt::DirectConnection);
         connect(pControl, &SavedLoopControl::savedLoopActivate,
                 this, &CueControl::savedLoopActivate,
                 Qt::DirectConnection);
@@ -1042,6 +1045,30 @@ void CueControl::savedLoopSet(SavedLoopControl* pControl, double v) {
     //};
 }
 
+void CueControl::savedLoopApply(SavedLoopControl* pControl, double v) {
+    if (!v)
+        return;
+
+    QMutexLocker lock(&m_mutex);
+    if (!m_pLoadedTrack) {
+        return;
+    }
+
+    CuePointer pCue(pControl->getCue());
+
+    // Need to unlock before emitting any signals to prevent deadlock.
+    lock.unlock();
+
+    if (pCue) {
+        int position = pCue->getPosition();
+        int length = pCue->getLength();
+        if (position != -1 && length > 0) {
+            m_pLoopStartPosition->set(position);
+            m_pLoopEndPosition->set(position + length);
+        }
+    }
+}
+
 
 void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
     //qDebug() << "CueControl::hotcueActivate" << v;
@@ -1058,12 +1085,10 @@ void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
 
     if (pCue) {
         if (v) {
-            int position = pCue->getPosition();
-            int length = pCue->getLength();
-            if (position != -1 && length > 0) {
-                setLoop(position, position + length, false);
-            } else {
+            if (pCue->getPosition() == -1) {
                 savedLoopSet(pControl, v);
+            } else {
+                savedLoopApply(pControl, v);
             }
         }
     } else {
@@ -1073,6 +1098,7 @@ void CueControl::savedLoopActivate(SavedLoopControl* pControl, double v) {
         }
     }
 }
+
 
 void CueControl::savedLoopClear(SavedLoopControl* pControl, double v) {
     if (!v)
@@ -2237,6 +2263,11 @@ SavedLoopControl::SavedLoopControl(QString group, int i)
             this, &SavedLoopControl::slotSavedLoopSet,
             Qt::DirectConnection);
 
+    m_savedLoopApply = new ControlPushButton(keyForControl(i, "apply"));
+    connect(m_savedLoopApply, &ControlObject::valueChanged,
+            this, &SavedLoopControl::slotSavedLoopApply,
+            Qt::DirectConnection);
+
     m_savedLoopActivate = new ControlPushButton(keyForControl(i, "activate"));
     connect(m_savedLoopActivate, &ControlObject::valueChanged,
             this, &SavedLoopControl::slotSavedLoopActivate,
@@ -2254,12 +2285,17 @@ SavedLoopControl::~SavedLoopControl() {
     delete m_savedLoopEnabled;
     delete m_savedLoopColor;
     delete m_savedLoopSet;
+    delete m_savedLoopApply;
     delete m_savedLoopActivate;
     delete m_savedLoopClear;
 }
 
 void SavedLoopControl::slotSavedLoopSet(double v) {
     emit(savedLoopSet(this, v));
+}
+
+void SavedLoopControl::slotSavedLoopApply(double v) {
+    emit(savedLoopApply(this, v));
 }
 
 void SavedLoopControl::slotSavedLoopActivate(double v) {
