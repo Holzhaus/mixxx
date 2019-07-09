@@ -52,7 +52,6 @@ CueControl::CueControl(QString group,
     m_pClosestBeat = ControlObject::getControl(ConfigKey(group, "beat_closest"));
     m_pLoopStartPosition = new ControlProxy(group, "loop_start_position", this);
     m_pLoopEndPosition = new ControlProxy(group, "loop_end_position", this);
-    m_pLoopEnabled = new ControlProxy(group, "loop_enabled", this);
     m_pLoopToggle = new ControlProxy(group, "loop_toggle", this);
 
     m_pCuePoint = new ControlObject(ConfigKey(group, "cue_point"));

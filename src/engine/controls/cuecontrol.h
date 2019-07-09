@@ -223,7 +223,6 @@ class CueControl : public EngineControl {
     ControlObject* m_pClosestBeat;
     ControlProxy* m_pLoopStartPosition;
     ControlProxy* m_pLoopEndPosition;
-    ControlProxy* m_pLoopEnabled;
     ControlProxy* m_pLoopToggle;
     bool m_bypassCueSetByPlay;
 
