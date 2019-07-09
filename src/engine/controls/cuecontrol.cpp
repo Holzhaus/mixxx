@@ -652,7 +652,7 @@ void CueControl::hotcueSetCue(HotcueControl* pControl, double v) {
 }
 
 void CueControl::hotcueSetLoop(HotcueControl* pControl, double v) {
-    //qDebug() << "CueControl::hotcueSet" << v;
+    //qDebug() << "CueControl::hotcueSetLoop" << v;
 
     if (!v)
         return;
