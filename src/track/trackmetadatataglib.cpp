@@ -28,6 +28,7 @@
 #include <taglib/textidentificationframe.h>
 #include <taglib/attachedpictureframe.h>
 #include <taglib/flacpicture.h>
+#include <taglib/generalencapsulatedobjectframe.h>
 
 #include <array>
 
@@ -153,10 +154,20 @@ const QString ID3V2_TYER_FORMAT("yyyy");
 // is always four characters long."
 const QString ID3V2_TDAT_FORMAT("ddMM");
 
+inline QByteArray toQByteArray(const TagLib::ByteVector& tByteVector) {
+    if (tByteVector.isNull()) {
+        // null -> null
+        return QByteArray();
+    } else {
+        return QByteArray(tByteVector.data(), tByteVector.size());
+    }
+}
+
+
 inline QString toQString(const TagLib::String& tString) {
     if (tString.isNull()) {
         // null -> null
-        return QString();
+        return QByteArray();
     } else {
         return TStringToQString(tString);
     }
@@ -194,6 +205,14 @@ QString toQStringFirstNotEmpty(
 // Returns the first non-empty value of an MP4 item as a string.
 inline QString toQStringFirstNotEmpty(const TagLib::MP4::Item& mp4Item) {
     return toQStringFirstNotEmpty(mp4Item.toStringList());
+}
+
+inline TagLib::ByteVector toTagLibByteVector(const QByteArray& bytearray) {
+    if (bytearray.isNull()) {
+        return TagLib::ByteVector::null;
+    } else {
+        return TagLib::ByteVector(bytearray.constData(), bytearray.size());
+    }
 }
 
 inline TagLib::String toTagLibString(const QString& str) {
@@ -583,6 +602,57 @@ int removeUserTextIdentificationFrames(
     return count;
 }
 
+// Finds the first text frame that with a matching description (case-insensitive).
+// If multiple comments frames with matching descriptions exist prefer the first
+// with a non-empty content if requested.
+TagLib::ID3v2::GeneralEncapsulatedObjectFrame* findFirstGeneralEncapsulatedObjectFrame(
+        const TagLib::ID3v2::Tag& tag,
+        const QString& description,
+        bool preferNotEmpty = true) {
+    DEBUG_ASSERT(!description.isEmpty());
+    TagLib::ID3v2::GeneralEncapsulatedObjectFrame* pFirstFrame = nullptr;
+    // Bind the const-ref result to avoid a local copy
+    const TagLib::ID3v2::FrameList& geobFrames =
+            tag.frameListMap()["GEOB"];
+    for (TagLib::ID3v2::FrameList::ConstIterator it(geobFrames.begin());
+            it != geobFrames.end(); ++it) {
+        auto pFrame =
+                dynamic_cast<TagLib::ID3v2::GeneralEncapsulatedObjectFrame*>(*it);
+        if (pFrame) {
+            const QString frameDescription(
+                    toQString(pFrame->description()));
+            if (0 == frameDescription.compare(
+                    description, Qt::CaseInsensitive)) {
+                if (preferNotEmpty && pFrame->toString().isEmpty()) {
+                    // we might need the first matching frame later
+                    // even if it is empty
+                    if (!pFirstFrame) {
+                        pFirstFrame = pFrame;
+                    }
+                } else {
+                    // found what we are looking for
+                    return pFrame;
+                }
+            }
+        }
+    }
+    // simply return the first matching frame
+    return pFirstFrame;
+}
+
+inline
+QByteArray readFirstGeneralEncapsulatedObjectFrame(
+        const TagLib::ID3v2::Tag& tag,
+        const QString& description) {
+    const TagLib::ID3v2::GeneralEncapsulatedObjectFrame* pGeobFrame =
+            findFirstGeneralEncapsulatedObjectFrame(tag, description);
+    if (pGeobFrame) {
+        return toQByteArray(pGeobFrame->object());
+    } else {
+        return QByteArray();
+    }
+}
+
 void writeID3v2TextIdentificationFrame(
         TagLib::ID3v2::Tag* pTag,
         const TagLib::ByteVector &id,
@@ -667,6 +737,35 @@ void writeID3v2CommentsFrameWithoutDescription(
     writeID3v2CommentsFrame(pTag, text, QString(), isNumericOrURL);
 }
 
+void writeID3v2GeneralEncapsulatedObjectFrame(
+        TagLib::ID3v2::Tag* pTag,
+        const QString& description,
+        const QByteArray& data) {
+    TagLib::ID3v2::GeneralEncapsulatedObjectFrame* pFrame =
+            findFirstGeneralEncapsulatedObjectFrame(*pTag, description);
+    if (pFrame) {
+        // Modify existing frame
+        if (data.isEmpty()) {
+            // Purge empty frames
+            pTag->removeFrame(pFrame);
+        } else {
+            pFrame->setDescription(toTagLibString(description));
+            pFrame->setObject(toTagLibByteVector(data));
+        }
+    } else {
+        // Add a new (non-empty) frame
+        if (!data.isEmpty()) {
+            auto pFrame =
+                    std::make_unique<TagLib::ID3v2::GeneralEncapsulatedObjectFrame>();
+            pFrame->setDescription(toTagLibString(description));
+            pFrame->setObject(toTagLibByteVector(data));
+            pTag->addFrame(pFrame.get());
+            // Now that the plain pointer in pFrame is owned and managed by
+            // pTag we need to release the ownership to avoid double deletion!
+            pFrame.release();
+        }
+    }
+}
 void writeID3v2UserTextIdentificationFrame(
         TagLib::ID3v2::Tag* pTag,
         const QString& description,
@@ -1332,6 +1431,13 @@ void importTrackMetadataFromID3v2Tag(
     const TagLib::ID3v2::FrameList subtitleFrame(tag.frameListMap()["TIT3"]);
     if (!subtitleFrame.isEmpty()) {
         pTrackMetadata->refTrackInfo().setSubtitle(toQStringFirstNotEmpty(subtitleFrame));
+    }
+
+    // Serato tags
+    QByteArray seratoMarkers2 = readFirstGeneralEncapsulatedObjectFrame(tag, "Serato Markers2");
+    if (!seratoMarkers2.isEmpty()) {
+        qDebug() << "Serato Markers2" << seratoMarkers2;
+        //parseSeratoMarkers2(pTrackMetadata, seratoMarkers2);
     }
 }
 
