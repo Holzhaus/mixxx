@@ -84,8 +84,12 @@ addons:
 
 before_install:
   - cmake --version
-  - [ "$TRAVIS_OS_NAME" = "linux" ] && NPROC="$(nproc)"
-  - [ "$TRAVIS_OS_NAME" = "osx" ] && NPROC="$(sysctl -n hw.ncpu)"
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      NPROC="$(nproc)";
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      NPROC="$(sysctl -n hw.ncpu)";
+    fi
 
 install:
   # Build flags common to OS X and Linux.
@@ -102,13 +106,18 @@ install:
       "
 
   # Ubuntu Xenial build prerequisites
-  - [ "$TRAVIS_OS_NAME" = "linux" ] && export EXTRA_FLAGS="-DLOCALECOMPARE_ENABLED=ON"
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      export EXTRA_FLAGS="-DLOCALECOMPARE_ENABLED=ON";
+    fi
 
   # NOTE(rryan): 2016-11-15 we are experiencing Travis timeouts for the OSX
   # build.  Turning off optimizations to see if that speeds up compile times.
   # TODO(rryan): localecompare doesn't work on Travis with qt5 for some reason.
   # TODO(2019-07-21): Move "ffmpeg=1" into COMMON_FLAGS if FFmpeg 4.x becomes available in Ubuntu
-  - [ "$TRAVIS_OS_NAME" = "osx" ] && export EXTRA_FLAGS="-DLOCALECOMPARE_ENABLED=OFF -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5/" PATH="/usr/local/opt/ccache/bin:$PATH"
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      export EXTRA_FLAGS="-DLOCALECOMPARE_ENABLED=OFF -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5/";
+      export PATH="/usr/local/opt/ccache/bin:$PATH";
+    fi
 
   - mkdir cmake_build
   - cd cmake_build
@@ -118,7 +127,9 @@ install:
 
 before_script:
   # Virtual X (Xvfb) is needed for analyzer waveform tests
-  - [ "$TRAVIS_OS_NAME" = "linux" ] && export DISPLAY=:99.0
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      export DISPLAY=:99.0;
+    fi
 
 script:
   # Build tests
