@@ -135,6 +135,7 @@ script:
   # Build tests
   - cmake --build . --parallel "$NPROC" --target mixxx-test
   # Run tests
+  - export GTEST_COLOR=1 CTEST_OUTPUT_ON_FAILURE=1
   - cmake --build . --target test
 
 notifications:
