@@ -85,10 +85,10 @@ addons:
 before_install:
   - cmake --version
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-      NPROC="$(nproc)";
+      export CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)";
     fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-      NPROC="$(sysctl -n hw.ncpu)";
+      export CMAKE_BUILD_PARALLEL_LEVEL="$(sysctl -n hw.ncpu)";
     fi
 
 install:
@@ -122,7 +122,7 @@ install:
   - mkdir cmake_build
   - cd cmake_build
   - cmake $COMMON_FLAGS $EXTRA_FLAGS ..
-  - cmake --build . --parallel "$NPROC"
+  - cmake --build .
   - sudo cmake --build . --target install
 
 before_script:
@@ -131,7 +131,7 @@ before_script:
       export DISPLAY=:99.0;
     fi
   # Build tests
-  - cmake --build . --parallel "$NPROC" --target mixxx-test
+  - cmake --build . --target mixxx-test
 
 script:
   - export GTEST_COLOR=1 CTEST_OUTPUT_ON_FAILURE=1
