@@ -7,6 +7,7 @@
 
 #include "track/bpm.h"
 #include "track/replaygain.h"
+#include "track/seratomarkers2.h"
 
 #include "util/duration.h"
 #include "util/macros.h"
@@ -33,6 +34,7 @@ class TrackInfo final {
     PROPERTY_SET_BYVAL_GET_BYREF(QString,    recordLabel,          RecordLabel)
     PROPERTY_SET_BYVAL_GET_BYREF(QString,    remixer,              Remixer)
     PROPERTY_SET_BYVAL_GET_BYREF(ReplayGain, replayGain,           ReplayGain)
+    PROPERTY_SET_BYVAL_GET_BYREF(SeratoMarkers2, seratoMarkers2,   SeratoMarkers2)
     PROPERTY_SET_BYVAL_GET_BYREF(QString,    subtitle,             Subtitle)
     PROPERTY_SET_BYVAL_GET_BYREF(QString,    title,                Title)
     PROPERTY_SET_BYVAL_GET_BYREF(QString,    trackNumber,          TrackNumber)

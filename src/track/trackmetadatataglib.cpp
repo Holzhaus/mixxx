@@ -380,79 +380,15 @@ bool parseAlbumPeak(
 
 bool parseSeratoMarkers2(
         TrackMetadata* pTrackMetadata,
-        const QByteArray& seratoMarkers2) {
+        const QByteArray& data) {
     DEBUG_ASSERT(pTrackMetadata);
 
-    if (seratoMarkers2.left(2).compare("\x01\x01") != 0) {
-        qDebug() << "Unknown outer Serato Markers2 tag version";
-        return false;
+    SeratoMarkers2 seratoMarkers2(pTrackMetadata->getTrackInfo().getSeratoMarkers2());
+    bool isValid = SeratoMarkers2::parse(&seratoMarkers2, data);
+    if (isValid) {
+        pTrackMetadata->refTrackInfo().setSeratoMarkers2(seratoMarkers2);
     }
-
-    QByteArray data(QByteArray::fromBase64(seratoMarkers2.mid(2)));
-
-    if (data.left(2).compare("\x01\x01") != 0) {
-        qDebug() << "Unknown inner Serato Markers2 tag version";
-        return false;
-    }
-    qDebug() << "Serato Markers2" << data;
-    int offset = 2;
-    int entryNameEndPos;
-    qDebug() << "entryNameEndPos" << data.indexOf('\x00', offset);
-    while((entryNameEndPos = data.indexOf('\x00', offset)) >= 0) {
-        // Entry Name
-        QString entryName(data.mid(offset, entryNameEndPos));
-        offset = entryNameEndPos + 1;
-        qDebug() << "entryName" << entryName;
-
-        // Entry Size
-        quint32 entrySize(qFromBigEndian<quint32>(data.mid(offset, offset + 4)));
-        offset += 4;
-        qDebug() << "entrySize" << entrySize;
-
-        QByteArray entryData(data.mid(offset, offset + entrySize));
-        offset += entrySize;
-
-        // Entry Content
-        if(entryName.compare("CUE") == 0) {
-            // Unknown field, make sure it's 0 in case it's a
-            // null-terminated string
-            if (entryData.at(0) != '\x00') {
-                return false;
-            }
-            quint8 index(entryData.at(1));
-            quint32 position(qFromBigEndian<quint32>(entryData.mid(2, 6)));
-
-            // Unknown field, make sure it's 0 in case it's a
-            // null-terminated string
-            if (entryData.at(6) != '\x00') {
-                return false;
-            }
-
-            qDebug() << "color data" << entryData.at(7) << entryData.at(8) << entryData.at(9);
-            QColor color(static_cast<quint8>(entryData.at(7)), static_cast<quint8>(entryData.at(8)), static_cast<quint8>(entryData.at(9)));
-
-            // Unknown field(s), make sure it's 0 in case it's a
-            // null-terminated string
-            if (entryData.at(10) != '\x00' || entryData.at(11)) {
-                return false;
-            }
-
-            int cueNameEndPos = entryData.indexOf('\x00', 12);
-            if (cueNameEndPos < 0) {
-                return false;
-            }
-            QString cueName(entryData.mid(12, cueNameEndPos));
-            qDebug() << "CUE" << index << position << color << cueName;
-        }
-    }
-
-    //ReplayGain replayGain(pTrackMetadata->getAlbumInfo().getReplayGain());
-    //bool isRatioValid = parseReplayGainGain(&replayGain, dbGain);
-    //if (isRatioValid) {
-    //    pTrackMetadata->refAlbumInfo().setReplayGain(replayGain);
-    //}
-    //return isRatioValid;
-    return false;
+    return isValid;
 }
 
 void readAudioProperties(

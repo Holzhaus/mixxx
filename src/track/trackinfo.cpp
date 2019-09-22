@@ -34,6 +34,7 @@ bool operator==(const TrackInfo& lhs, const TrackInfo& rhs) {
             (lhs.getRecordLabel() == rhs.getRecordLabel()) &&
             (lhs.getRemixer() == rhs.getRemixer()) &&
             (lhs.getReplayGain() == rhs.getReplayGain()) &&
+            (lhs.getSeratoMarkers2() == rhs.getSeratoMarkers2()) &&
             (lhs.getSubtitle() == rhs.getSubtitle()) &&
             (lhs.getTitle() == rhs.getTitle()) &&
             (lhs.getTrackNumber() == rhs.getTrackNumber()) &&
@@ -60,6 +61,7 @@ QDebug operator<<(QDebug dbg, const TrackInfo& arg) {
     arg.dbgRecordLabel(dbg);
     arg.dbgRemixer(dbg);
     arg.dbgReplayGain(dbg);
+    arg.dbgSeratoMarkers2(dbg);
     arg.dbgSubtitle(dbg);
     arg.dbgTitle(dbg);
     arg.dbgTrackNumber(dbg);
