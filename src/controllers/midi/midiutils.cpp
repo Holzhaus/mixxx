@@ -6,13 +6,13 @@ QString MidiUtils::opCodeToTranslatedString(MidiOpCode code) {
         return QObject::tr("Invalid");
     }
     switch (code) {
-        case MIDI_NOTE_ON:
+        case MidiOpCode::NOTE_ON:
             return QObject::tr("Note On");
-        case MIDI_NOTE_OFF:
+        case MidiOpCode::NOTE_OFF:
             return QObject::tr("Note Off");
-        case MIDI_CC:
+        case MidiOpCode::CC:
             return QObject::tr("CC");
-        case MIDI_PITCH_BEND:
+        case MidiOpCode::PITCH_BEND:
             return QObject::tr("Pitch Bend");
         default:
             return QObject::tr("Unknown (0x%1)").arg(
@@ -78,34 +78,34 @@ QString MidiUtils::formatMidiMessage(const QString& controllerName,
       msg2 = QString("t:%1").arg(timestamp.formatMillisWithUnit());
     }
     switch (opCode) {
-        case MIDI_PITCH_BEND:
+        case MidiOpCode::PITCH_BEND:
             return QString("%1: %2 status 0x%3: pitch bend ch %4, value 0x%5")
                     .arg(controllerName, msg2,
                          QString::number(status, 16).toUpper(),
                          QString::number(channel+1, 10),
                          QString::number((value << 7) | control, 16).toUpper().rightJustified(4,'0'));
-        case MIDI_SONG_POS:
+        case MidiOpCode::SONG_POS:
             return QString("%1: %2 status 0x%3: song position 0x%4")
                     .arg(controllerName, msg2,
                          QString::number(status, 16).toUpper(),
                          QString::number((value << 7) | control, 16).toUpper().rightJustified(4,'0'));
-        case MIDI_PROGRAM_CH:
-        case MIDI_CH_AFTERTOUCH:
+        case MidiOpCode::PROGRAM_CH:
+        case MidiOpCode::CH_AFTERTOUCH:
             return QString("%1: %2 status 0x%3 (ch %4, opcode 0x%5), value 0x%6")
                     .arg(controllerName, msg2,
                          QString::number(status, 16).toUpper(),
                          QString::number(channel+1, 10),
                          QString::number((status & 255)>>4, 16).toUpper(),
                          QString::number(control, 16).toUpper().rightJustified(2,'0'));
-        case MIDI_SONG:
+        case MidiOpCode::SONG:
             return QString("%1: %2 status 0x%3: select song #%4")
                     .arg(controllerName, msg2,
                          QString::number(status, 16).toUpper(),
                          QString::number(control+1, 10));
-        case MIDI_NOTE_OFF:
-        case MIDI_NOTE_ON:
-        case MIDI_AFTERTOUCH:
-        case MIDI_CC:
+        case MidiOpCode::NOTE_OFF:
+        case MidiOpCode::NOTE_ON:
+        case MidiOpCode::AFTERTOUCH:
+        case MidiOpCode::CC:
             return QString("%1: %2 status 0x%3 (ch %4, opcode 0x%5), ctrl 0x%6, val 0x%7")
                     .arg(controllerName, msg2,
                          QString::number(status, 16).toUpper(),

@@ -317,7 +317,7 @@ void MidiController::processInputMapping(const MidiInputMapping& mapping,
             m_fourteen_bit_queued_mappings.append(qMakePair(mapping, value));
             return;
         }
-    } else if (opCode == MIDI_PITCH_BEND) {
+    } else if (opCode == MidiOpCode::PITCH_BEND) {
         // compute 14-bit value for pitch bend messages
         int iValue;
         iValue = (value << 7) | control;
@@ -338,7 +338,7 @@ void MidiController::processInputMapping(const MidiInputMapping& mapping,
     // ControlPushButton ControlObjects only accept NOTE_ON, so if the midi
     // mapping is <button> we override the Midi 'status' appropriately.
     if (mapping.options.button || mapping.options.sw) {
-        opCode = MIDI_NOTE_ON;
+        opCode = MidiOpCode::NOTE_ON;
     }
 
     if (mapping.options.soft_takeover) {
@@ -416,7 +416,7 @@ double MidiController::computeValue(
     }
 
     if (options.spread64) {
-        //qDebug() << "MIDI_OPT_SPREAD64";
+        //qDebug() << "MidiOpCode::OPT_SPREAD64";
         // BJW: Spread64: Distance away from centre point (aka "relative CC")
         // Uses a similar non-linear scaling formula as ControlTTRotary::getValueFromWidget()
         // but with added sensitivity adjustment. This formula is still experimental.

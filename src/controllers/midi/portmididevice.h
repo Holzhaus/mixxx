@@ -1,5 +1,5 @@
-#ifndef CONTROLLERS_MIDI_PORTMIDIDEVICE
-#define CONTROLLERS_MIDI_PORTMIDIDEVICE
+#ifndef CONTROLLERS_MidiOpCode::PORTMIDIDEVICE
+#define CONTROLLERS_MidiOpCode::PORTMIDIDEVICE
 
 #include <portmidi.h>
 
@@ -73,4 +73,4 @@ class PortMidiDevice {
     PortMidiStream* m_pStream;
 };
 
-#endif /* CONTROLLERS_MIDI_PORTMIDIDEVICE */
+#endif /* CONTROLLERS_MidiOpCode::PORTMIDIDEVICE */

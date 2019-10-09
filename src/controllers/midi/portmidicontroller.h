@@ -47,13 +47,13 @@
 // accumulated 500 messages in a single poll during stress-testing.
 // A midi message contains 1 .. 4 bytes.
 // a 1024 messages buffer will buffer ~327 ms Midi-Stream
-#define MIXXX_PORTMIDI_BUFFER_LEN 1024
+#define MIXXX_PORTMIDI::BUFFER_LEN 1024
 
 // Length of SysEx buffer in byte
 #define MIXXX_SYSEX_BUFFER_LEN 1024
 
 // String to display for no MIDI devices present
-#define MIXXX_PORTMIDI_NO_DEVICE_STRING "None"
+#define MIXXX_PORTMIDI::NO_DEVICE_STRING "None"
 
 // A PortMidi-based implementation of MidiController
 class PortMidiController : public MidiController {
@@ -95,7 +95,7 @@ class PortMidiController : public MidiController {
     QScopedPointer<PortMidiDevice> m_pInputDevice;
     QScopedPointer<PortMidiDevice> m_pOutputDevice;
 
-    PmEvent m_midiBuffer[MIXXX_PORTMIDI_BUFFER_LEN];
+    PmEvent m_midiBuffer[MIXXX_PORTMIDI::BUFFER_LEN];
 
     // Storage for SysEx messages
     unsigned char m_cReceiveMsg[MIXXX_SYSEX_BUFFER_LEN];

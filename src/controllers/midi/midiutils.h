@@ -12,7 +12,7 @@ class MidiUtils {
 
     static inline MidiOpCode opCodeFromStatus(unsigned char status) {
         unsigned char opCode = status & 0xF0;
-        // MIDI_SYSEX and higher don't have a channel and occupy the entire byte.
+        // MidiOpCode::SYSEX and higher don't have a channel and occupy the entire byte.
         if (opCode == 0xF0) {
             opCode = status;
         }
@@ -21,11 +21,11 @@ class MidiUtils {
 
     static inline bool isMessageTwoBytes(unsigned char opCode) {
         switch (opCode) {
-            case MIDI_SONG:
-            case MIDI_NOTE_OFF:
-            case MIDI_NOTE_ON:
-            case MIDI_AFTERTOUCH:
-            case MIDI_CC:
+            case MidiOpCode::SONG:
+            case MidiOpCode::NOTE_OFF:
+            case MidiOpCode::NOTE_ON:
+            case MidiOpCode::AFTERTOUCH:
+            case MidiOpCode::CC:
                 return true;
             default:
                 return false;
@@ -33,7 +33,7 @@ class MidiUtils {
     }
 
     static inline bool isClockSignal(const MidiKey& mappingKey) {
-        return (mappingKey.key & MIDI_TIMING_CLK) == MIDI_TIMING_CLK;
+        return (mappingKey.key & MidiOpCode::TIMING_CLK) == MidiOpCode::TIMING_CLK;
     }
 
     static QString opCodeToTranslatedString(MidiOpCode code);

@@ -32,11 +32,11 @@ void DeviceChannelListener::Process(const hss1394::uint8 *pBuffer, hss1394::uint
         unsigned char note;
         unsigned char velocity;
         switch (status & 0xF0) {
-            case MIDI_NOTE_OFF:
-            case MIDI_NOTE_ON:
-            case MIDI_AFTERTOUCH:
-            case MIDI_CC:
-            case MIDI_PITCH_BEND:
+            case MidiOpCode::NOTE_OFF:
+            case MidiOpCode::NOTE_ON:
+            case MidiOpCode::AFTERTOUCH:
+            case MidiOpCode::CC:
+            case MidiOpCode::PITCH_BEND:
                 if (i + 2 < uBufferSize) {
                     note = pBuffer[i+1];
                     velocity = pBuffer[i+2];
