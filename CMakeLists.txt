@@ -782,6 +782,10 @@ include(CPack)
 # Dependencies
 #
 option(STATIC_DEPS "Link dependencies statically" OFF)
+if(MSVC AND STATIC_DEPS)
+  set(CMAKE_CXX_FLAGS_RELEASE /MT)
+  set(CMAKE_CXX_FLAGS_DEBUG /MTd)
+endif()
 
 # Chromaprint
 find_package(Chromaprint REQUIRED)
