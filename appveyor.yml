@@ -133,7 +133,7 @@ for:
   test_script:
     # Calling mixxx-test under bash to have standard output and use stdbuf to
     # unbuffer standard & error output
-    - cmake --build cmake_build --config "Release" --target test
+    - ctest
     - cmake --build cmake_build --config "Release" --target benchmark
 
   artifacts:
