@@ -124,7 +124,7 @@ install:
 
   - mkdir cmake_build
   - cd cmake_build
-  - cmake $COMMON_FLAGS $EXTRA_FLAGS ..
+  - cmake -L $COMMON_FLAGS $EXTRA_FLAGS ..
   - cmake --build .
   - sudo cmake --build . --target install
 
