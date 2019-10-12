@@ -16,6 +16,8 @@ services:
   # Virtual X is needed for analyzer waveform tests
   - xvfb
 
+cache: ccache
+
 addons:
   apt:
     sources:
@@ -57,6 +59,7 @@ addons:
   homebrew:
     update: true
     packages:
+      - ccache
       - chromaprint
       - faad2
       - ffmpeg
