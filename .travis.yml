@@ -98,19 +98,19 @@ install:
   # Build flags common to OS X and Linux.
   # Parallel builds are important for avoiding OSX build timeouts.
   # We turn off verbose output to avoid going over the 4MB output limit.
-  # TODO(2019-07-21): Add "FFMPEG_ENABLED=1" if FFmpeg 4.x becomes available in Ubuntu
+  # TODO(2019-07-21): Add "-DFFMPEG=ON" if FFmpeg 4.x becomes available in Ubuntu
   - export COMMON_FLAGS="
-      -DMAD_ENABLED=ON \
-      -DFAAD_ENABLED=ON \
-      -DOPUS_ENABLED=ON
-      -DMODPLUG_ENABLED=ON \
-      -DWAVPACK_ENABLED=ON \
-      -DHSS1394_ENABLED=OFF \
+      -DMAD=ON \
+      -DFAAD=ON \
+      -DOPUS=ON
+      -DMODPLUG=ON \
+      -DWAVPACK=ON \
+      -DHSS1394=OFF \
       "
 
   # Ubuntu Xenial build prerequisites
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-      export EXTRA_FLAGS="-DLOCALECOMPARE_ENABLED=ON";
+      export EXTRA_FLAGS="-DLOCALECOMPARE=ON";
     fi
 
   # NOTE(rryan): 2016-11-15 we are experiencing Travis timeouts for the OSX
@@ -118,7 +118,7 @@ install:
   # TODO(rryan): localecompare doesn't work on Travis with qt5 for some reason.
   # TODO(2019-07-21): Move "ffmpeg=1" into COMMON_FLAGS if FFmpeg 4.x becomes available in Ubuntu
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-      export EXTRA_FLAGS="-DLOCALECOMPARE_ENABLED=OFF -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5/";
+      export EXTRA_FLAGS="-DLOCALECOMPARE=OFF -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5/";
       export PATH="/usr/local/opt/ccache/bin:$PATH";
     fi
 
