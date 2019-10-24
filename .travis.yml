@@ -130,8 +130,6 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
       export DISPLAY=:99.0;
     fi
-  # Build tests
-  - cmake --build . --target mixxx-test
 
 script:
   - export GTEST_COLOR=1 CTEST_OUTPUT_ON_FAILURE=1
