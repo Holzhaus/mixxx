@@ -130,13 +130,15 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
       export DISPLAY=:99.0;
     fi
-
-script:
   # Build tests
   - cmake --build . --parallel "$NPROC" --target mixxx-test
-  # Run tests
+
+script:
   - export GTEST_COLOR=1 CTEST_OUTPUT_ON_FAILURE=1
+  # Run tests
   - cmake --build . --target test
+  # Run benchmarks
+  - cmake --build . --target benchmark
 
 notifications:
   webhooks:
