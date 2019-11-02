@@ -753,7 +753,7 @@ void WTrackTableView::showTrackInfo(QModelIndex index) {
     if (m_pTrackInfo.isNull()) {
         // Give a NULL parent because otherwise it inherits our style which can
         // make it unreadable. Bug #673411
-        m_pTrackInfo.reset(new DlgTrackInfo(nullptr));
+        m_pTrackInfo.reset(new DlgTrackInfo(m_pConfig, nullptr));
 
         connect(m_pTrackInfo.data(), SIGNAL(next()),
                 this, SLOT(slotNextTrackInfo()));
@@ -1109,25 +1109,11 @@ void WTrackTableView::contextMenuEvent(QContextMenuEvent* event) {
                 }
             }
 
-            // Get the predefined color of the selected tracks. If they have
-            // different colors, do not preselect a color (by using nullptr
-            // instead).
-            PredefinedColorPointer predefinedTrackColor = nullptr;
-
-            if (trackColor) {
-                // All tracks have the same color
-                for (PredefinedColorPointer color : Color::kPredefinedColorsSet.allColors) {
-                    if (mixxx::RgbColor(color->m_defaultRgba.rgb()) == *trackColor) {
-                        predefinedTrackColor = color;
-                        break;
-                    }
-                }
-            } else if (!multipleTrackColors) {
-                // All tracks have no color
-                predefinedTrackColor = Color::kPredefinedColorsSet.noColor;
+            if (multipleTrackColors) {
+                m_pColorPickerAction->resetSelectedColor();
+            } else {
+                m_pColorPickerAction->setSelectedColor(toQColor(trackColor));
             }
-
-            m_pColorPickerAction->setSelectedColor(predefinedTrackColor);
             m_pColorMenu->addAction(m_pColorPickerAction);
             m_pMenu->addMenu(m_pColorMenu);
         }
@@ -1986,7 +1972,7 @@ void WTrackTableView::lockBpm(bool lock) {
     }
 }
 
-void WTrackTableView::slotColorPicked(PredefinedColorPointer pColor) {
+void WTrackTableView::slotColorPicked(const QColor& color) {
     TrackModel* trackModel = getTrackModel();
     if (trackModel == nullptr) {
         return;
@@ -1996,7 +1982,7 @@ void WTrackTableView::slotColorPicked(PredefinedColorPointer pColor) {
     // TODO: This should be done in a thread for large selections
     for (const auto& index : selectedTrackIndices) {
         TrackPointer track = trackModel->getTrack(index);
-        track->setColor(mixxx::RgbColor::optional(pColor->m_defaultRgba));
+        track->setColor(mixxx::RgbColor::optional(color));
     }
 
     m_pMenu->hide();
