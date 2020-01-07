@@ -454,6 +454,9 @@ class Qt(Dependence):
 class TestHeaders(Dependence):
     def configure(self, build, conf):
         build.env.Append(CPPPATH="#lib/gtest-1.7.0/include")
+        # Temporary workaround: Fix build errors for C++17 and VS 2017
+        if build.platform_is_windows:
+            build.env.Append(GTEST_LANG_CXX11=1)
 
 class FidLib(Dependence):
     def sources(self, build):
