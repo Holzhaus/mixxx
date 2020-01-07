@@ -446,6 +446,9 @@ class Qt(Dependence):
         else:
             # GCC/Clang
             build.env.Append(CXXFLAGS='-std=c++17')
+            # TODO: Re-enable aligned memory allocations for macOS 10.14 or newer
+            if build.platform_is_osx:
+                build.env.Append(CXXFLAGS='-fno-aligned-allocation')
 
 
 class TestHeaders(Dependence):
