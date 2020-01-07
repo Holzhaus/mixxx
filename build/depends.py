@@ -443,6 +443,10 @@ class Qt(Dependence):
         if build.platform_is_windows:
             # MSVC
             build.env.Append(CXXFLAGS='/std:c++17')
+            # Fix build of gtest 1.7.0
+            # https://developercommunity.visualstudio.com/content/problem/225156/google-test-does-not-work-with-stdc17.html
+            # https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+            build.env.Append(CXXFLAGS='/Zc:__cplusplus')
         else:
             # GCC/Clang
             build.env.Append(CXXFLAGS='-std=c++17')
@@ -454,9 +458,6 @@ class Qt(Dependence):
 class TestHeaders(Dependence):
     def configure(self, build, conf):
         build.env.Append(CPPPATH="#lib/gtest-1.7.0/include")
-        # Temporary workaround: Fix build errors for C++17 and VS 2017
-        if build.platform_is_windows:
-            build.env.Append(GTEST_LANG_CXX11=1)
 
 class FidLib(Dependence):
     def sources(self, build):
