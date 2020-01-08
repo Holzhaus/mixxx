@@ -970,14 +970,6 @@ target_link_libraries(mixxx-test PUBLIC mixxx-lib)
 set(GTEST_CMAKE_ARGS "")
 set(GMOCK_CMAKE_ARGS "")
 if(MSVC)
-  # Since Visual Studio 17 15.5 (Tools Update 2), the use of std::tr1 has
-  # been deprecated and throws a warning. If /W3 is used, this causes an
-  # error. This suppresses the warning/error until we pull in the fixes from
-  # upstream.
-  # See this for details: https://github.com/google/googletest/issues/1111
-  set(GTEST_CMAKE_ARGS "-DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING")
-  set(GMOCK_CMAKE_ARGS "-DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING")
-
   # Use shared CRT when linking gtest to prevent error LNK2038: mismatch
   # detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value
   # 'MD_DynamicRelease'
@@ -1232,15 +1224,6 @@ target_link_libraries(mixxx-lib PUBLIC FpClassify)
 
 # gtest
 target_include_directories(mixxx-lib SYSTEM PUBLIC lib/gtest-1.8.1/googletest/include)
-if(MSVC)
-  # Since Visual Studio 17 15.5 (Tools Update 2), the use of std::tr1 has
-  # been deprecated and throws a warning. If /W3 is used, this causes an
-  # error. This suppresses the warning/error until we pull in the fixes from
-  # upstream.
-  # See this for details: https://github.com/google/googletest/issues/1111
-  target_compile_definitions(mixxx-lib PUBLIC _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)
-endif()
-
 # LAME
 find_package(LAME REQUIRED)
 target_link_libraries(mixxx-lib PUBLIC LAME::LAME)
