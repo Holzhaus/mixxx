@@ -32,6 +32,25 @@ jobs:
             - python3-setuptools
             - python3-wheel
 
+    - name: jshint
+      os: linux
+      dist: xenial
+      before_install:
+        - npm install -g jshint
+      script:
+        - STATUS=0 &&
+          [ ! -z "$TRAVIS_COMMIT_RANGE" ] &&
+          git diff --name-only "$TRAVIS_COMMIT_RANGE"
+            | grep -E '.*\.js'
+            | while IFS= read -r filename; do
+                jshint "$filename" || STATUS="1";
+              done
+            ; [ "$STATUS" -ne 0 ] && false
+      addons:
+        apt:
+          packages:
+            - npm
+
     - name: Ubuntu/gcc/SCons build
       os: linux
       dist: xenial
