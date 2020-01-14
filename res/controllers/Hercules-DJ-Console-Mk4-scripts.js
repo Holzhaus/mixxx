@@ -216,8 +216,8 @@ HerculesMk4.pfl = function (midino, control, value, status, group) {
             if(actualMixCue==1){
                 engine.setValue("[Master]","headMix",HerculesMk4.antiguoMixCue);
             }
-        };
-    };
+        }
+    }
 };
 
 

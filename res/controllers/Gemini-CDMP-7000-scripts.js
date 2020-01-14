@@ -88,8 +88,8 @@ cdmp7000.slip_state_d2 = false;
 cdmp7000.firstDeckGroup = "[Channel1]";
 cdmp7000.secondDeckGroup = "[Channel2]";
 
-engine.setValue(cdmp7000.firstDeckGroup,'rateRange', 0.08);
-engine.setValue(cdmp7000.secondDeckGroup,'rateRange', 0.08);
+engine.setValue(cdmp7000.firstDeckGroup,"rateRange", 0.08);
+engine.setValue(cdmp7000.secondDeckGroup,"rateRange", 0.08);
 
 
 engine.connectControl(cdmp7000.firstDeckGroup,"rate","cdmp7000.rate_d1");
@@ -181,7 +181,7 @@ cdmp7000.reverse_toggle_d1 = function(channel, control, value, status, group) {
     cdmp7000.reverse_play_d1 = true;
     midi.sendShortMsg(0x90,0x1E,0x7F);
     }
-   engine.setValue(group,'reverse',cdmp7000.reverse_play_d1);
+   engine.setValue(group,"reverse",cdmp7000.reverse_play_d1);
 }
 
 
@@ -197,7 +197,7 @@ cdmp7000.reverse_toggle_d2 = function(channel, control, value, status, group) {
     cdmp7000.reverse_play_d2 = true;
     midi.sendShortMsg(0x90,0x1E,0x7F);
     }
-   engine.setValue(group,'reverse',cdmp7000.reverse_play_d2);
+   engine.setValue(group,"reverse",cdmp7000.reverse_play_d2);
 }
 
 // slip mode (doesn't work, unless you press again to disable. Disable should occur on wheel touch disable)
@@ -209,13 +209,13 @@ cdmp7000.slip_enabled_d1 = function(channel, control, value, status, group) {
         
         cdmp7000.slip_state_d1 = true;
         midi.sendShortMsg(0x90,0x1F,0x7F);
-        engine.setValue(group, 'slip_enabled', 1);
+        engine.setValue(group, "slip_enabled", 1);
     }
     else if ((value == 0x7f) && (cdmp7000.slip_state_d1 == true)) {
         
         cdmp7000.slip_state_d1 = false;
         midi.sendShortMsg(0x90,0x1F,0x00);
-        engine.setValue(group, 'slip_enabled', 0);
+        engine.setValue(group, "slip_enabled", 0);
     }
 }
 
@@ -226,13 +226,13 @@ cdmp7000.slip_enabled_d2 = function(channel, control, value, status, group) {
         
         cdmp7000.slip_state_d2 = true;
         midi.sendShortMsg(0x90,0x1F,0x7F);
-        engine.setValue(group, 'slip_enabled', 1);
+        engine.setValue(group, "slip_enabled", 1);
     }
     else if ((value == 0x7f) && (cdmp7000.slip_state_d2 == true)) {
         
         cdmp7000.slip_state_d2 = false;
         midi.sendShortMsg(0x90,0x1F,0x00);
-        engine.setValue(group, 'slip_enabled', 0);
+        engine.setValue(group, "slip_enabled", 0);
     }
 }
 
@@ -315,7 +315,7 @@ cdmp7000.select_track_knob_pos = function(channel, control, value, status, group
     } else {
         return;
     }
-    engine.setValue(group,'SelectTrackKnob',value);
+    engine.setValue(group,"SelectTrackKnob",value);
 };
 
 cdmp7000.select_track_knob_neg = function(channel, control, value, status, group) {
@@ -326,7 +326,7 @@ cdmp7000.select_track_knob_neg = function(channel, control, value, status, group
     } else {
         return;
     }
-    engine.setValue(group,'SelectTrackKnob',value);
+    engine.setValue(group,"SelectTrackKnob",value);
 };
 
 cdmp7000.ToggleDirectory = function(channel, control, value, status, group) {
@@ -380,12 +380,12 @@ cdmp7000.memoActive_d2 = function (channel, control, value, status, group) {
 
 cdmp7000.hotcue_activate_d1 = function(group,hotcue,value,led) {
 
-    hotcue_state_d1 = 'hotcue_' + hotcue + '_enabled';
+    hotcue_state_d1 = "hotcue_" + hotcue + "_enabled";
     result = engine.getValue("[Channel1]", hotcue_state_d1);
     
 
     if ((value == 0x7f) && (cdmp7000.memoButton_d1 == true))  {
-        key = 'hotcue_' + hotcue + '_clear';
+        key = "hotcue_" + hotcue + "_clear";
 
         engine.setValue(group,key,value);
         midi.sendShortMsg(0x90,0x08,0x00); // turn off memo led
@@ -396,14 +396,14 @@ cdmp7000.hotcue_activate_d1 = function(group,hotcue,value,led) {
 
       } else if ((value == 0x7f) && (cdmp7000.memoButton_d1 == false) && (result == 0))  {
 
-    key = 'hotcue_' + hotcue + '_set';
+    key = "hotcue_" + hotcue + "_set";
     engine.setValue(group,key,value);
     midi.sendShortMsg(0x90,led,0x7F);
     cdmp7000.setSongLcd(key, 1);
 
    } else {
 
-     key = 'hotcue_' + hotcue + '_gotoandplay';
+     key = "hotcue_" + hotcue + "_gotoandplay";
      engine.setValue(group,key,value);
 
    }
@@ -429,12 +429,12 @@ cdmp7000.hotcue_3_activate_d1 = function(channel, control, value, status, group)
 // Deck 2 - HotCues - Checks for memo button active to delete hotcue and turn off LED
 cdmp7000.hotcue_activate_d2 = function(group,hotcue,value,led) {
 
-    hotcue_state_d2 = 'hotcue_' + hotcue + '_enabled';
+    hotcue_state_d2 = "hotcue_" + hotcue + "_enabled";
     result = engine.getValue("[Channel2]", hotcue_state_d2);
     
 
     if ((value == 0x7f) && (cdmp7000.memoButton_d2 == true))  {
-        key = 'hotcue_' + hotcue + '_clear';
+        key = "hotcue_" + hotcue + "_clear";
         engine.setValue(group,key,value);
         midi.sendShortMsg(0x90,0x08,0x00); // turn off memo led
         midi.sendShortMsg(0x90,led,0x00); // turn off efx led
@@ -443,14 +443,14 @@ cdmp7000.hotcue_activate_d2 = function(group,hotcue,value,led) {
         
     } else if ((value == 0x7f) && (cdmp7000.memoButton_d2 == false) && (result == 0))  {
 
-    key = 'hotcue_' + hotcue + '_set';
+    key = "hotcue_" + hotcue + "_set";
     engine.setValue(group,key,value);
     midi.sendShortMsg(0x90,led,0x7F);
     cdmp7000.setSongLcd(key, 1);
 
    } else {
 
-     key = 'hotcue_' + hotcue + '_gotoandplay';
+     key = "hotcue_" + hotcue + "_gotoandplay";
      engine.setValue(group,key,value);
 
    }
@@ -657,9 +657,9 @@ cdmp7000.LoadTrack = function(channel, control, value, status, group) {
      midi.sendShortMsg(0x90,0x07,0x00);
     }
 
-    var currentBpm = engine.getValue(group,'bpm');           
-    var currentRange = engine.getValue(group,'rateRange');
-    var currentDur = engine.getValue(group,'duration');
+    var currentBpm = engine.getValue(group,"bpm");           
+    var currentRange = engine.getValue(group,"rateRange");
+    var currentDur = engine.getValue(group,"duration");
 
     // convert decimal to real number
     currentRange = currentRange*100
@@ -672,9 +672,9 @@ cdmp7000.LoadTrack = function(channel, control, value, status, group) {
     print( "Duration!:"+currentDur);  // for debug
  
         // convert int to string otherwise toInt() will not work
-        currentBpm += ''  
-        currentRange += ''
-        currentDur += ''
+        currentBpm += ""  
+        currentRange += ""
+        currentDur += ""
 
         midi.sendSysexMsg(cdmp7000.LCD_BPM.concat(currentBpm.toInt(), 0xF7),9+currentBpm.length); 
         midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(currentRange.toInt(), 0xF7),11+currentRange.length);
@@ -689,36 +689,36 @@ cdmp7000.LoadTrack = function(channel, control, value, status, group) {
 
 
 cdmp7000.rate_d1 = function (channel, control, value, status, group) {
-    var pitchValue = engine.getValue(cdmp7000.firstDeckGroup,'rate');
-    var currentBpm = engine.getValue(cdmp7000.firstDeckGroup,'bpm');
+    var pitchValue = engine.getValue(cdmp7000.firstDeckGroup,"rate");
+    var currentBpm = engine.getValue(cdmp7000.firstDeckGroup,"bpm");
         
         pitchValue = pitchValue*10
         pitchValue.toFixed(0)
-        pitchValue += '' 
+        pitchValue += "" 
         print( "Deck 1 rate:"+pitchValue);  // for debug    
         midi.sendSysexMsg(cdmp7000.LCD_PITCH.concat(pitchValue.toInt(), 0xF7),11+pitchValue.length);
         // when the pitch slider is changed, we update the bpm as well
-        currentBpm += '' 
+        currentBpm += "" 
         midi.sendSysexMsg(cdmp7000.LCD_BPM.concat(currentBpm.toInt(), 0xF7),9+currentBpm.length);
 }
 
 cdmp7000.rate_d2 = function (channel, control, value, status, group) {
-    var pitchValue = engine.getValue(cdmp7000.secondDeckGroup,'rate');
-    var currentBpm = engine.getValue(cdmp7000.secondDeckGroup,'bpm');
+    var pitchValue = engine.getValue(cdmp7000.secondDeckGroup,"rate");
+    var currentBpm = engine.getValue(cdmp7000.secondDeckGroup,"bpm");
 
         pitchValue = pitchValue*10
         pitchValue.toFixed(0)
-        pitchValue += '' 
+        pitchValue += "" 
         print( "Deck 2 rate:"+pitchValue);  // for debug    
         midi.sendSysexMsg(cdmp7000.LCD_PITCH.concat(pitchValue.toInt(), 0xF7),11+pitchValue.length); 
         // when the pitch slider is changed, we update the bpm as well!
-        currentBpm += '' 
+        currentBpm += "" 
         midi.sendSysexMsg(cdmp7000.LCD_BPM.concat(currentBpm.toInt(), 0xF7),9+currentBpm.length);
 }
 
 cdmp7000.rateRange = function (channel, control, value, status, group) {
    if (value == 0x7f) {
-  var currentRange = engine.getValue(group,'rateRange');
+  var currentRange = engine.getValue(group,"rateRange");
   currentRange = currentRange*100;
   currentRange = Math.round(currentRange);
 
@@ -727,39 +727,39 @@ cdmp7000.rateRange = function (channel, control, value, status, group) {
 // there has to be a more efficient way of doing this, maybe external lcd update function
 // set, then get, then update
   if (currentRange == "4") {
-     engine.setValue(group,'rateRange', 0.08);
-     var newRange = engine.getValue(group,'rateRange');
-     newRange += ''
+     engine.setValue(group,"rateRange", 0.08);
+     var newRange = engine.getValue(group,"rateRange");
+     newRange += ""
      midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(newRange.toInt(), 0xF7),11+newRange.length);
   }
   if (currentRange == "8") {
-     engine.setValue(group,'rateRange', 0.16);
-     var newRange = engine.getValue(group,'rateRange');
-     newRange += ''
+     engine.setValue(group,"rateRange", 0.16);
+     var newRange = engine.getValue(group,"rateRange");
+     newRange += ""
      midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(newRange.toInt(), 0xF7),11+newRange.length);
   }
   if (currentRange == "16") {
-     engine.setValue(group,'rateRange', 0.24);
-     var newRange = engine.getValue(group,'rateRange');
-     newRange += ''
+     engine.setValue(group,"rateRange", 0.24);
+     var newRange = engine.getValue(group,"rateRange");
+     newRange += ""
      midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(newRange.toInt(), 0xF7),11+newRange.length);
   }
   if (currentRange == "24") {
-    engine.setValue(group,'rateRange', 0.50);
-     var newRange = engine.getValue(group,'rateRange');
-     newRange += ''
+    engine.setValue(group,"rateRange", 0.50);
+     var newRange = engine.getValue(group,"rateRange");
+     newRange += ""
     midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(newRange.toInt(), 0xF7),11+newRange.length);
   }
   if (currentRange == 50) {
-    engine.setValue(group,'rateRange', 1.00);
-     var newRange = engine.getValue(group,'rateRange');
-     newRange += ''
+    engine.setValue(group,"rateRange", 1.00);
+     var newRange = engine.getValue(group,"rateRange");
+     newRange += ""
     midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(newRange.toInt(), 0xF7),11+newRange.length);
   }
   if (currentRange == 100) {
-    engine.setValue(group,'rateRange', 0.04);
-     var newRange = engine.getValue(group,'rateRange');
-     newRange += ''
+    engine.setValue(group,"rateRange", 0.04);
+     var newRange = engine.getValue(group,"rateRange");
+     newRange += ""
     midi.sendSysexMsg(cdmp7000.LCD_RANGE.concat(newRange.toInt(), 0xF7),11+newRange.length);
   }
 

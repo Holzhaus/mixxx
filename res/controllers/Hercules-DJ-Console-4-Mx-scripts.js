@@ -65,40 +65,40 @@ Hercules4Mx.Leds = {
 // --- Personal preferences configuration ---
 Hercules4Mx.userSettings = {
     // Indicates if the Headphone/Master mix should automatically be set to master when none of the headphone cue buttons are activated.
-    'autoHeadMix': false,
+    "autoHeadMix": false,
     // Enable automatically the headphone cue select (PFL) of the deck when a song is loaded. (Like in virtual-dj)
-    'autoHeadcueOnLoad': true,
+    "autoHeadcueOnLoad": true,
     // Flashing at the rhythm of the beat on the led. Use the Leds map above.
     // Note: if using sync button, then the button will not show sync master state.
-    'beatFlashLed': Hercules4Mx.Leds.none,
+    "beatFlashLed": Hercules4Mx.Leds.none,
     // Simulate vuMeters using the kill and source buttons. If enabled, shows master vus, or deck vu depending if prefader listen button is enabled or not.
-    'useVuMeters': true,
+    "useVuMeters": true,
     // KeyRepeat speed for navigating up/down, in milliseconds. 100 is a good value. Lower values make it scroll faster.
-    'naviScrollSpeed': 100,
+    "naviScrollSpeed": 100,
     // The controller has two modes to report the crossfader position. The default/beatmix curve, and the scratch curve.
     // The default curve reports the real position of the control. The scratch curve just crossfades on the edges.
     // Setting this setting to true, the curve will change to scratch curve when the scratch mode is on (scratch button).
     // Setting it to false will not change it, so it will use the setting configured in the DJHercules Tray-icon configuration.
-    'crossfaderScratchCurve': false,
+    "crossfaderScratchCurve": false,
     // _Scratching_ Playback speed of the virtual vinyl that is being scratched. 45.00 and 33.33 are the common speeeds. (Lower number equals faster scratch)
-    'vinylSpeed': 45,
+    "vinylSpeed": 45,
     // _Scratching_ You should configure this setting to the same value than in the DJHercules tray icon configuration. (Normal means 1/1).
     // If crossfaderScratchCurve is true, or the setting is changed while Mixxx is active, this value will be detected automatically.
-    'sensitivity': 1 / 1,
+    "sensitivity": 1 / 1,
     // _Scratching_ alpha value for the filter (start with 1/8 (0.125) and tune from there)
-    'alpha': 1 / 8,
+    "alpha": 1 / 8,
     // _Scratching_ beta value for the filter (start with alpha/32 and tune from there)
-    'beta': (1 / 8) / 32,
+    "beta": (1 / 8) / 32,
     // This indicates which mapping for the FX buttons should Mixxx use.
     // The possible values are:
     // original : As they are in the Hercules Manual and the default setup in Virtual DJ 7 LE.
     // mixxx20 : As they were initially defined with the release of Mixxx 2.0
     // mixxx21 : AS they were defined with the release of Mixxx 2.1
     // With a little caution, you can modify them at the bottom of this file
-    'FXbuttonsSetup': 'mixxx21',
+    "FXbuttonsSetup": "mixxx21",
     // This allows to use the left jog wheel in place of the right jog wheel when pressing the right jog wheel.
     // I implemented this to overcome the failure of the right jog wheel on my controller.
-    'useSingleJogWheelHack': false
+    "useSingleJogWheelHack": false
 };
 
 //
@@ -119,104 +119,104 @@ Hercules4Mx.rightJogWheelGroup = "[Channel2]";
 
 Hercules4Mx.navigationStatus = {
     //Navigation direction 1 up, -1 down, 0 do not move
-    'direction': 0,
+    "direction": 0,
     //Indicator that the up or down buttons are pressed. Separated from direction to avoid a race condition with jogwheel.
-    'enabled': false,
+    "enabled": false,
     //Indicates if navigating in the sidebar, or in the library
-    'sidebar': false,
+    "sidebar": false,
     //Holds the timeout event id that does the key-repeat action for moving up or down holding only the key.
-    'timeoutId': null,
+    "timeoutId": null,
     //Indicates if it is the first execution of the timer for this timer instance. We use this to have a longer start time when pressing the button than for keyrepeat.
-    'isSingleShotTimer': false
+    "isSingleShotTimer": false
 };
 
 Hercules4Mx.forwardRewindStatus = {
     //Navigation direction 1 forward, -1 backward, 0 do not move
-    'direction': 0,
+    "direction": 0,
     //The group name for the deck of which the forward and rewind buttons have been pressed.
-    'group': null,
+    "group": null,
     //Holds the timeout event id that starts the forward/backward seeking.
-    'timeoutId': null
+    "timeoutId": null
 };
 
 Hercules4Mx.syncEnabledStatus = {
     //Holds the timeout event id that starts the forward/backward seeking.
-    'timeoutId': null,
+    "timeoutId": null,
     //Indicates if the timeout has been reached
-    'triggered': 0
+    "triggered": 0
 };
 
 Hercules4Mx.editModes = {
     // Edit mode disabled
-    'disabled': -1,
+    "disabled": -1,
     // Beatgrid edit mode
-    'beatgrid': 0,
+    "beatgrid": 0,
     // Effect edit mode (currently unimplemented)
-    'effects': 1,
+    "effects": 1,
     // Loop edit mode
-    'loop': 2,
+    "loop": 2,
     // Effect knob moving mode
-    'effectknob': 3,
+    "effectknob": 3,
     // Loop sizing mode
-    'loopsizing': 4,
+    "loopsizing": 4,
     // musical key change mode
-    'pitchkeychanging': 5
+    "pitchkeychanging": 5
 };
 Hercules4Mx.editModeStatus = {
     // The selected edit mode
-    'mode': Hercules4Mx.editModes.disabled,
+    "mode": Hercules4Mx.editModes.disabled,
     // The selected effect or deck
-    'effect': -1,
+    "effect": -1,
     // If the edit mode was used. (this is similar to the shiftstatus.used)
-    'used': false
+    "used": false
 };
 Hercules4Mx.shiftStatus = {
     //The shift button is currently pressed (hold down)
-    'pressed': false,
+    "pressed": false,
     //Some action has been triggered that has used the shift status
-    'used': false,
+    "used": false,
     //The brake action has been triggered (this is used so that the shift button can be released)
-    'braking': false,
+    "braking": false,
     //The brake action has been triggered (this is used so that the shift button can be released)
-    'reversing': false
+    "reversing": false
 };
 Hercules4Mx.VuMeterL = {
     // This is used internally to know that this is VuMeterR
-    'initchan': 1,
+    "initchan": 1,
     //top led (originally thought to be the clip indicator, but it is now the -3dB and clip is shown by flickering)
-    'clip': 0x16,
+    "clip": 0x16,
     //vu leds
-    'vu3': 0x17,
-    'vu2': 0x18,
-    'vu1': 0x19,
+    "vu3": 0x17,
+    "vu2": 0x18,
+    "vu1": 0x19,
     // Which source to use for this vumeter. [Disabled] for no source
-    'source': '[Master]',
+    "source": "[Master]",
     // Midichan of this vumeter. This is needed when switching the Decks (A/C, B/D)
-    'midichan': 0x90,
+    "midichan": 0x90,
     // Last value evaluated. This allows to quantize the value and reduce the amount of messages sent.
-    'lastvalue': 0
+    "lastvalue": 0
 };
 Hercules4Mx.VuMeterR = {
     // This is used internally to know that this is VuMeterR
-    'initchan': 2,
+    "initchan": 2,
     //top led (originally thought to be the clip indicator, but it is now the -3dB and clip is shown by flickering)
-    'clip': 0x36,
+    "clip": 0x36,
     //vu leds
-    'vu3': 0x37,
-    'vu2': 0x38,
-    'vu1': 0x39,
+    "vu3": 0x37,
+    "vu2": 0x38,
+    "vu1": 0x39,
     // Which source to use for this vumeter. [Disabled] for no source
-    'source': '[Master]',
+    "source": "[Master]",
     // Midichan of this vumeter. This is needed when switching the Decks (A/C, B/D)
-    'midichan': 0x90,
+    "midichan": 0x90,
     // Last value evaluated. This allows to quantize the value and reduce the amount of messages sent.
-    'lastvalue': 0
+    "lastvalue": 0
 };
 Hercules4Mx.previewOnDeck = {
-    '[Channel1]':false,
-    '[Channel2]':false,
-    '[Channel3]':false,
-    '[Channel4]':false
+    "[Channel1]":false,
+    "[Channel2]":false,
+    "[Channel3]":false,
+    "[Channel4]":false
 };
 // Amount of time in milliseconds to hold a button to trigger some actions.
 Hercules4Mx.KeyHoldTime = 500;
@@ -233,13 +233,13 @@ Hercules4Mx.pitchMsbValue = [0x40, 0x40, 0x40, 0x40];
 //Default action for the action map.
 Hercules4Mx.noActionButtonMap = {
     //Action to do when pressed
-    'buttonPressAction': null, //This needs to be setup at the end, once the function is defined
+    "buttonPressAction": null, //This needs to be setup at the end, once the function is defined
     //Action to do when released
-    'buttonReleaseAction': null,
+    "buttonReleaseAction": null,
     //Additional information, if needed
-    'extraParameter': null,
+    "extraParameter": null,
     //If this button has a led, this can be used to connect it.
-    'ledToConnect': null
+    "ledToConnect": null
 };
 //Array of button mappings. It is filled from the presets at the end of this file.
 Hercules4Mx.buttonMappings = [Hercules4Mx.noActionButtonMap];
@@ -639,32 +639,32 @@ Hercules4Mx.onSyncLed = function(value, group, control) {
 
 // only feed the correct levels to each channel of the vumeter
 Hercules4Mx.onVuMeterMasterL = function(value) {
-    if (Hercules4Mx.VuMeterL.source === '[Master]') {
+    if (Hercules4Mx.VuMeterL.source === "[Master]") {
         Hercules4Mx.updateVumeterEvent(Hercules4Mx.VuMeterL, value);
     }
 };
 Hercules4Mx.onVuMeterMasterR = function(value) {
-    if (Hercules4Mx.VuMeterR.source === '[Master]') {
+    if (Hercules4Mx.VuMeterR.source === "[Master]") {
         Hercules4Mx.updateVumeterEvent(Hercules4Mx.VuMeterR, value);
     }
 };
 Hercules4Mx.onVuMeterDeck1 = function(value) {
-    if (Hercules4Mx.VuMeterL.source === '[Channel1]') {
+    if (Hercules4Mx.VuMeterL.source === "[Channel1]") {
         Hercules4Mx.updateVumeterEvent(Hercules4Mx.VuMeterL, value);
     }
 };
 Hercules4Mx.onVuMeterDeck2 = function(value) {
-    if (Hercules4Mx.VuMeterR.source === '[Channel2]') {
+    if (Hercules4Mx.VuMeterR.source === "[Channel2]") {
         Hercules4Mx.updateVumeterEvent(Hercules4Mx.VuMeterR, value);
     }
 };
 Hercules4Mx.onVuMeterDeck3 = function(value) {
-    if (Hercules4Mx.VuMeterL.source === '[Channel3]') {
+    if (Hercules4Mx.VuMeterL.source === "[Channel3]") {
         Hercules4Mx.updateVumeterEvent(Hercules4Mx.VuMeterL, value);
     }
 };
 Hercules4Mx.onVuMeterDeck4 = function(value) {
-    if (Hercules4Mx.VuMeterR.source === '[Channel4]') {
+    if (Hercules4Mx.VuMeterR.source === "[Channel4]") {
         Hercules4Mx.updateVumeterEvent(Hercules4Mx.VuMeterR, value);
     }
 };
@@ -736,13 +736,13 @@ Hercules4Mx.autoDJButton = function(midichan, control, value, status, group) {
 
 //Cue button is pressed in a deck.
 Hercules4Mx.cueButton = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
     engine.setParameter(group, "cue_default", (value > 0) ? 1: 0);
 };
 
 //Stop button is pressed in a deck.
 Hercules4Mx.stopButton = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
     if (Hercules4Mx.shiftStatus.pressed || Hercules4Mx.shiftStatus.braking) { //Shifting: Do brake effect.
         var deck = script.deckFromGroup(group);
         engine.brake(deck, value ? true : false);
@@ -765,7 +765,7 @@ Hercules4Mx.stopButton = function(midichan, control, value, status, groupInitial
 
 //Play button is pressed in a deck.
 Hercules4Mx.playButton = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
    
     if (Hercules4Mx.shiftStatus.pressed || Hercules4Mx.shiftStatus.reversing) { //Shifting: Do backward playback effect.
         if (engine.getValue(group, "slip_enabled") !== 0) {
@@ -782,7 +782,7 @@ Hercules4Mx.playButton = function(midichan, control, value, status, groupInitial
 };
 // Forward button is pressed in a deck.
 Hercules4Mx.forwardButton = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
     
     if (Hercules4Mx.shiftStatus.pressed) { //Shifting: Jump 1 beat forward.
         if (value) {
@@ -811,7 +811,7 @@ Hercules4Mx.forwardButton = function(midichan, control, value, status, groupInit
 
 // rewind button is pressed in a deck.
 Hercules4Mx.rewindButton = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
     if (Hercules4Mx.shiftStatus.pressed) { //Shifting: Jump 1 beat backwards.
         if (value) {
             engine.setValue(group, "beatjump_1_backward", 1);
@@ -860,7 +860,7 @@ Hercules4Mx.pScaleDownButton = function(midichan, control, value, status, group)
             if (Hercules4Mx.editModeStatus.mode !== Hercules4Mx.editModes.disabled) {
                 Hercules4Mx.deactivateEditModeAction();
             }
-            Hercules4Mx.activateEditModeAction(Hercules4Mx.editModes.pitchkeychanging, '');
+            Hercules4Mx.activateEditModeAction(Hercules4Mx.editModes.pitchkeychanging, "");
             Hercules4Mx.editModeStatus.used = false;
         } else {
             Hercules4Mx.deactivateEditModeAction();
@@ -883,7 +883,7 @@ Hercules4Mx.pScaleUpButton = function(midichan, control, value, status, group) {
             if (Hercules4Mx.editModeStatus.mode !== Hercules4Mx.editModes.disabled) {
                 Hercules4Mx.deactivateEditModeAction();
             }
-            Hercules4Mx.activateEditModeAction(Hercules4Mx.editModes.pitchkeychanging, '');
+            Hercules4Mx.activateEditModeAction(Hercules4Mx.editModes.pitchkeychanging, "");
             Hercules4Mx.editModeStatus.used = false;
         } else {
             Hercules4Mx.deactivateEditModeAction();
@@ -1081,7 +1081,7 @@ Hercules4Mx.navigationFolders = function(midichan, control, value, status, group
     if (value) {
         if (Hercules4Mx.navigationStatus.sidebar) {
             //if we are already on sidebar, open/close group
-            engine.setParameter('[Playlist]', 'ToggleSelectedSidebarItem', 1);
+            engine.setParameter("[Playlist]", "ToggleSelectedSidebarItem", 1);
         }
         Hercules4Mx.navigationStatus.sidebar = true;
         midi.sendShortMsg(Hercules4Mx.NOnC1, 0x3E, 0x00);
@@ -1142,7 +1142,7 @@ Hercules4Mx.doNavigateAction = function() {
 
 Hercules4Mx.LoadSelectedTrack = function(midichan, control, value, status, groupInitial) {
     if (value > 0) {
-        var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+        var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
         engine.setValue(group, "LoadSelectedTrack", 1);
         engine.setValue(group, "LoadSelectedTrack", 0);
     }
@@ -1301,7 +1301,7 @@ Hercules4Mx.LoopEditPress = function(group, fxbutton, value, extraparam) {
     if (Hercules4Mx.editModeStatus.mode !== Hercules4Mx.editModes.disabled) {
         Hercules4Mx.deactivateEditModeAction();
     }
-    Hercules4Mx.activateEditModeAction(Hercules4Mx.editModes.loopsizing, '');
+    Hercules4Mx.activateEditModeAction(Hercules4Mx.editModes.loopsizing, "");
     Hercules4Mx.editModeStatus.used = false;
 };
 Hercules4Mx.LoopEditRelease = function(group, fxbutton, value, extraparam) {
@@ -1385,7 +1385,7 @@ Hercules4Mx.LoopButtonPush = function(group, fxbutton, value, extraparam) {
 // Some buttons have default actions if the button is maintained pressed (like play a hotcue), and others
 // have additional functionality (like editing the loop length , or using the effect superknob)
 Hercules4Mx.FXButton = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
     var fxbutton = (control > 0x20) ? control - 0x20 : control;
     if (Hercules4Mx.shiftStatus.pressed) {
         //Tell shift not to change state.
@@ -1427,7 +1427,7 @@ Hercules4Mx.jogWheel = function(midichan, control, value, status, groupInitial) 
         Hercules4Mx.navigationStatus.direction = direction;
         Hercules4Mx.doNavigateAction();
     } else {
-        var group = (Hercules4Mx.previewOnDeck[groupInitial]) ? '[PreviewDeck1]' : groupInitial;
+        var group = (Hercules4Mx.previewOnDeck[groupInitial]) ? "[PreviewDeck1]" : groupInitial;
         if (Hercules4Mx.userSettings.useSingleJogWheelHack === true 
                 && Hercules4Mx.swapJogWheel === true) {
             group = Hercules4Mx.rightJogWheelGroup;
@@ -1459,7 +1459,7 @@ Hercules4Mx.scratchButton = function(midichan, control, value, status, group) {
 Hercules4Mx.wheelTouch = function(midichan, control, value, status, groupInitial) {
     //Scratching does not work with the previewdeck.
     if (Hercules4Mx.previewOnDeck[groupInitial] === false) {
-        var group = (Hercules4Mx.previewOnDeck[groupInitial]) ? '[PreviewDeck1]' : groupInitial;
+        var group = (Hercules4Mx.previewOnDeck[groupInitial]) ? "[PreviewDeck1]" : groupInitial;
         if (Hercules4Mx.scratchEnabled && value) {
             // If button down
             engine.scratchEnable(script.deckFromGroup(group),
@@ -1483,7 +1483,7 @@ Hercules4Mx.scratchWheel = function(midichan, control, value, status, groupIniti
     } else {
         //It has a speed sensor, but you have to move it really fast for it to send something different.
         var direction = (value < 0x40) ? value : value - 0x80;
-        var group = (Hercules4Mx.previewOnDeck[groupInitial]) ? '[PreviewDeck1]' : groupInitial;
+        var group = (Hercules4Mx.previewOnDeck[groupInitial]) ? "[PreviewDeck1]" : groupInitial;
         engine.scratchTick(script.deckFromGroup(group), direction);
     }
 };
@@ -1513,7 +1513,7 @@ Hercules4Mx.deckRateLsb = function(midichan, control, value, status, group) {
 };
 
 Hercules4Mx.deckGain = function(midichan, control, value, status, groupInitial) {
-    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? '[PreviewDeck1]' : groupInitial;
+    var group = (Hercules4Mx.previewOnDeck[groupInitial] === true) ? "[PreviewDeck1]" : groupInitial;
     engine.setParameter(group, "pregain", script.absoluteLin(value,0,1));
 };
 Hercules4Mx.deckTreble = function(midichan, control, value, status, group) {

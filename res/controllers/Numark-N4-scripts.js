@@ -1,10 +1,10 @@
 var NumarkN4 = {};
 
 NumarkN4.scratchSettings = {
-    'alpha': 1.0 / 8,
-    'beta': 1.0 / 8 / 32,
-    'jogResolution': 600,
-    'vinylSpeed': 33 + 1 / 3,
+    "alpha": 1.0 / 8,
+    "beta": 1.0 / 8 / 32,
+    "jogResolution": 600,
+    "vinylSpeed": 33 + 1 / 3,
 };
 
 NumarkN4.searchAmplification = 5; // multiplier for the jogwheel when the search button is held down.
@@ -108,7 +108,7 @@ NumarkN4.init = function (id) {
 };
 
 NumarkN4.topContainer = function (channel) {
-  this.group = '[Channel'+channel+']';
+  this.group = "[Channel"+channel+"]";
   var theContainer = this;
 
   this.btnEffect1 = new components.Button({
@@ -217,7 +217,7 @@ NumarkN4.topContainer = function (channel) {
         number = (i+1)+theContainer.hotcueButtons.length*this.hotCuePage;
         theContainer.hotcueButtons[i].disconnect();
         theContainer.hotcueButtons[i].number=number;
-        theContainer.hotcueButtons[i].outKey='hotcue_' + number + '_enabled';
+        theContainer.hotcueButtons[i].outKey="hotcue_" + number + "_enabled";
         theContainer.hotcueButtons[i].unshift(); // for setting inKey based on number property.
         theContainer.hotcueButtons[i].connect();
         theContainer.hotcueButtons[i].trigger();
@@ -371,7 +371,7 @@ NumarkN4.MixerTemplate.prototype = new components.ComponentContainer();
 
 NumarkN4.Deck = function (channel) {
   components.Deck.call(this, channel);
-  this.group = '[Channel' + channel + ']';
+  this.group = "[Channel" + channel + "]";
   this.rateRangeEntry=1;
   this.lastOrientation = (channel % 2) ? 0 : 2;
   this.isSearching=false;
@@ -386,8 +386,8 @@ NumarkN4.Deck = function (channel) {
   for (var i = 1; i <= 3; i++) {
       this.eqKnobs[i] = new components.Pot({
           midi: [0xB0, 0x29 + i + 5*(channel-1)],
-          group: '[EqualizerRack1_'+theDeck.group+'_Effect1]',
-          inKey: 'parameter' + i,
+          group: "[EqualizerRack1_"+theDeck.group+"_Effect1]",
+          inKey: "parameter" + i,
 
           // The exact center of the Pots on my N4 are roughly around 0x3e instead of 0x40
           // This is a Hack which adds that offset back when the pot is in the center range.

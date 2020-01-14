@@ -223,8 +223,8 @@ function KontrolF1Controller() {
             left = KontrolF1.segments[Math.floor(number/10)];
             right = KontrolF1.segments[number % 10];
         } else {
-            left = KontrolF1.segments['empty'];
-            right = KontrolF1.segments['empty'];
+            left = KontrolF1.segments["empty"];
+            right = KontrolF1.segments["empty"];
         }
 
         for (var i=0;i<7;i++) {
@@ -335,7 +335,7 @@ KontrolF1.init = function (id) {
     KontrolF1.resetLEDs();
     KontrolF1.setControlMode(KontrolF1.defaultControlMode);
 
-    KontrolF1.segments['empty'] = [0,0,0,0,0,0,0];
+    KontrolF1.segments["empty"] = [0,0,0,0,0,0,0];
     KontrolF1.segments[0] = [0x0,0x40,0x40,0x40,0x40,0x40,0x40];
     KontrolF1.segments[1] = [0x0,0x40,0x40,0x0,0x0,0x0,0x0];
     KontrolF1.segments[2] = [0x40,0x0,0x40,0x40,0,0x40,0x40];
@@ -583,7 +583,7 @@ KontrolF1.linkGrid = function(mode,button,group,name,toggle,callback,ledcolor,le
         KontrolF1.grids[mode] = {};
     if (ledname==undefined) {
         if (name.match(/hotcue_[0-9]/))
-            ledname = name + '_enabled';
+            ledname = name + "_enabled";
         else
             ledname = name;
     }
@@ -622,7 +622,7 @@ KontrolF1.linkPlay = function(mode,button,group,name,toggle,callback,ledname) {
 
     if (ledname==undefined) {
         if (name.match(/hotcue_[0-9]/))
-            ledname = name + '_enabled';
+            ledname = name + "_enabled";
         else
             ledname = name;
     }
@@ -667,7 +667,7 @@ KontrolF1.button = function(button,field) {
         return;
     }
     if (button.toggle) {
-        if (button.name=='play')
+        if (button.name=="play")
             controller.togglePlay(button.group,field);
         else
             controller.toggle(button.group,button.name,field.value);
@@ -678,9 +678,9 @@ KontrolF1.button = function(button,field) {
 }
 
 KontrolF1.switchControlMode = function(field) {
-    if (field.name=='quant') {
+    if (field.name=="quant") {
         KontrolF1.setControlMode("samplers");
-    } else if (field.name=='capture') {
+    } else if (field.name=="capture") {
         KontrolF1.setControlMode("decks");
     } else {
         HIDDebug("Unconfigured mode selector button: " + field.name);
@@ -819,9 +819,9 @@ KontrolF1.hotcue = function(button,field) {
     if (field.value == controller.buttonStates.released)
         return;
     if (controller.modifiers.get("shift"))
-        name = button.name + '_clear';
+        name = button.name + "_clear";
     else
-        name = button.name + '_activate';
+        name = button.name + "_activate";
     engine.setValue(button.group,name,true);
 }
 

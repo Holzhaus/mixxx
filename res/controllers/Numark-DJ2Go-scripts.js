@@ -125,7 +125,7 @@ NumarkDJ2Go.deck = function(deckNum) {
 		if (this.scratchTimer !== 0)
 			{
 			engine.stopTimer(this.scratchTimer);
-			};
+			}
 		var playDelay = 40; //Adjust to suit.
 		var scrConst = 1;  //Adjust to suit. 
 		var scrVal = (forwards)?scrConst:-scrConst;
@@ -144,7 +144,7 @@ NumarkDJ2Go.deck = function(deckNum) {
 		if (this.pitchTimer !== 0)
 			{
 			engine.stopTimer(this.pitchTimer);
-			};
+			}
 		var bendConst = 0.002; //Adjust to suit.
 		var nVal = (Math.abs(this.bendVal) + bendConst); //Turn bendVal to absolute value and add.
 		nVal = (nVal > 3.0)?3.0:nVal; //If gone over 3, keep at 3.
@@ -214,12 +214,12 @@ NumarkDJ2Go.light = function(group, midino, deckID, controlID) {
 			{		
 			engine.stopTimer(this.flashTimer);
 			this.flashTimer= 0;
-			};
+			}
 		if (this.flashOnceTimer !== 0)
 			{		
 			engine.stopTimer(this.flashOnceTimer);
 			this.flashOnceTimer= 0;
-			};
+			}
 		if (relight)
 			{
 			this.onOff(1);
@@ -227,7 +227,7 @@ NumarkDJ2Go.light = function(group, midino, deckID, controlID) {
 		else
 			{
 			this.onOff(0);
-			};
+			}
 	};
 	this.flashOn = function(flashNo) {
 		var relight = this.lit;
@@ -237,7 +237,7 @@ NumarkDJ2Go.light = function(group, midino, deckID, controlID) {
 		if (flashNo)
 			{
 			engine.beginTimer((flashNo * 600) -50, this.objStr + ".flashOff(" + relight + ")", true);
-			};			
+			}			
 	};
 };
 
@@ -248,7 +248,7 @@ NumarkDJ2Go.addControl = function(arrID, ID, controlObj, addLight) {
 		{
 		//If the button can illuminate, a light object is created for it (see above).
 		controlObj.light = new NumarkDJ2Go.light(this.group, controlObj.midino, "D" + this.deckNum,ID);
-		};
+		}
 	arrAdd[ID] = controlObj;
 };
 
@@ -318,8 +318,8 @@ NumarkDJ2Go.decks.D2.addControl("control", "bendPlus", new NumarkDJ2Go.control("
              else
                  {
                  backBut.onOff(1);
-                 };
-          };
+                 }
+          }
     };
 
     //Changes the selectKnob (below) dirMode attribute to 'track' if 'playlist'. If dirMode attribute
@@ -338,8 +338,8 @@ NumarkDJ2Go.decks.D2.addControl("control", "bendPlus", new NumarkDJ2Go.control("
              else
                  {
                  selectKnob.dirMode = "Track";
-                 };
-          };
+                 }
+          }
     };
 
 //Depending on the dirMode attribute, either scrolls up and down the directory tree or the tracklist.
@@ -348,7 +348,7 @@ NumarkDJ2Go.selectKnob = function(channel, midino, value) {
 	if (!("dirMode" in selectKnob))
 		{
 		selectKnob.dirMode = "Playlist"; //Assumes playlist if back/enter buttons never been pressed.
-		};
+		}
 	selectKnob.key = (value == 0x7F)?"SelectPrev"+selectKnob.dirMode:"SelectNext"+selectKnob.dirMode;
 	selectKnob.onOff(1);
 };
@@ -366,12 +366,12 @@ NumarkDJ2Go.load = function(channel, midino, value, status, group) {
 		else
 			{
 			deck.scratchMode = true;
-			};
+			}
 		}
 	else
 		{
 		deck.control.load.onOff(1);
-		};
+		}
 };
 
 //Turns on/off headphone monitor for the deck, but also turns off the headphone monitor for the other deck.
@@ -392,8 +392,8 @@ NumarkDJ2Go.pfl = function(channel, midino, value, status, group) {
 		      NumarkDJ2Go.decks.D1.control.pfl.onOff(0);
 		      NumarkDJ2Go.decks.D2.control.pfl.onOff(0);
 		      deck.control.pfl.onOff(1);
-		      };
-             };	
+		      }
+             }	
         };
 
 
@@ -411,12 +411,12 @@ NumarkDJ2Go.cue = function(channel, midino, value, status, group) {
 	       if (deck.braked)
                   {
 		  deck.brakeOff();
-		  };
+		  }
 	       if (deck.loadedCheck())
 		   {
 		   var onoff = (status == 0x90)?1:0;
 		   deck.control.cue.onOff(onoff);
-		   };
+		   }
               }
 };
 
@@ -427,7 +427,7 @@ NumarkDJ2Go.play = function(channel, midino, value, status, group) {
                 if (shiftBck) {
                               engine.setValue(group, "reverse", 0);
                               shiftUsed=1;
-                              };
+                              }
                 }
                 else {
                      if (shiftBck){
@@ -440,7 +440,7 @@ NumarkDJ2Go.play = function(channel, midino, value, status, group) {
 	               if (deck.braked)
 		              {
 		              deck.brakeOff();
-		              };
+		              }
 	                 if (deck.loadedCheck())
                             {
 		            if (deck.control.play.checkOn())
@@ -448,14 +448,14 @@ NumarkDJ2Go.play = function(channel, midino, value, status, group) {
 		               if (deck.scratchMode)
                                   {
 //    	               		deck.brakeOn(750);
-                                  };
+                                  }
 		               deck.control.play.onOff(0);
 		               }
                                else {
                 	            deck.control.play.onOff(1);
-                	            };
-	                     };
-	             };
+                	            }
+	                     }
+	             }
 };
 
 //Jog wheel. Scratches or pitchbends depending on whether scratch mode selected.
@@ -465,14 +465,14 @@ NumarkDJ2Go.wheel = function (channel, midino, value, status, group) {
 	if (shiftEnt) {
 	   deck.scratchMode=1;
 	   shiftUsed=1;
-           };
+           }
 		if (deck.scratchMode)
 			{
 			if (deck.scratchTimer == 0)
 				{
 				//If no scratch timer (i.e. jog wheel not already being scratched), turns scratch mode on.
 				deck.scratchOn();
-				};
+				}
 			//Does scratching. Whether back or forward given in 'forwards' variable.
 			deck.scratch(forwards);
 			deck.scratchMode=0;
@@ -481,7 +481,7 @@ NumarkDJ2Go.wheel = function (channel, midino, value, status, group) {
 			{
 			//Does pitchbend.
 			deck.pitchBend(forwards);
-			};
+			}
 };
 
 //Pitch bend down. This toggles off the pitch bend up and pitches down while the
@@ -499,7 +499,7 @@ NumarkDJ2Go.pitchBendMinus = function(channel, midino, value, status, group) {
 			{
 			deck.control.bendMinus.onOff(0)
 			}
-	};
+	}
 };
 
 //Pitch bend up. This toggles off the pitch bend down and pitches up while the
@@ -517,7 +517,7 @@ NumarkDJ2Go.pitchBendPlus = function(channel, midino, value, status, group) {
 			{
 			deck.control.bendPlus.onOff(0)
 			}
-	};
+	}
 };
 
 NumarkDJ2Go.sync =function (channel, midino, value, status, group) {
@@ -570,7 +570,7 @@ NumarkDJ2Go.loadLights = function(value,group) {
 		deck.control.pfl.light.flashOff();
 		deck.control.play.light.flashOff();
 		deck.control.cue.light.flashOff();
-		};
+		}
 };
 
 //Headphone monitor lights.
@@ -593,8 +593,8 @@ NumarkDJ2Go.cueLights = function(value, group, key) {
 			{
 			deck.control.cue.light.flashOff();
 			deck.control.play.light.flashOff(1);
-			};
-		};
+			}
+		}
 };
 
 //Play lights. If play paused, both cue and play flash. If play resumed, play button 
@@ -612,8 +612,8 @@ NumarkDJ2Go.playLights = function(value, group, key) {
 			{
 			deck.control.play.light.flashOn();
 			deck.control.cue.light.flashOn();
-			};
-		};
+			}
+		}
 };
 
 //Mixxx's sync feature is not the same as VDJ, where syncing appears to

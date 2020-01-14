@@ -1099,8 +1099,8 @@ TraktorS4MK2.scalerJog = function(tick_delta, time_delta) {
   } else {
     //If shift pressed, fast search through tracks
     // otherwise search normal speed
-    if (TraktorS4MK2.controller.shift_pressed['deck1'] ||
-        TraktorS4MK2.controller.shift_pressed['deck2']
+    if (TraktorS4MK2.controller.shift_pressed["deck1"] ||
+        TraktorS4MK2.controller.shift_pressed["deck2"]
       ){
       return (tick_delta / time_delta) * 20.0;
     } else {
@@ -1185,8 +1185,8 @@ TraktorS4MK2.snapHandler = function(field) {
 TraktorS4MK2.FXButtonHandler = function(field){
   if(field.value){
     if (
-      TraktorS4MK2.controller.shift_pressed['deck1'] ||
-      TraktorS4MK2.controller.shift_pressed['deck2']
+      TraktorS4MK2.controller.shift_pressed["deck1"] ||
+      TraktorS4MK2.controller.shift_pressed["deck2"]
     ) {
       engine.setValue(field.group, "effect_selector", 1);
     } else {
@@ -1221,13 +1221,13 @@ TraktorS4MK2.callbackPregain = function(field) {
   }
 
   if (
-    TraktorS4MK2.controller.shift_pressed['deck1'] ||
-    TraktorS4MK2.controller.shift_pressed['deck2']
+    TraktorS4MK2.controller.shift_pressed["deck1"] ||
+    TraktorS4MK2.controller.shift_pressed["deck2"]
   ) {
     if (delta > 0){
-        engine.setValue(group, 'beats_translate_later', true);
+        engine.setValue(group, "beats_translate_later", true);
     } else if (delta < 0){
-        engine.setValue(group, 'beats_translate_earlier', true);
+        engine.setValue(group, "beats_translate_earlier", true);
     }
   } else {
     var cur_pregain = engine.getValue(group, "pregain");
@@ -1304,7 +1304,7 @@ TraktorS4MK2.displayCharLoopCounter = function(deck, charPos, character){
     //  and the dot before it is 0 (but this is dealt with in displayCharLoopDot)
 
   var numArray = {
-    '': [], //empty
+    "": [], //empty
     0: [2,3,4,5,6,7],
     1: [2,3],
     2: [1,3,4,6,7],
@@ -1316,13 +1316,13 @@ TraktorS4MK2.displayCharLoopCounter = function(deck, charPos, character){
     8: [1,2,3,4,5,6,7],
     9: [5,4,1,3,2,7],
 // Add a few special characters
-    'h': [5,1,6,2],
-    'n': [6,1,2],
-    'o': [6,1,2,7],
-    '-': [1],
-    'b': [5,6,7,2,1],
-    'c': [1,6,7],
-    'u': [6,2,7],
+    "h": [5,1,6,2],
+    "n": [6,1,2],
+    "o": [6,1,2,7],
+    "-": [1],
+    "b": [5,6,7,2,1],
+    "c": [1,6,7],
+    "u": [6,2,7],
   }
 
   for (j = 0; j < 8; j++) {
@@ -1574,7 +1574,7 @@ TraktorS4MK2.onLoopSizeChanged = function(value, group, key) {
   var deck = TraktorS4MK2.resolveDeckIfActive(group);
   //deal with single digit values
   if (value.toString().length === 1){
-    TraktorS4MK2.sendLoopSizeMessage(deck, '', value, false, false);
+    TraktorS4MK2.sendLoopSizeMessage(deck, "", value, false, false);
   // values with two digits
   } else if (value.toString().length === 2 ) {
     TraktorS4MK2.sendLoopSizeMessage(deck, value.toString().split("")[0], value.toString().split("")[1], false, false);
@@ -1583,7 +1583,7 @@ TraktorS4MK2.onLoopSizeChanged = function(value, group, key) {
     var inverse_value = 1/value;
     if (inverse_value % 1 === 0){
       if (inverse_value.toString().length === 1) {
-        TraktorS4MK2.sendLoopSizeMessage(deck, '', inverse_value, false, true);
+        TraktorS4MK2.sendLoopSizeMessage(deck, "", inverse_value, false, true);
       } else if(inverse_value.toString().length === 2) {
         TraktorS4MK2.sendLoopSizeMessage(deck, inverse_value.toString().split("")[0], inverse_value.toString().split("")[1], false, true);
       }

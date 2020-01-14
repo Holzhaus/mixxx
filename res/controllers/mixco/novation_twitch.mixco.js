@@ -30,8 +30,8 @@
 // modules are usable too when writing your script with the *Mixco*
 // framework.
 
-var _      = require('underscore')
-var mixco  = require('mixco')
+var _      = require("underscore")
+var mixco  = require("mixco")
 var c      = mixco.control
 var b      = mixco.behaviour
 var v      = mixco.value
@@ -55,8 +55,8 @@ mixco.script.register(module, {
     info: {
 	name:   "[mixco] Novation Twitch",
 	author: "Juan Pedro Bolivar Puente <raskolnikov@gnu.org>",
-        forums: 'https://github.com/arximboldi/mixco/issues',
-        wiki:   'https://sinusoid.es/mixco/script/korg_nanokontrol2.mixco.html',
+        forums: "https://github.com/arximboldi/mixco/issues",
+        wiki:   "https://sinusoid.es/mixco/script/korg_nanokontrol2.mixco.html",
         description: "Controller mapping for Novation Twitch (in basic mode).",
     },
 
@@ -206,11 +206,11 @@ mixco.script.register(module, {
 
 	c.input(ccIdAll(0x06))
             .option(scaledDiff(1/2))
-            .does("[QuickEffectRack1_"+g+"]", 'super1')
+            .does("[QuickEffectRack1_"+g+"]", "super1")
 	c.control(noteIdAll(0x06))
-            .does("[QuickEffectRack1_"+g+"]", 'enabled')
+            .does("[QuickEffectRack1_"+g+"]", "enabled")
 	c.control(noteIdAll(0x0D))
-            .does("[QuickEffectRack1_"+g+"]", 'enabled')
+            .does("[QuickEffectRack1_"+g+"]", "enabled")
 
 	// #### Effects
 	//

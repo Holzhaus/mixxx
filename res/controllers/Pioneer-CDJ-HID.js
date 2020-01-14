@@ -170,7 +170,7 @@ function PioneerCDJController() {
         // anyway when implemented. When I know what data is sent, I
         // will add a helper function to actually do something with it!
         var waveform_packet_datalen = 400;
-        packet = new HIDPacket("waveform", 0x1, undefined, [0x2]);;
+        packet = new HIDPacket("waveform", 0x1, undefined, [0x2]);
         for (var i=0;i<waveform_packet_datalen;i++)
             packet.addControl("hid","byte_"+i,i,"B");
         //this.controller.registerOutputPacket(packet);
@@ -627,7 +627,7 @@ PioneerCDJHID.track = function(field) {
     if (field.value==controller.buttonStates.released)
         return;
 
-    if (field.name=='previous_track') {
+    if (field.name=="previous_track") {
         var position = PioneerCDJHID.track_length -
             PioneerCDJHID.track_length * engine.getValue(group,"playposition");
         if (position<PioneerCDJHID.previousJumpStartSeconds) {
@@ -645,7 +645,7 @@ PioneerCDJHID.track = function(field) {
             //engine.setValue(group,"eject",true);
             engine.setValue(group,"LoadSelectedTrack",true);
         }
-    } else if (field.name=='next_track') {
+    } else if (field.name=="next_track") {
         // Jump to next track
         engine.setValue("[Playlist]","SelectNextTrack",true);
         // Disable until audio bug with noise when we do this is fixed
@@ -679,16 +679,16 @@ PioneerCDJHID.hotcue = function(field) {
     }
 
     if (controller.modifiers.get("hotcue_delete")) {
-        control = field.name + '_activate';
+        control = field.name + "_activate";
         controller.setOutput("hid",field.name+"_red",0);
         controller.setOutput("hid",field.name+"_green",0);
-        control = field.name + '_clear';
+        control = field.name + "_clear";
     } else if (controller.modifiers.get("hotcue_rec")) {
-        control = field.name + '_set';
+        control = field.name + "_set";
         controller.setOutput("hid",field.name+"_red",1);
         controller.setOutput("hid",field.name+"_green",1);
     } else {
-        control = field.name + '_activate';
+        control = field.name + "_activate";
         controller.setOutput("hid",field.name+"_red",0);
         controller.setOutput("hid",field.name+"_green",1);
     }

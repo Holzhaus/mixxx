@@ -10,12 +10,12 @@ PioneerCDJ2000.shutdown = function(id) {}
 
 PioneerCDJ2000.jog_wheel = function(channel, control, value, status, group) {
     value = (value-0x40) / PioneerCDJ2000.jog_sensitivity;
-    engine.setValue(group,'jog',value);
+    engine.setValue(group,"jog",value);
 };
 
 PioneerCDJ2000.jog_scratch = function(channel, control, value, status, group) {
     value = (value-0x40) / PioneerCDJ2000.scratch_sensitivity;
-    engine.setValue(group,'jog',value);
+    engine.setValue(group,"jog",value);
 };
 
 PioneerCDJ2000.select_track_knob = function(channel, control, value, status, group) {
@@ -26,6 +26,6 @@ PioneerCDJ2000.select_track_knob = function(channel, control, value, status, gro
     } else {
         return;
     }
-    engine.setValue(group,'SelectTrackKnob',value);
+    engine.setValue(group,"SelectTrackKnob",value);
 };
 

@@ -279,7 +279,7 @@ TraktorS2MK3.syncHandler = function (field) {
         TraktorS2MK3.outputHandler(field.value, field.group, "sync_enabled");
     } else {
         if (field.value) {
-            if (engine.getValue(field.group, 'sync_enabled') === 0) {
+            if (engine.getValue(field.group, "sync_enabled") === 0) {
                 script.triggerControl(field.group, "beatsync");
                 // Start timer to measure how long button is pressed
                 TraktorS2MK3.syncPressedTimer[field.group] = engine.beginTimer(300, function () {
@@ -861,22 +861,22 @@ TraktorS2MK3.lightDeck = function (switchOff) {
         fullLight = 0x00;
     }
 
-    var current = (!!engine.getValue("[Channel1]", "play_indicator") ? fullLight : softLight);
+    var current = (engine.getValue("[Channel1]", "play_indicator") ? fullLight : softLight);
     TraktorS2MK3.controller.setOutput("[Channel1]", "play_indicator", current, false);
-    current = (!!engine.getValue("[Channel2]", "play_indicator")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel2]", "play_indicator")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel2]", "play_indicator", current, false);
 
-    current = (!!engine.getValue("[Channel1]", "cue_indicator")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel1]", "cue_indicator")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel1]", "cue_indicator", current, false);
-    current = (!!engine.getValue("[Channel2]", "cue_indicator")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel2]", "cue_indicator")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel2]", "cue_indicator", current, false);
 
     TraktorS2MK3.controller.setOutput("[Channel1]", "shift", softLight, false);
     TraktorS2MK3.controller.setOutput("[Channel2]", "shift", softLight, false);
 
-    current = (!!engine.getValue("[Channel1]", "sync_enabled")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel1]", "sync_enabled")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel1]", "sync_enabled", current, false);
-    current = (!!engine.getValue("[Channel1]", "sync_enabled")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel1]", "sync_enabled")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel2]", "sync_enabled", current, false);
 
     // Hotcues mode is default start value
@@ -886,21 +886,21 @@ TraktorS2MK3.lightDeck = function (switchOff) {
     TraktorS2MK3.controller.setOutput("[Channel1]", "samples", softLight, false);
     TraktorS2MK3.controller.setOutput("[Channel2]", "samples", softLight, false);
 
-    current = (!!engine.getValue("[Channel1]", "keylock")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel1]", "keylock")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel1]", "keylock", current, false);
-    current = (!!engine.getValue("[Channel2]", "keylock")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel2]", "keylock")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel2]", "keylock", current, false);
 
     for (var i = 1; i <= 8; ++i) {
-        current = (!!engine.getValue("[Channel1]", "hotcue_" + i + "_enabled")) ? fullLight : softLight;
+        current = (engine.getValue("[Channel1]", "hotcue_" + i + "_enabled")) ? fullLight : softLight;
         TraktorS2MK3.controller.setOutput("[Channel1]", "pad_" + i, current, false);
-        current = (!!engine.getValue("[Channel2]", "hotcue_" + i + "_enabled")) ? fullLight : softLight;
+        current = (engine.getValue("[Channel2]", "hotcue_" + i + "_enabled")) ? fullLight : softLight;
         TraktorS2MK3.controller.setOutput("[Channel2]", "pad_" + i, current, false);
     }
 
-    current = (!!engine.getValue("[Channel1]", "pfl")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel1]", "pfl")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel1]", "pfl", current, false);
-    current = (!!engine.getValue("[Channel2]", "pfl")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel2]", "pfl")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel2]", "pfl", current, false);
 
     TraktorS2MK3.controller.setOutput("[ChannelX]", "fxButton1", softLight, false);
@@ -911,9 +911,9 @@ TraktorS2MK3.lightDeck = function (switchOff) {
     TraktorS2MK3.controller.setOutput("[Channel1]", "reverse", softLight, false);
     TraktorS2MK3.controller.setOutput("[Channel2]", "reverse", softLight, false);
 
-    current = (!!engine.getValue("[Channel1]", "slip_enabled")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel1]", "slip_enabled")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel1]", "slip_enabled", current, false);
-    current = (!!engine.getValue("[Channel2]", "slip_enabled")) ? fullLight : softLight;
+    current = (engine.getValue("[Channel2]", "slip_enabled")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Channel2]", "slip_enabled", current, false);
 
     TraktorS2MK3.controller.setOutput("[Channel1]", "addTrack", softLight, false);
@@ -928,7 +928,7 @@ TraktorS2MK3.lightDeck = function (switchOff) {
     TraktorS2MK3.controller.setOutput("[ChannelX]", "quantize", softLight, false);
 
     // For the last output we should send the packet finally
-    current = (!!engine.getValue("[Microphone]", "talkover")) ? fullLight : softLight;
+    current = (engine.getValue("[Microphone]", "talkover")) ? fullLight : softLight;
     TraktorS2MK3.controller.setOutput("[Microphone]", "talkover", current, true);
 };
 

@@ -72,7 +72,7 @@ NANOPAD2RK.loops[0x4a] = new Array("[Channel2]", 4);
 
 
 NANOPAD2RK.init = function (id, debug) { // called when the device is opened & set up
-    if (NANOPAD2RK.debug){print("###init##############")};
+    if (NANOPAD2RK.debug){print("###init##############")}
 };
 
 NANOPAD2RK.shutdown = function () {
@@ -81,7 +81,7 @@ NANOPAD2RK.shutdown = function () {
     
     
 NANOPAD2RK.clear = function (){//enables hotcue clearing
-    if (NANOPAD2RK.debug){print("###hotcueclear##############")};
+    if (NANOPAD2RK.debug){print("###hotcueclear##############")}
     NANOPAD2RK.hotcueClear=true;
     };
 
@@ -91,22 +91,22 @@ NANOPAD2RK.noclear = function (){//disables hotcue clearing
 
 NANOPAD2RK.hotcueButton = function (channel, control, value, status, group) {
 
-    if (NANOPAD2RK.debug){print("###hotcueButton##############")};
-    if (NANOPAD2RK.debug){print("status:"+status)};
-    if (NANOPAD2RK.debug){print("channel:"+channel)};
-    if (NANOPAD2RK.debug){print("control:"+control)};
-    if (NANOPAD2RK.debug){print("hotcuebank:"+NANOPAD2RK.hotcueBank)};
-    if (NANOPAD2RK.debug){print("phrase:#"+status.toString(16).toLowerCase()+control.toString(16).toLowerCase()+"#")};
+    if (NANOPAD2RK.debug){print("###hotcueButton##############")}
+    if (NANOPAD2RK.debug){print("status:"+status)}
+    if (NANOPAD2RK.debug){print("channel:"+channel)}
+    if (NANOPAD2RK.debug){print("control:"+control)}
+    if (NANOPAD2RK.debug){print("hotcuebank:"+NANOPAD2RK.hotcueBank)}
+    if (NANOPAD2RK.debug){print("phrase:#"+status.toString(16).toLowerCase()+control.toString(16).toLowerCase()+"#")}
     
     //activate or clear depending on whether clear button is pressed
     var thecue = NANOPAD2RK.hotcues[control];
     if (NANOPAD2RK.hotcueClear){
         engine.setValue(thecue[0], "hotcue_"+thecue[1]+"_clear", 1);
-        if (NANOPAD2RK.debug){print("cleared")};
+        if (NANOPAD2RK.debug){print("cleared")}
         } else {
         engine.setValue(thecue[0], "hotcue_"+thecue[1]+"_activate", 1);
-        if (NANOPAD2RK.debug){print("###"+control+"--activated")};
-        };
+        if (NANOPAD2RK.debug){print("###"+control+"--activated")}
+        }
 
     };
 
@@ -136,7 +136,7 @@ NANOPAD2RK.reloopButton = function (channel, control, value, status, group) {
 NANOPAD2RK.reloopButtonRelease = function (channel, control, value, status, group) {//button was released
     if (NANOPAD2RK.debug){print("reloop release");}
     NANOPAD2RK.loopbuttonDown=false;
-    if (NANOPAD2RK.doreloop===true) {engine.setValue(group, "reloop_exit", 1);};
+    if (NANOPAD2RK.doreloop===true) {engine.setValue(group, "reloop_exit", 1);}
     NANOPAD2RK.doreloop=true;
     };
 
@@ -157,7 +157,7 @@ NANOPAD2RK.loopplus = function (channel, control, value, status, group) {
         engine.setValue(group, "loop_start_position", start+interval);
         engine.setValue(group, "loop_end_position", end+interval);
         return true;
-        };
+        }
     };
 NANOPAD2RK.loopminus = function (channel, control, value, status, group) {
     //shrinks loop or moves loop back
@@ -170,7 +170,7 @@ NANOPAD2RK.loopminus = function (channel, control, value, status, group) {
         engine.setValue(group, "loop_start_position", start-interval);
         engine.setValue(group, "loop_end_position", end-interval);
         return true;
-        };
+        }
     };
 
 

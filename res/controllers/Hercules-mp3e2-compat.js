@@ -7,8 +7,8 @@ MP3e2.init = function(id) {
 // Debug switch. set to true to print debug log messages in console.
 var debug=false;
 
-var c1 = '[Channel1]'
-var c2 = '[Channel2]'
+var c1 = "[Channel1]"
+var c2 = "[Channel2]"
 
 MP3e2.incomingData = function(data, length) {
     if (debug)
@@ -79,16 +79,16 @@ MP3e2.incomingData = function(data, length) {
 
 
             case 0x9029:
-                group = '[Playlist]';
+                group = "[Playlist]";
                 f = HerculesMP3e2.selectTrack;
                 break;
             case 0x902a:
-                group = '[Playlist]';
+                group = "[Playlist]";
                 f = HerculesMP3e2.mic;
                 break;
             case 0x902b:
             case 0x902c:
-                group = '[Playlist]';
+                group = "[Playlist]";
                 f = HerculesMP3e2.scroll;
                 break;
             case 0x902d:
@@ -117,11 +117,11 @@ MP3e2.incomingData = function(data, length) {
                 f = HerculesMP3e2.filterLow;
                 break;
             case 0xb038:
-                engine.setValue('[Master]', 'crossfader', script.absoluteLin(value, -1, 1));
+                engine.setValue("[Master]", "crossfader", script.absoluteLin(value, -1, 1));
                 break;
         }
 
-        if (typeof(f) == 'string') {
+        if (typeof(f) === "string") {
             engine.setValue(group, f, (value>0)?1:0);
         } else if (f) {
             f(0, midino, value, status, group);

@@ -79,7 +79,7 @@ MC4000.Deck = function (channel) {
     this.isVinylMode = true;
     this.midiChannel = channel;
     this.engineChannel = channel + 1;
-    this.group = '[Channel' + this.engineChannel + ']';
+    this.group = "[Channel" + this.engineChannel + "]";
     
     // Initialize vinyl mode LED
     midi.sendShortMsg(0x90 + this.midiChannel, 0x07, this.isVinylMode ? 0x7F: 0x00);

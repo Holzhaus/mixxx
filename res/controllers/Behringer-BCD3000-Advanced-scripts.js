@@ -155,7 +155,7 @@ BehringerBCD3000.On = function (channel, control, value, status, group) {
         // Turn off the On light
         midi.sendShortMsg(0xB0, 0x6, 0x00);
         engine.setValue("[Channel1]","LoadSelectedTrack",1);
-    };
+    }
 };
 
 //Action button function 

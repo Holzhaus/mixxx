@@ -189,9 +189,9 @@ HerculesMP3Hid.init = function() {
             case "hotcue": c.layer[deck-1] = "loop"; break;
             case "loop": 
                 c.layer[deck-1] = "kill"; 
-                c.send(g, "fx", !c.kills[deck-1]['filterHighKill']);
-                c.send(g, "hotcue", !c.kills[deck-1]['filterMidKill']);
-                c.send(g, "loop", !c.kills[deck-1]['filterLowKill']);
+                c.send(g, "fx", !c.kills[deck-1]["filterHighKill"]);
+                c.send(g, "hotcue", !c.kills[deck-1]["filterMidKill"]);
+                c.send(g, "loop", !c.kills[deck-1]["filterLowKill"]);
                 break;
             case "kill": 
                 c.layer[deck-1] = "fx";
@@ -313,7 +313,7 @@ HerculesMP3Hid.layer_btn = function(g, e, v) {
             var len = HerculesMP3Hid.loop_lengths[btn-1];
             engine.setValue(g, "beatloop_" + len + "_toggle", 1);
             break;
-        case 'kill':
+        case "kill":
             print("killmode");
             if (v > 0) {
                 engine.setValue(g, HerculesMP3Hid.kill_order[btn-1], !engine.getValue(g, HerculesMP3Hid.kill_order[btn-1]));
@@ -338,7 +338,7 @@ HerculesMP3Hid.scroll_tracks = function(g, e, v) {
     if (v > 0) {
         engine.setValue("[Playlist]", e == "track_next_a" ? "SelectNextTrack" : "SelectPrevTrack", 1);
         if (!HerculesMP3Hid.scroll_timer) {
-            HerculesMP3Hid.scroll_timer = engine.beginTimer(150, 'HerculesMP3Hid.scroll_tracks("[Playlist]","' + e + '",' + v + ')');
+            HerculesMP3Hid.scroll_timer = engine.beginTimer(150, "HerculesMP3Hid.scroll_tracks(\"[Playlist]\",\"" + e + "\"," + v + ")");
         }
     }
     else {
@@ -364,9 +364,9 @@ HerculesMP3Hid.kill_status = function(g, e, v) {
     if (HerculesMP3Hid.layer[deck-1] == "kill") {
         
         switch (e) {
-            case 'filterHighKill': HerculesMP3Hid.send(g, "fx", !v); break;
-            case 'filterMidKill': HerculesMP3Hid.send(g, "hotcue", !v); break;
-            case 'filterLowKill': HerculesMP3Hid.send(g, "loop", !v); 
+            case "filterHighKill": HerculesMP3Hid.send(g, "fx", !v); break;
+            case "filterMidKill": HerculesMP3Hid.send(g, "hotcue", !v); break;
+            case "filterLowKill": HerculesMP3Hid.send(g, "loop", !v); 
         }
     }
 }
@@ -545,7 +545,7 @@ HerculesMP3Hid.send = function(g, e, v) {
 HerculesMP3Hid.feedbackData = function(v, g, e) {
     if (HerculesMP3Hid.feedbacks[g + e] != undefined) {
         for (func in HerculesMP3Hid.feedbacks[g + e]) {
-            if (typeof(HerculesMP3Hid.feedbacks[g + e][func]) == "function") {
+            if (typeof(HerculesMP3Hid.feedbacks[g + e][func]) === "function") {
                 HerculesMP3Hid.feedbacks[g + e][func](g, e, v);
             }
         }
@@ -575,7 +575,7 @@ HerculesMP3Hid.control = function(packetid, name, group, type, offset, mask) {
         }
         else {
             // map to a relative value if it's an encoder, usually +1 or -1
-            if (this.type == 'encoder') {
+            if (this.type == "encoder") {
                 this.relative = value - this.value;
                 if (this.relative > 100) {
                     this.relative -= this.maxval;
@@ -617,7 +617,7 @@ HerculesMP3Hid.incomingData = function (data, length) {
 
             for (key in c.controls[i]) {
                 var control = c.controls[i][key];
-                if (typeof(control) == 'object' && control.packetid == data[0] && control.changed(data[i])) {
+                if (typeof(control) === "object" && control.packetid == data[0] && control.changed(data[i])) {
 
                     //
                     // we found a hid control that has changed value within that byte, check for callbacks
@@ -626,7 +626,7 @@ HerculesMP3Hid.incomingData = function (data, length) {
                     var callbacks = c.callbacks[control.name];
                     if (callbacks != undefined) {
                         for (var i=0; i<callbacks.length; i++) {
-                            if (typeof(callbacks[i][1]) == 'function') {
+                            if (typeof(callbacks[i][1]) === "function") {
 
                                 //
                                 // check we need to call for this value change: all, press, release

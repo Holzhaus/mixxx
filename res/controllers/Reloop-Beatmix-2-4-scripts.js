@@ -407,14 +407,14 @@ ReloopBeatmix24.WheelTurn = function(channel, control, value, status, group) {
     if (engine.isScratching(deck)) {
         engine.scratchTick(deck, newValue); // Scratch!
     } else {
-        engine.setValue(group, 'jog', newValue); // Pitch bend
+        engine.setValue(group, "jog", newValue); // Pitch bend
     }
 };
 
 // Led Feedback functions
 // ========================================================
 ReloopBeatmix24.AllJogLEDsToggle = function(deck, state, step) {
-    step = typeof step !== 'undefined' ? step : 1; // default value
+    step = typeof step !== "undefined" ? step : 1; // default value
     for (var j = 0x30; j <= 0x3F; j += step) {
         midi.sendShortMsg(deck, j, state);
     }

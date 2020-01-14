@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-var prify = require('es6-promisify')
-var ejs = require('ejs')
-var path = require('path')
-var readFile = prify(require('fs').readFile)
-var writeFile = prify(require('fs').writeFile)
-var mkdirp = prify(require('mkdirp'))
+var prify = require("es6-promisify")
+var ejs = require("ejs")
+var path = require("path")
+var readFile = prify(require("fs").readFile)
+var writeFile = prify(require("fs").writeFile)
+var mkdirp = prify(require("mkdirp"))
 
 if (process.argv.length !== 4) {
-  throw Error('Usage: target outFile')
+  throw Error("Usage: target outFile")
 }
 
 var tgt = process.argv[2]
-var pkg = require(path.resolve('package.json'))
-var tgtPkg = require(path.resolve('packages', tgt, 'package.json'))
-var buttons = require(path.resolve('packages', tgt, 'buttons'))
-var templateFile = path.join('packages', tgt, 'template.xml.ejs')
+var pkg = require(path.resolve("package.json"))
+var tgtPkg = require(path.resolve("packages", tgt, "package.json"))
+var buttons = require(path.resolve("packages", tgt, "buttons"))
+var templateFile = path.join("packages", tgt, "template.xml.ejs")
 
 readFile(templateFile)
   .then(function (template) {

@@ -536,12 +536,12 @@ NumarkMixTrackPro.onLoopChange = function(value, group, key){
 
 NumarkMixTrackPro.onReloopExitChange = function(value, group, key){
 	var deck = NumarkMixTrackPro.groupToDeck(group);
-	NumarkMixTrackPro.setLED(NumarkMixTrackPro.leds[deck]['reloop_exit'], value);
+	NumarkMixTrackPro.setLED(NumarkMixTrackPro.leds[deck]["reloop_exit"], value);
 }
 
 NumarkMixTrackPro.onReloopExitChangeAuto = function(value, group, key){
 	var deck = NumarkMixTrackPro.groupToDeck(group);
-	NumarkMixTrackPro.setLED(NumarkMixTrackPro.leds[deck]['loop_end_position'], value);
+	NumarkMixTrackPro.setLED(NumarkMixTrackPro.leds[deck]["loop_end_position"], value);
 }
 
 // Stutters adjust BeatGrid

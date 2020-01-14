@@ -202,7 +202,7 @@ DJCStarlight.scratchWheelShift = function(channel, control, value, status, group
 
 DJCStarlight._bendWheelImpl = function(deck, value) {
     var interval = DJCStarlight._convertWheelRotation(value);
-    engine.setValue('[Channel' + deck + ']', 'jog',
+    engine.setValue("[Channel" + deck + "]", "jog",
                     interval * DJCStarlight.bendScale);
 };
 
@@ -221,12 +221,12 @@ DJCStarlight.cueMaster = function(channel, control, value, status, group) {
         return;
     }
 
-    var masterIsCued = engine.getValue('[Master]', 'headMix') > 0;
+    var masterIsCued = engine.getValue("[Master]", "headMix") > 0;
     // Toggle state.
     masterIsCued = !masterIsCued;
 
     var headMixValue = masterIsCued ? 1 : -1;
-    engine.setValue('[Master]', 'headMix', headMixValue);
+    engine.setValue("[Master]", "headMix", headMixValue);
 
     // Set LED (will be overwritten when [Shift] is released)
     var cueMasterLedValue = masterIsCued ? 0x7F : 0x00;
@@ -245,11 +245,11 @@ DJCStarlight.cueMix = function(channel, control, value, status, group) {
     }
 
     // Toggle state.
-    script.toggleControl('[Master]', 'headSplit');
+    script.toggleControl("[Master]", "headSplit");
 
     // Set LED (will be overwritten when [Shift] is released)
     var cueMixLedValue =
-        engine.getValue('[Master]', 'headSplit') ? 0x7F : 0x00;
+        engine.getValue("[Master]", "headSplit") ? 0x7F : 0x00;
     midi.sendShortMsg(0x92, 0x0C, cueMixLedValue);
 };
 
@@ -259,18 +259,18 @@ DJCStarlight.shiftButton = function(channel, control, value, status, group) {
         // When Shift is held, light the LEDS to show the status of the alt
         // functions of the cue buttons.
         var cueMasterLedValue =
-            engine.getValue('[Master]', 'headMix') > 0 ? 0x7F : 0x00;
+            engine.getValue("[Master]", "headMix") > 0 ? 0x7F : 0x00;
         midi.sendShortMsg(0x91, 0x0C, cueMasterLedValue);
         var cueMixLedValue =
-            engine.getValue('[Master]', 'headSplit') ? 0x7F : 0x00;
+            engine.getValue("[Master]", "headSplit") ? 0x7F : 0x00;
         midi.sendShortMsg(0x92, 0x0C, cueMixLedValue);
     } else {
         // When Shift is released, go back to the normal LED values.
         var cueChan1LedValue =
-            engine.getValue('[Channel1]', 'pfl') ? 0x7F : 0x00;
+            engine.getValue("[Channel1]", "pfl") ? 0x7F : 0x00;
         midi.sendShortMsg(0x91, 0x0C, cueChan1LedValue);
         var cueChan2LedValue =
-            engine.getValue('[Channel2]', 'pfl') ? 0x7F : 0x00;
+            engine.getValue("[Channel2]", "pfl") ? 0x7F : 0x00;
         midi.sendShortMsg(0x92, 0x0C, cueChan2LedValue);
     }
 };

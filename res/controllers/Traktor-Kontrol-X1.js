@@ -1,5 +1,5 @@
 
-function KontrolX1() {};
+function KontrolX1() {}
 
 KontrolX1.debugging = true;
 
@@ -308,18 +308,18 @@ KontrolX1.SelectPlaylistKnob = function(channel, control, value, status, group) 
 // Seek button callback
 KontrolX1.seek = function(channel, control, value, status, group) {
     if (value==0) {
-        engine.setValue(group, 'wheel', 0);
+        engine.setValue(group, "wheel", 0);
         return;
     }
     value = (engine.getValue(group, "play")==true) ? 0.02 : 0.5;
-    if (control=='seek_back')
+    if (control=="seek_back")
         value = -value;
-    engine.setValue(group, 'wheel', value);
+    engine.setValue(group, "wheel", value);
 }
 
 // Reset rate button
 KontrolX1.rate_reset = function(channel, control, value, status, group) {
-    engine.setValue(group, 'rate', 0);
+    engine.setValue(group, "rate", 0);
 }
 
 // Callback for rate encoders
@@ -341,7 +341,7 @@ KontrolX1.rate_encoder = function(channel, control, value, status, group) {
 KontrolX1.jog_encoder = function(channel, control, value, status, group) {
     value = KontrolX1.jog_delta * value;
     KontrolX1.debug("jog_encoder group "+group+" value "+value);
-    engine.setValue(group, 'jog', value);
+    engine.setValue(group, "jog", value);
 }
 
 // Callback for loop size encoders

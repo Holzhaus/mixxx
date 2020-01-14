@@ -51,7 +51,7 @@ Jockey3ME.EffectLedMeterShow = function () {
 			}
 			engine.trigger("[EffectRack1_EffectUnit" + i + "]", "mix");
 		}
-  };
+  }
 }
 // Funny Led Show on VuMeter
 Jockey3ME.LedMeterShow = function() {
@@ -68,7 +68,7 @@ Jockey3ME.LedMeterShow = function() {
     engine.stopTimer(Jockey3ME.LedMeterShowTimer);
     Jockey3ME.LedMeterShowTimer = 0;
     Jockey3ME.EffectLedMeter = engine.beginTimer(20,"Jockey3ME.EffectLedMeterShow()");
-  };
+  }
 }
 
 Jockey3ME.LedShowBegin = function () {
@@ -82,13 +82,13 @@ Jockey3ME.init = function () {
     midi.sendShortMsg(0x91,i,0x7F);
     midi.sendShortMsg(0x92,i,0x7F);
     midi.sendShortMsg(0x93,i,0x7F);
-  };
+  }
   for (var j = 1; j < 120; j++) {
     midi.sendShortMsg(0x90,j,0x00);
     midi.sendShortMsg(0x91,j,0x00);
     midi.sendShortMsg(0x92,j,0x00);
     midi.sendShortMsg(0x93,j,0x00);
-  };
+  }
   Jockey3ME.LedShowBeginTimer = engine.beginTimer(2000,"Jockey3ME.LedShowBegin()",1); // LedShow Script Starts Here after 500ms
 	for (var i = 1; i <= 4; i++) {
 		for (var j = 1; j <= 3; j++) {
@@ -111,7 +111,7 @@ Jockey3ME.shutdown = function () {
     midi.sendShortMsg(0x91,i,0x00);
     midi.sendShortMsg(0x92,i,0x00);
     midi.sendShortMsg(0x93,i,0x00);
-  };
+  }
 }
 
 // The button that enables/disables scratching
@@ -159,7 +159,7 @@ Jockey3ME.hotcue_clear = function (channel, control, value, status, group) {
    } else {
     Jockey3ME.hotcueClearVal = 0;
     midi.sendShortMsg(status,control,0x00);
-   };
+   }
 }
 
 // Effect Sections

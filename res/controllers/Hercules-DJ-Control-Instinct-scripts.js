@@ -1,4 +1,4 @@
-function HCInstinct() {};
+function HCInstinct() {}
 
 
 
@@ -157,12 +157,12 @@ HCInstinct.pitch = function (midino, control, value, status, group) {
         case 0x2C: HCInstinct.pitchSwitches["B"][1]=state;
             engine.setValue(group, "rate_temp_up"+speed, state); 
             break;
-    };    
+    }    
         // when buttons + and - pressed simultaneously
         if (HCInstinct.pitchSwitches["A"][0] && HCInstinct.pitchSwitches["A"][1]) {
         // reset pitch to 0
         engine.setValue(group, "rate", 0); 
-    };
+    }
         if (HCInstinct.pitchSwitches["B"][0] && HCInstinct.pitchSwitches["B"][1]) {
         engine.setValue(group, "rate", 0); 
     }

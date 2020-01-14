@@ -5,7 +5,7 @@
 // For Mixxx version 1.11.x
 // 
 
-function HileVci100() {};
+function HileVci100() {}
 
 HileVci100.debugging = true;
 
@@ -498,7 +498,7 @@ HileVci100.beatloop = function(button,value) {
     if (!value) return;
     var modifiers = HileVci100.modifiers[button.group];
     var group = HileVci100.activeLooperGroup;
-    var control = button.control.replace('_enabled','_activate');
+    var control = button.control.replace("_enabled","_activate");
     HileVci100.debug("BEATLOOP: " + group+" "+ button.control);
     midi.sendShortMsg(0x90,button.midino,0x7f);
     engine.setValue(group,control,true);

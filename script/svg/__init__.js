@@ -17,10 +17,10 @@ function isNumber(n) {
     svg.regexpQuote = function (str, delimiter) {
         return String(str).replace(
             new RegExp(
-                '[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]',
-                'g'
+                "[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\" + (delimiter || "") + "-]",
+                "g"
             ),
-            '\\$&'
+            "\\$&"
         );
     }
 
@@ -31,7 +31,7 @@ function isNumber(n) {
         
         // hook_name( arg1 [, arg2]... )
         if( hookNames.length ){
-            var pattern = "("+hookNames.join('|')+")\\(([^\\(\\)]+)\\)\\s*;?";
+            var pattern = "("+hookNames.join("|")+")\\(([^\\(\\)]+)\\)\\s*;?";
             return pattern;
         }
     }
@@ -41,23 +41,23 @@ function isNumber(n) {
         if( varName in global ){
             return global[varName];
         }
-        return '';
+        return "";
     }
 
     svg.templateHooks.prop = function( propName, varName ){
-        var out = '';
+        var out = "";
         
         if( (varName in global) ){
             var value = global[varName];
             
             if( isNumber(value) ){
-                out = propName + ':' + value + ';';
+                out = propName + ":" + value + ";";
             } else if( value.length ) {
-                out = propName + ':' + value + ';';
+                out = propName + ":" + value + ";";
             }
             
         } else {
-            console.log( 'Unable to find ' + varName + ' for prop hook.' );
+            console.log( "Unable to find " + varName + " for prop hook." );
         }
         
         return out;

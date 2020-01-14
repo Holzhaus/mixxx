@@ -112,7 +112,7 @@ DigitalJockey2Controller.playTrack = function (channel, control, value) {
 		//If no song is loaded
 		if (engine.getValue("[Channel"+channel+"]", "duration") == 0) { 
 				return; 
-		};
+		}
 		var currentlyPlaying = engine.getValue("[Channel"+channel+"]","play");
 		if (currentlyPlaying == 1) {    // If currently playing
 			engine.setValue("[Channel"+channel+"]","play",0);    // Stop
@@ -141,7 +141,7 @@ DigitalJockey2Controller.Cue = function (channel, control, value) {
 	//If no song is loaded
 	if (engine.getValue("[Channel"+channel+"]", "duration") == 0) { 
 			return; 
-	};
+	}
 	// As soon as we press CUE, execute CUE Logic
 	if(value == DigitalJockey2Controller.keyPressed){
 		engine.setValue("[Channel"+channel+"]","cue_default",1);
@@ -181,7 +181,7 @@ DigitalJockey2Controller.CuePlay = function (channel, control, value) {
 		//If no song is loaded
 		if (engine.getValue("[Channel"+channel+"]", "duration") == 0) { 
 				return; 
-		};
+		}
 		var currentlyPlaying = engine.getValue("[Channel"+channel+"]","play");
 		//print ("isPlaying" + currentlyPlaying);
 		if(currentlyPlaying == 1){

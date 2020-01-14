@@ -265,12 +265,12 @@ NumarkMixTrackII.pitch_bend_down_or_keylock = function(channel, control, value, 
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
         // toggle keylock (only on press down)
         if (value > 0) {
-            var current_keylock_value = engine.getValue(group, 'keylock');
-            engine.setValue(group, 'keylock', !current_keylock_value);
+            var current_keylock_value = engine.getValue(group, "keylock");
+            engine.setValue(group, "keylock", !current_keylock_value);
         }
     } else {
         // temp pitch down
-        engine.setValue(group, 'rate_temp_down', value == 0 ? 0 : 1);
+        engine.setValue(group, "rate_temp_down", value == 0 ? 0 : 1);
     }
 }
 
@@ -283,11 +283,11 @@ NumarkMixTrackII.pitch_bend_up_or_range = function(channel, control, value, stat
             var psr = NumarkMixTrackII.pitch_slider_ranges;
             NumarkMixTrackII.pitch_slider_range_index = (psri + 1) % psr.length;
             //print("setting rate to " + psr[psri]);
-            engine.setValue(group, 'rateRange', psr[psri]);
+            engine.setValue(group, "rateRange", psr[psri]);
         }
     } else {
         // temp pitch up
-        engine.setValue(group, 'rate_temp_up', value > 0 ? 1 : 0);
+        engine.setValue(group, "rate_temp_up", value > 0 ? 1 : 0);
     }
 }
 
@@ -303,11 +303,11 @@ NumarkMixTrackII.hotcue = function(channel, control, value, status, group) {
 
     if (value && NumarkMixTrackII.cue_delete_mode[deck - 1]) {
         // clear the cue and exit delete mode
-        engine.setValue(group, 'hotcue_' + cue_num + '_clear', value);
+        engine.setValue(group, "hotcue_" + cue_num + "_clear", value);
         NumarkMixTrackII.cue_delete_mode[deck - 1] = false;
         NumarkMixTrackII.setLED(NumarkMixTrackII.leds[deck]["hotcue_delete"], false);
     } else if (cue_num >= 1) {
-        engine.setValue(group, 'hotcue_' + cue_num + '_activate', value);
+        engine.setValue(group, "hotcue_" + cue_num + "_activate", value);
     }
 }
 
@@ -328,9 +328,9 @@ NumarkMixTrackII.loop_halve = function(channel, control, value, status, group) {
 
     var deck = NumarkMixTrackII.groupToDeck(group);
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
-        engine.setValue(group, 'loop_double', 1);
+        engine.setValue(group, "loop_double", 1);
     } else {
-        engine.setValue(group, 'loop_halve', 1);
+        engine.setValue(group, "loop_halve", 1);
     }
 }
 
@@ -340,7 +340,7 @@ NumarkMixTrackII.fx1_or_auto1 = function(channel, control, value, status, group)
 
     var deck = NumarkMixTrackII.groupToDeck(group);
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
-        engine.setValue(group, 'beatloop', 1);
+        engine.setValue(group, "beatloop", 1);
     } else {
         var fxGroup = null;
         var c = "enabled";
@@ -361,7 +361,7 @@ NumarkMixTrackII.fx2_or_auto2 = function(channel, control, value, status, group)
 
     var deck = NumarkMixTrackII.groupToDeck(group);
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
-        engine.setValue(group, 'beatloop', 2);
+        engine.setValue(group, "beatloop", 2);
     } else {
         var c = "enabled";
         if (control == 0x5A) {
@@ -379,7 +379,7 @@ NumarkMixTrackII.fx3_or_auto4 = function(channel, control, value, status, group)
 
     var deck = NumarkMixTrackII.groupToDeck(group);
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
-        engine.setValue(group, 'beatloop', 4);
+        engine.setValue(group, "beatloop", 4);
     } else {
         var c = "enabled";
         if (control == 0x5B) {
@@ -395,9 +395,9 @@ NumarkMixTrackII.fx3_or_auto4 = function(channel, control, value, status, group)
 NumarkMixTrackII.tap_or_auto16 = function(channel, control, value, status, group) {
     var deck = NumarkMixTrackII.groupToDeck(group);
     if (value > 0 && NumarkMixTrackII.shift_is_pressed[deck - 1]) {
-        engine.setValue(group, 'beatloop', 16);
+        engine.setValue(group, "beatloop", 16);
     } else {
-        engine.setValue(group, 'bpm_tap', value);
+        engine.setValue(group, "bpm_tap", value);
     }
 }
 
@@ -422,9 +422,9 @@ NumarkMixTrackII.fxKnobs = function(channel, control, value, status, group) {
 
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
         if (value == 1) {
-            engine.setValue(fxGroup, 'effect_selector', +1);
+            engine.setValue(fxGroup, "effect_selector", +1);
         } else {
-            engine.setValue(fxGroup, 'effect_selector', -1);
+            engine.setValue(fxGroup, "effect_selector", -1);
         }
     } else {
         var c = "meta";
@@ -469,9 +469,9 @@ NumarkMixTrackII.cue = function(channel, control, value, status, group) {
     var deck = NumarkMixTrackII.groupToDeck(group);
 
     if (NumarkMixTrackII.shift_is_pressed[deck - 1]) {
-        engine.setValue(group, 'cue_gotoandstop', value);
+        engine.setValue(group, "cue_gotoandstop", value);
     } else {
-        engine.setValue(group, 'cue_default', value);
+        engine.setValue(group, "cue_default", value);
     }
 }
 
@@ -490,9 +490,9 @@ NumarkMixTrackII.play = function(channel, control, value, status, group) {
         }
     } else {
         if (isPlaying) {
-            engine.setValue(group, 'play', 0);
+            engine.setValue(group, "play", 0);
         } else {
-            engine.setValue(group, 'play', 1);
+            engine.setValue(group, "play", 1);
         }
     }
 }

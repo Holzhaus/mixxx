@@ -186,9 +186,9 @@ StantonSCS1d.init = function (id,debug) {
     var CC = 0xB0 + StantonSCS1d.channel;
     var No = 0x90 + StantonSCS1d.channel;
 
-    midi.sendShortMsg(CC,1,'x'.toInt());   // Stop platter
-    if (StantonSCS1d.platterSpeed==1) midi.sendShortMsg(CC,1,'2'.toInt());   // 45 RPM
-    else midi.sendShortMsg(CC,1,'1'.toInt());   // 33 RPM
+    midi.sendShortMsg(CC,1,"x".toInt());   // Stop platter
+    if (StantonSCS1d.platterSpeed==1) midi.sendShortMsg(CC,1,"2".toInt());   // 45 RPM
+    else midi.sendShortMsg(CC,1,"1".toInt());   // 33 RPM
     
     midi.sendSysexMsg(StantonSCS1d.sysex.concat([StantonSCS1d.channel, 14, 0, 0xF7]),8);  // Clear Passive mode
 
@@ -217,7 +217,7 @@ StantonSCS1d.init2 = function () {
 StantonSCS1d.shutdown = function () {   // called when the MIDI device is closed
     
     var CC = 0xB0 + StantonSCS1d.channel;
-    midi.sendShortMsg(CC,1,'x'.toInt());   // Stop the platter
+    midi.sendShortMsg(CC,1,"x".toInt());   // Stop the platter
 
     // Graffiti :)
     var message = "Mixxx";
@@ -303,7 +303,7 @@ StantonSCS1d.controlButton = function (channel, control, value, status) {
     var byte1 = 0x90 + channel;
     if ((status & 0XF0) == 0x90) {    // If button down
         engine.scratchDisable(StantonSCS1d.deck);
-        midi.sendShortMsg(0xB0 + channel,1,'x'.toInt());   // Stop platter
+        midi.sendShortMsg(0xB0 + channel,1,"x".toInt());   // Stop platter
         midi.sendShortMsg(byte1,control,1);  // Light 'er up
         StantonSCS1d.platterMode["[Channel"+StantonSCS1d.deck+"]"] = "control";
         midi.sendShortMsg(0x80+channel,0x1C,0);  // turn off the "browse" mode button
@@ -327,7 +327,7 @@ StantonSCS1d.browseButton = function (channel, control, value, status) {
             midi.sendShortMsg(byte1,control,1);  // Light 'er up
             midi.sendShortMsg(0x80+channel,0x1B,0);  // turn off the "control" mode button
             midi.sendShortMsg(0x80+channel,0x1D,0);  // turn off the "vinyl" mode button
-            midi.sendShortMsg(0xB0 + channel,1,'x'.toInt());   // Stop platter
+            midi.sendShortMsg(0xB0 + channel,1,"x".toInt());   // Stop platter
             engine.setValue("[Playlist]","SelectPrevPlaylist",1);
         }
         return;
@@ -593,9 +593,9 @@ StantonSCS1d.rew = function (channel, control, value, status) {
     // If in vinyl mode and button down
     if ((status & 0xF0) == 0x90) {
         if (StantonSCS1d.platterMode["[Channel"+StantonSCS1d.deck+"]"] == "vinyl") {
-            midi.sendShortMsg(0xB0+channel,1,'4'.toInt());   // 45 RPM backward
+            midi.sendShortMsg(0xB0+channel,1,"4".toInt());   // 45 RPM backward
             midi.sendSysexMsg(StantonSCS1d.sysex.concat([StantonSCS1d.channel, 35, 1.5, 5, 0, 0, 0xF7]),11);  // Motor full speed
-            midi.sendShortMsg(0xB0+channel,1,'o'.toInt());   // Start platter
+            midi.sendShortMsg(0xB0+channel,1,"o".toInt());   // Start platter
         }
         engine.setValue("[Channel"+StantonSCS1d.deck+"]","back",1);
         return;
@@ -610,9 +610,9 @@ StantonSCS1d.ffwd = function (channel, control, value, status) {
     // If in vinyl mode and button down
     if ((status & 0xF0) == 0x90) {
         if (StantonSCS1d.platterMode["[Channel"+StantonSCS1d.deck+"]"] == "vinyl") {
-            midi.sendShortMsg(0xB0+channel,1,'2'.toInt());   // 45 RPM forward
+            midi.sendShortMsg(0xB0+channel,1,"2".toInt());   // 45 RPM forward
             midi.sendSysexMsg(StantonSCS1d.sysex.concat([StantonSCS1d.channel, 35, 1.5, 5, 0, 0, 0xF7]),11);  // Motor full speed
-            midi.sendShortMsg(0xB0+channel,1,'o'.toInt());   // Start platter
+            midi.sendShortMsg(0xB0+channel,1,"o".toInt());   // Start platter
         }
         engine.setValue("[Channel"+StantonSCS1d.deck+"]","fwd",1);
         return;
@@ -1575,12 +1575,12 @@ StantonSCS1d.reverse = function (value) {
     if (engine.getValue("[Channel"+StantonSCS1d.deck+"]","fwd")>0 || engine.getValue("[Channel"+StantonSCS1d.deck+"]","back")>0) return;
     var CC = 0xB0 + StantonSCS1d.channel;
     if (value>0) {
-        if (StantonSCS1d.platterSpeed==1) midi.sendShortMsg(CC,1,'4'.toInt());   // 45 RPM backward
-        else midi.sendShortMsg(CC,1,'3'.toInt());   // 33 RPM backward
+        if (StantonSCS1d.platterSpeed==1) midi.sendShortMsg(CC,1,"4".toInt());   // 45 RPM backward
+        else midi.sendShortMsg(CC,1,"3".toInt());   // 33 RPM backward
         return;
     }
-    if (StantonSCS1d.platterSpeed==1) midi.sendShortMsg(CC,1,'2'.toInt());   // 45 RPM forward
-    else midi.sendShortMsg(CC,1,'1'.toInt());   // 33 RPM forward
+    if (StantonSCS1d.platterSpeed==1) midi.sendShortMsg(CC,1,"2".toInt());   // 45 RPM forward
+    else midi.sendShortMsg(CC,1,"1".toInt());   // 33 RPM forward
 }
 
 StantonSCS1d.pitchChange = function (value,noScratchEnable) {
@@ -1606,14 +1606,14 @@ StantonSCS1d.pitchChange = function (value,noScratchEnable) {
         if (engine.getValue(group,"play")>0 && !StantonSCS1d.state["outsideMotor"]) {
             if (StantonSCS1d.debug) print ("Stopping platter motor: music speed is outside its abilities");
             engine.scratchDisable(StantonSCS1d.deck);    // Disable direct platter control
-            midi.sendShortMsg(CC,1,'x'.toInt());    // Stop platter
+            midi.sendShortMsg(CC,1,"x".toInt());    // Stop platter
         }
         StantonSCS1d.state["outsideMotor"]=true;
         return;
     } else {    // Start the platter since the music speed is within the ability of the motor
         StantonSCS1d.state["outsideMotor"]=false;
         if (StantonSCS1d.platterMode[group] == "vinyl" && engine.getValue(group,"play")>0) {
-                midi.sendShortMsg(CC,1,'o'.toInt());
+                midi.sendShortMsg(CC,1,"o".toInt());
                 // Re-enable direct platter control
                 if (noScratchEnable != true)
                     engine.scratchEnable(StantonSCS1d.deck, StantonSCS1d.scratch["resolution"],
@@ -1647,8 +1647,8 @@ StantonSCS1d.buttonLED = function (value, note, on, off) {
 StantonSCS1d.playLED = function (value) {
     var CC = 0xB0 + StantonSCS1d.channel;
     if (StantonSCS1d.platterMode["[Channel"+StantonSCS1d.deck+"]"] == "vinyl") {
-        if (value==0) midi.sendShortMsg(CC,1,'x'.toInt());   // Stop platter
-        else if (!StantonSCS1d.state["outsideMotor"]) midi.sendShortMsg(CC,1,'o'.toInt());   // Start platter
+        if (value==0) midi.sendShortMsg(CC,1,"x".toInt());   // Stop platter
+        else if (!StantonSCS1d.state["outsideMotor"]) midi.sendShortMsg(CC,1,"o".toInt());   // Start platter
     }
     StantonSCS1d.buttonLED(value, 41, 32, 0);    //green
 }

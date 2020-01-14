@@ -643,10 +643,10 @@ DenonMC6000MK2.OldDeck.prototype.onCensorButton = function (buttonPressed) {
         // Please note that reverseroll seems to have side effects on
         // slip_enabled so better leave it alone while shift is pressed!
         if (buttonPressed) {
-            this.toggleValue('slip_enabled');
+            this.toggleValue("slip_enabled");
         }
     } else {
-        this.setValue('reverseroll', buttonPressed);
+        this.setValue("reverseroll", buttonPressed);
     }
 };
 
@@ -787,26 +787,26 @@ DenonMC6000MK2.OldDeck.prototype.deleteLoop = function () {
 };
 
 DenonMC6000MK2.OldDeck.prototype.onAutoLoopButton = function (isButtonPressed) {
-    if (this.hasLoop() || this.getValue('loop_enabled')) {
+    if (this.hasLoop() || this.getValue("loop_enabled")) {
         if (this.getShiftState()) {
             // Delete loop
-            this.setValue('reloop_toggle', false);
+            this.setValue("reloop_toggle", false);
             if (isButtonPressed) {
                 this.deleteLoop();
             }
         } else {
             // Reloop
-            this.setValue('reloop_toggle', isButtonPressed);
+            this.setValue("reloop_toggle", isButtonPressed);
         }
     } else {
         // Autoloop
-        this.setValue('reloop_toggle', false);
+        this.setValue("reloop_toggle", false);
         this.deleteLoop(); // cleanup
         if (isButtonPressed) {
             if (this.getShiftState()) {
-                this.setValue('beatlooproll_activate', true);
+                this.setValue("beatlooproll_activate", true);
             } else {
-                this.setValue('beatloop_activate', true);
+                this.setValue("beatloop_activate", true);
             }
         }
     }
@@ -837,7 +837,7 @@ DenonMC6000MK2.OldDeck.prototype.onLoopOutButton = function (isButtonPressed) {
 DenonMC6000MK2.OldDeck.prototype.onLoopCutMinusButton = function (isButtonPressed) {
     if (isButtonPressed) {
         if (this.getShiftState()) {
-            var step_size = this.getValue('beatloop_size');
+            var step_size = this.getValue("beatloop_size");
             if (step_size <= 0.0) {
                 step_size = 1;
             }
@@ -851,7 +851,7 @@ DenonMC6000MK2.OldDeck.prototype.onLoopCutMinusButton = function (isButtonPresse
 DenonMC6000MK2.OldDeck.prototype.onLoopCutPlusButton = function (isButtonPressed) {
     if (isButtonPressed) {
         if (this.getShiftState()) {
-            var step_size = this.getValue('beatloop_size');
+            var step_size = this.getValue("beatloop_size");
             if (step_size <= 0.0) {
                 step_size = 1;
             }
@@ -1273,16 +1273,16 @@ DenonMC6000MK2.restoreValues = function () {
 
 DenonMC6000MK2.recvTrackSelectKnob = function (channel, control, value, status) {
     var knobDelta = DenonMC6000MK2.getKnobDelta(value);
-    engine.setValue('[Library]', DenonMC6000MK2.getShiftState() ? 'ScrollVertical' : 'MoveVertical', knobDelta);
+    engine.setValue("[Library]", DenonMC6000MK2.getShiftState() ? "ScrollVertical" : "MoveVertical", knobDelta);
 };
 
 DenonMC6000MK2.recvTrackSelectButton = function (channel, control, value, status) {
     var buttonPressed = DenonMC6000MK2.isButtonPressed(value);
     if (buttonPressed) {
         if (DenonMC6000MK2.getShiftState()) {
-            engine.setValue('[Library]', 'MoveFocusBackward', true);
+            engine.setValue("[Library]", "MoveFocusBackward", true);
         } else {
-            engine.setValue('[Library]', 'GoToItem', true);
+            engine.setValue("[Library]", "GoToItem", true);
         }
     }
 };
@@ -1291,9 +1291,9 @@ DenonMC6000MK2.recvBackButton = function (channel, control, value, status) {
     var buttonPressed = DenonMC6000MK2.isButtonPressed(value);
     if (buttonPressed) {
         if (DenonMC6000MK2.getShiftState()) {
-            engine.setValue('[Library]', 'MoveFocusBackward', true);
+            engine.setValue("[Library]", "MoveFocusBackward", true);
         } else {
-            engine.setValue('[Library]', 'ScrollUp', true);
+            engine.setValue("[Library]", "ScrollUp", true);
         }
     }
 };
@@ -1302,9 +1302,9 @@ DenonMC6000MK2.recvFwdButton = function (channel, control, value, status) {
     var buttonPressed = DenonMC6000MK2.isButtonPressed(value);
     if (buttonPressed) {
         if (DenonMC6000MK2.getShiftState()) {
-            engine.setValue('[Library]', 'MoveFocusForward', true);
+            engine.setValue("[Library]", "MoveFocusForward", true);
         } else {
-            engine.setValue('[Library]', 'ScrollDown', true);
+            engine.setValue("[Library]", "ScrollDown", true);
         }
     }
 };
@@ -1584,15 +1584,15 @@ DenonMC6000MK2.LoadButton = function (options) {
 DenonMC6000MK2.LoadButton.prototype = new components.Button({
     type: components.Button.toggle,
     unshift: function () {
-        this.inKey = 'LoadSelectedTrack';
+        this.inKey = "LoadSelectedTrack";
     },
     shift: function () {
-        this.inKey = 'eject';
+        this.inKey = "eject";
     },
     input: function (channel, control, value, status, group) {
         this.inSetParameter(this.inValueScale(value));
         // Smart PFL control
-        if (this.inKey == 'LoadSelectedTrack' && !engine.getValue(this.group, "play")) {
+        if (this.inKey == "LoadSelectedTrack" && !engine.getValue(this.group, "play")) {
             for (var deckGroup in DenonMC6000MK2.decksByGroup) {
                 engine.setValue(deckGroup, "pfl", this.group == deckGroup);
             }

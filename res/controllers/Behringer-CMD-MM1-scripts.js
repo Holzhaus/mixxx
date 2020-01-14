@@ -21,13 +21,13 @@ components.Button.prototype.off=(invertColor ? 0x01 : 0x00);
 components.ComponentContainer.prototype.layer = function (layer) {
   this.forEachComponent(function (component) {
       if (component.before !== undefined && typeof component.before === "function") {component.before();}
-      if (typeof component["layer"+layer] === 'function') {
+      if (typeof component["layer"+layer] === "function") {
           if (component instanceof components.Button
               && (component.type === components.Button.prototype.types.push
                   || component.type === undefined)
               && component.input === components.Button.prototype.input
-              && typeof component.inKey === 'string'
-              && typeof component.group === 'string') {
+              && typeof component.inKey === "string"
+              && typeof component.group === "string") {
               if (engine.getValue(component.group, component.inKey) !== 0) {
                   engine.setValue(component.group, component.inKey, 0);
               }
@@ -122,8 +122,8 @@ CMDMM.EQAndGain = function (channel, baseAddress) {
   for (var i = 1; i <= 3; i++) {
     this.knobs[i] = new components.Pot({
       midi: [MIDI.CC, baseAddress + 4*(i-1)],
-      group: '[EqualizerRack1_[Channel'+channel+']_Effect1]',
-      inKey: 'parameter' + (4-i),
+      group: "[EqualizerRack1_[Channel"+channel+"]_Effect1]",
+      inKey: "parameter" + (4-i),
       // parameter has to be assigned in reverse.
     });
   }
@@ -135,8 +135,8 @@ CMDMM.EQAndQuickEffect = function (channel, baseAddress) {
   for (var i = 1; i <= 3; i++) {
     this.knobs[i-1] = new components.Pot({
       midi: [MIDI.CC, baseAddress + 4*(i-1)],
-      group: '[EqualizerRack1_[Channel'+channel+']_Effect1]',
-      inKey: 'parameter' + (4-i),
+      group: "[EqualizerRack1_[Channel"+channel+"]_Effect1]",
+      inKey: "parameter" + (4-i),
       // parameter has to be assigned in reverse.
     });
   }
@@ -154,14 +154,14 @@ CMDMM.FXKnobs = function (channel, baseAddress) {
   for (var i = 1; i <= 3; i++) {
     this.knobs[i-1] = new components.Pot({
       midi: [MIDI.CC, baseAddress + 4*(i-1)],
-      group: '[EffectRack1_EffectUnit'+channel+'_Effect'+i+']',
-      inKey: 'meta',
+      group: "[EffectRack1_EffectUnit"+channel+"_Effect"+i+"]",
+      inKey: "meta",
     });
   }
   this.knobs[3] = new components.Pot({
     midi: [MIDI.CC, baseAddress+3*4],
     // (third knob of channel (zero-based)) * (offset of knobs to one another)
-    group: '[EffectRack1_EffectUnit'+channel+']',
+    group: "[EffectRack1_EffectUnit"+channel+"]",
     inKey: "mix",
   });
 };
@@ -337,7 +337,7 @@ CMDMM.fxChannel = function (physicalChannel,virtualChannel) {
         // the fader doesn't get changed if it is set to control the fxunit
         // (look at components.Deck.setCurrentDeck for more explanation)
         if (theDeck.fader.inKey==="super1") {
-          theDeck.fader.group='[EffectRack1_EffectUnit'+theDeck.virtualChannel+']';
+          theDeck.fader.group="[EffectRack1_EffectUnit"+theDeck.virtualChannel+"]";
         }
         theDeck.setCurrentDeck("[Channel"+theDeck.virtualChannel+"]");
       };
@@ -372,7 +372,7 @@ CMDMM.fxChannel = function (physicalChannel,virtualChannel) {
         // the fader doesn't get changed if it is set to control the fxunit
         // (look at components.Deck.setCurrentDeck for more explanation)
         if (theDeck.fader.inKey==="super1") {
-          theDeck.fader.group='[EffectRack1_EffectUnit'+theDeck.virtualChannel+']';
+          theDeck.fader.group="[EffectRack1_EffectUnit"+theDeck.virtualChannel+"]";
         }
         theDeck.setCurrentDeck("[Channel"+theDeck.virtualChannel+"]");
       };
@@ -408,7 +408,7 @@ CMDMM.fxChannel = function (physicalChannel,virtualChannel) {
   this.fader = new components.Pot({
     midi: [MIDI.CC,0x2A+baseAddress],
     inKey: (faderMode[physicalChannel]?"super1":"rate"),
-    group: (faderMode[physicalChannel]?'[EffectRack1_EffectUnit'+theDeck.virtualChannel+']':"[Channel"+theDeck.virtualChannel+"]"),
+    group: (faderMode[physicalChannel]?"[EffectRack1_EffectUnit"+theDeck.virtualChannel+"]":"[Channel"+theDeck.virtualChannel+"]"),
     before: function () {
       this.input=components.Pot.prototype.input;
     },
@@ -419,7 +419,7 @@ CMDMM.fxChannel = function (physicalChannel,virtualChannel) {
           this.group="[Channel"+theDeck.virtualChannel+"]";
         } else {
           this.inKey="super1";
-          this.group='[EffectRack1_EffectUnit'+theDeck.virtualChannel+']';
+          this.group="[EffectRack1_EffectUnit"+theDeck.virtualChannel+"]";
         }
       };
     },

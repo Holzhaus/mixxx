@@ -904,11 +904,11 @@ Wiimote.accel = function(field) {
     if (!controller.modifiers.get("shift")) {
         return;
     }
-    if (field.name == 'accelerometer_x') {
+    if (field.name == "accelerometer_x") {
         HIDDebug(field.name + " DELTA " + field.delta);
-    } else if (field.name == 'accelerometer_y') {
+    } else if (field.name == "accelerometer_y") {
         HIDDebug(field.name + " DELTA " + field.delta);
-    } else if (field.name == 'accelerometer_z') {
+    } else if (field.name == "accelerometer_z") {
         HIDDebug(field.name + " DELTA " + field.delta);
     }
 }

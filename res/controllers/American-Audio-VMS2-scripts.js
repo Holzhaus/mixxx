@@ -83,8 +83,8 @@ VMS2.init = function (id) {    // called when the MIDI device is opened & set up
     engine.connectControl("[Channel1]","play_indicator","VMS2.playlight");
     engine.connectControl("[Channel2]","play_indicator","VMS2.playlight");
 
-    engine.trigger("[Channel1]",'play_indicator');
-    engine.trigger("[Channel2]",'play_indicator');
+    engine.trigger("[Channel1]","play_indicator");
+    engine.trigger("[Channel2]","play_indicator");
 
     print("American Audio "+VMS2.id+" initialized.");
 };

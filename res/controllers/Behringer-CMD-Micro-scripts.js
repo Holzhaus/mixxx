@@ -38,7 +38,7 @@ BehringerCMDMicro.wheelTick = function(channel, control, value, status, grp) {
     if (engine.isScratching(forChannel)) {
         engine.scratchTick(forChannel, value);
     } else {
-        engine.setValue('[Channel' + grp + ']', 'jog', value);
+        engine.setValue("[Channel" + grp + "]", "jog", value);
     }
 };
 
@@ -59,20 +59,20 @@ if (BehringerCMDMicro.PitchBendsKey) {
             if (BehringerCMDMicro.PitchReset[btnIdx]) {
                 if (0 === btns[btnIdx]) {
                     BehringerCMDMicro.PitchReset[btnIdx] = false;
-                    engine.setValue('[Channel' + grp + ']',
-                                    'pitch',
+                    engine.setValue("[Channel" + grp + "]",
+                                    "pitch",
                                     0);
                 }
             } else {
-                var cur = engine.getValue('[Channel' + grp + ']',
-                                          'pitch');
+                var cur = engine.getValue("[Channel" + grp + "]",
+                                          "pitch");
                 if (up) {
                     cur += 1;
                 } else {
                     cur -= 1;
                 }
-                engine.setValue('[Channel' + grp + ']',
-                                'pitch',
+                engine.setValue("[Channel" + grp + "]",
+                                "pitch",
                                 cur);
             }
         }
@@ -82,9 +82,9 @@ if (BehringerCMDMicro.PitchBendsKey) {
         // 0x11 is the left deck pitch bend up button, while 0x21 is the right.
         var up = (0x11 === control) || (0x21 === control);
 
-        var signal = 'rate_temp_down';
+        var signal = "rate_temp_down";
         if (up) {
-            signal = 'rate_temp_up';
+            signal = "rate_temp_up";
         }
 
         var isNoteOn = 0x90 === (status & 0xF0);    // 0x90 is the 'Note On'
@@ -92,7 +92,7 @@ if (BehringerCMDMicro.PitchBendsKey) {
                                                     // sent when the button is
                                                     // pressed down.
 
-        engine.setValue('[Channel' + grp + ']', signal, isNoteOn);
+        engine.setValue("[Channel" + grp + "]", signal, isNoteOn);
     };
 }
 BehringerCMDMicro.shutdown = function() {};

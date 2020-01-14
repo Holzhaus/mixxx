@@ -80,9 +80,9 @@ WirelessDJ.shutdown = function(id) {
 WirelessDJ.groupToDeck = function(group) {
     var the_char = group.charAt(8);
     
-	if (the_char == '1') {
+	if (the_char == "1") {
 		return 0;
-	} else if (the_char == '2') {
+	} else if (the_char == "2") {
 		return 1;
 	} else {
         return -1;

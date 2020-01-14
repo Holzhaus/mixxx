@@ -1,5 +1,5 @@
 var NovationLaunchpadMK2 = (function () {
-'use strict';
+"use strict";
 
 /* global engine, midi, script */
 var engine_1 = engine;
@@ -165,13 +165,13 @@ var toConsumableArray = function (arr) {
 };
 
 /** Detect free variable `global` from Node.js. */
-var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
+var freeGlobal = (typeof global === "undefined" ? "undefined" : _typeof(global)) == "object" && global && global.Object === Object && global;
 
 /** Detect free variable `self`. */
-var freeSelf = (typeof self === 'undefined' ? 'undefined' : _typeof(self)) == 'object' && self && self.Object === Object && self;
+var freeSelf = (typeof self === "undefined" ? "undefined" : _typeof(self)) == "object" && self && self.Object === Object && self;
 
 /** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
+var root = freeGlobal || freeSelf || Function("return this")();
 
 /** Built-in value references. */
 var _Symbol = root.Symbol;
@@ -241,8 +241,8 @@ function objectToString(value) {
 }
 
 /** `Object#toString` result references. */
-var nullTag = '[object Null]';
-var undefinedTag = '[object Undefined]';
+var nullTag = "[object Null]";
+var undefinedTag = "[object Undefined]";
 
 /** Built-in value references. */
 var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
@@ -286,11 +286,11 @@ function baseGetTag(value) {
  * // => false
  */
 function isObjectLike(value) {
-  return value != null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+  return value != null && (typeof value === "undefined" ? "undefined" : _typeof(value)) == "object";
 }
 
 /** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
+var symbolTag = "[object Symbol]";
 
 /**
  * Checks if `value` is classified as a `Symbol` primitive or object.
@@ -310,7 +310,7 @@ var symbolTag = '[object Symbol]';
  * // => false
  */
 function isSymbol(value) {
-  return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && baseGetTag(value) == symbolTag;
+  return (typeof value === "undefined" ? "undefined" : _typeof(value)) == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
 }
 
 /** Used as references for various `Number` constants. */
@@ -325,7 +325,7 @@ var NAN = 0 / 0;
  * @returns {number} Returns the number.
  */
 function baseToNumber(value) {
-  if (typeof value == 'number') {
+  if (typeof value === "number") {
     return value;
   }
   if (isSymbol(value)) {
@@ -396,18 +396,18 @@ var symbolToString = symbolProto ? symbolProto.toString : undefined;
  */
 function baseToString(value) {
   // Exit early for strings to avoid a performance hit in some environments.
-  if (typeof value == 'string') {
+  if (typeof value === "string") {
     return value;
   }
   if (isArray(value)) {
     // Recursively convert values (susceptible to call stack limits).
-    return arrayMap(value, baseToString) + '';
+    return arrayMap(value, baseToString) + "";
   }
   if (isSymbol(value)) {
-    return symbolToString ? symbolToString.call(value) : '';
+    return symbolToString ? symbolToString.call(value) : "";
   }
-  var result = value + '';
-  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
+  var result = value + "";
+  return result == "0" && 1 / value == -INFINITY ? "-0" : result;
 }
 
 /**
@@ -431,7 +431,7 @@ function createMathOperation(operator, defaultValue) {
       if (result === undefined) {
         return other;
       }
-      if (typeof value == 'string' || typeof other == 'string') {
+      if (typeof value === "string" || typeof other === "string") {
         value = baseToString(value);
         other = baseToString(other);
       } else {
@@ -489,8 +489,8 @@ var add = createMathOperation(function (augend, addend) {
  * // => false
  */
 function isObject(value) {
-  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-  return value != null && (type == 'object' || type == 'function');
+  var type = typeof value === "undefined" ? "undefined" : _typeof(value);
+  return value != null && (type == "object" || type == "function");
 }
 
 /** Used as references for various `Number` constants. */
@@ -535,20 +535,20 @@ var freeParseInt = parseInt;
  * // => 3.2
  */
 function toNumber(value) {
-  if (typeof value == 'number') {
+  if (typeof value === "number") {
     return value;
   }
   if (isSymbol(value)) {
     return NAN$1;
   }
   if (isObject(value)) {
-    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = isObject(other) ? other + '' : other;
+    var other = typeof value.valueOf === "function" ? value.valueOf() : value;
+    value = isObject(other) ? other + "" : other;
   }
-  if (typeof value != 'string') {
+  if (typeof value !== "string") {
     return value === 0 ? value : +value;
   }
-  value = value.replace(reTrim, '');
+  value = value.replace(reTrim, "");
   var isBinary = reIsBinary.test(value);
   return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN$1 : +value;
 }
@@ -626,7 +626,7 @@ function toInteger(value) {
 }
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT = 'Expected a function';
+var FUNC_ERROR_TEXT = "Expected a function";
 
 /**
  * The opposite of `_.before`; this method creates a function that invokes
@@ -653,7 +653,7 @@ var FUNC_ERROR_TEXT = 'Expected a function';
  * // => Logs 'done saving!' after the two async saves have completed.
  */
 function after(n, func) {
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT);
   }
   n = toInteger(n);
@@ -685,10 +685,10 @@ function identity(value) {
 }
 
 /** `Object#toString` result references. */
-var asyncTag = '[object AsyncFunction]';
-var funcTag = '[object Function]';
-var genTag = '[object GeneratorFunction]';
-var proxyTag = '[object Proxy]';
+var asyncTag = "[object AsyncFunction]";
+var funcTag = "[object Function]";
+var genTag = "[object GeneratorFunction]";
+var proxyTag = "[object Proxy]";
 
 /**
  * Checks if `value` is classified as a `Function` object.
@@ -718,12 +718,12 @@ function isFunction(value) {
 }
 
 /** Used to detect overreaching core-js shims. */
-var coreJsData = root['__core-js_shared__'];
+var coreJsData = root["__core-js_shared__"];
 
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = function () {
-  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-  return uid ? 'Symbol(src)_1.' + uid : '';
+  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+  return uid ? "Symbol(src)_1." + uid : "";
 }();
 
 /**
@@ -756,10 +756,10 @@ function toSource(func) {
       return funcToString$1.call(func);
     } catch (e) {}
     try {
-      return func + '';
+      return func + "";
     } catch (e) {}
   }
-  return '';
+  return "";
 }
 
 /**
@@ -782,7 +782,7 @@ var funcToString = funcProto.toString;
 var hasOwnProperty$1 = objectProto$2.hasOwnProperty;
 
 /** Used to detect if a method is native. */
-var reIsNative = RegExp('^' + funcToString.call(hasOwnProperty$1).replace(reRegExpChar, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+var reIsNative = RegExp("^" + funcToString.call(hasOwnProperty$1).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$");
 
 /**
  * The base implementation of `_.isNative` without bad shim checks.
@@ -826,7 +826,7 @@ function getNative(object, key) {
 }
 
 /* Built-in method references that are verified to be native. */
-var WeakMap = getNative(root, 'WeakMap');
+var WeakMap = getNative(root, "WeakMap");
 
 /** Used to store function metadata. */
 var metaMap = WeakMap && new WeakMap();
@@ -1135,7 +1135,7 @@ var hasOwnProperty$2 = objectProto$3.hasOwnProperty;
  * @returns {string} Returns the function name.
  */
 function getFuncName(func) {
-  var result = func.name + '',
+  var result = func.name + "",
       array = realNames[result],
       length = hasOwnProperty$2.call(realNames, result) ? array.length : 0;
 
@@ -1332,7 +1332,7 @@ function lodash(value) {
     if (value instanceof LodashWrapper) {
       return value;
     }
-    if (hasOwnProperty$3.call(value, '__wrapped__')) {
+    if (hasOwnProperty$3.call(value, "__wrapped__")) {
       return wrapperClone(value);
     }
   }
@@ -1355,7 +1355,7 @@ function isLaziable(func) {
   var funcName = getFuncName(func),
       other = lodash[funcName];
 
-  if (typeof other != 'function' || !(funcName in LazyWrapper.prototype)) {
+  if (typeof other !== "function" || !(funcName in LazyWrapper.prototype)) {
     return false;
   }
   if (func === other) {
@@ -1450,9 +1450,9 @@ function insertWrapDetails(source, details) {
     return source;
   }
   var lastIndex = length - 1;
-  details[lastIndex] = (length > 1 ? '& ' : '') + details[lastIndex];
-  details = details.join(length > 2 ? ', ' : ' ');
-  return source.replace(reWrapComment, '{\n/* [wrapped with ' + details + '] */\n');
+  details[lastIndex] = (length > 1 ? "& " : "") + details[lastIndex];
+  details = details.join(length > 2 ? ", " : " ");
+  return source.replace(reWrapComment, "{\n/* [wrapped with " + details + "] */\n");
 }
 
 /**
@@ -1482,8 +1482,8 @@ function constant(value) {
 
 var defineProperty$1 = function () {
   try {
-    var func = getNative(Object, 'defineProperty');
-    func({}, '', {});
+    var func = getNative(Object, "defineProperty");
+    func({}, "", {});
     return func;
   } catch (e) {}
 }();
@@ -1497,11 +1497,11 @@ var defineProperty$1 = function () {
  * @returns {Function} Returns `func`.
  */
 var baseSetToString = !defineProperty$1 ? identity : function (func, string) {
-  return defineProperty$1(func, 'toString', {
-    'configurable': true,
-    'enumerable': false,
-    'value': constant(string),
-    'writable': true
+  return defineProperty$1(func, "toString", {
+    "configurable": true,
+    "enumerable": false,
+    "value": constant(string),
+    "writable": true
   });
 };
 
@@ -1631,7 +1631,7 @@ var WRAP_REARG_FLAG = 256;
 var WRAP_FLIP_FLAG$1 = 512;
 
 /** Used to associate wrap methods with their bit flags. */
-var wrapFlags = [['ary', WRAP_ARY_FLAG$2], ['bind', WRAP_BIND_FLAG$4], ['bindKey', WRAP_BIND_KEY_FLAG$3], ['curry', WRAP_CURRY_FLAG$3], ['curryRight', WRAP_CURRY_RIGHT_FLAG$2], ['flip', WRAP_FLIP_FLAG$1], ['partial', WRAP_PARTIAL_FLAG$2], ['partialRight', WRAP_PARTIAL_RIGHT_FLAG$2], ['rearg', WRAP_REARG_FLAG]];
+var wrapFlags = [["ary", WRAP_ARY_FLAG$2], ["bind", WRAP_BIND_FLAG$4], ["bindKey", WRAP_BIND_KEY_FLAG$3], ["curry", WRAP_CURRY_FLAG$3], ["curryRight", WRAP_CURRY_RIGHT_FLAG$2], ["flip", WRAP_FLIP_FLAG$1], ["partial", WRAP_PARTIAL_FLAG$2], ["partialRight", WRAP_PARTIAL_RIGHT_FLAG$2], ["rearg", WRAP_REARG_FLAG]];
 
 /**
  * Updates wrapper `details` based on `bitmask` flags.
@@ -1643,7 +1643,7 @@ var wrapFlags = [['ary', WRAP_ARY_FLAG$2], ['bind', WRAP_BIND_FLAG$4], ['bindKey
  */
 function updateWrapDetails(details, bitmask) {
   arrayEach(wrapFlags, function (pair) {
-    var value = '_.' + pair[0];
+    var value = "_." + pair[0];
     if (bitmask & pair[1] && !arrayIncludes(details, value)) {
       details.push(value);
     }
@@ -1662,7 +1662,7 @@ function updateWrapDetails(details, bitmask) {
  * @returns {Function} Returns `wrapper`.
  */
 function setWrapToString(wrapper, reference, bitmask) {
-  var source = reference + '';
+  var source = reference + "";
   return setToString(wrapper, insertWrapDetails(source, updateWrapDetails(getWrapDetails(source), bitmask)));
 }
 
@@ -1742,7 +1742,7 @@ var reIsUint = /^(?:0|[1-9]\d*)$/;
  */
 function isIndex(value, length) {
   length = length == null ? MAX_SAFE_INTEGER : length;
-  return !!length && (typeof value == 'number' || reIsUint.test(value)) && value > -1 && value % 1 == 0 && value < length;
+  return !!length && (typeof value === "number" || reIsUint.test(value)) && value > -1 && value % 1 == 0 && value < length;
 }
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -1771,7 +1771,7 @@ function reorder(array, indexes) {
 }
 
 /** Used as the internal argument placeholder. */
-var PLACEHOLDER = '__lodash_placeholder__';
+var PLACEHOLDER = "__lodash_placeholder__";
 
 /**
  * Replaces all `placeholder` elements in `array` with an internal placeholder
@@ -1948,7 +1948,7 @@ function createPartial(func, bitmask, thisArg, partials) {
 }
 
 /** Used as the internal argument placeholder. */
-var PLACEHOLDER$1 = '__lodash_placeholder__';
+var PLACEHOLDER$1 = "__lodash_placeholder__";
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_BIND_FLAG$6 = 1;
@@ -2030,7 +2030,7 @@ function mergeData(data, source) {
 }
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$1 = 'Expected a function';
+var FUNC_ERROR_TEXT$1 = "Expected a function";
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_BIND_FLAG = 1;
@@ -2070,7 +2070,7 @@ var nativeMax = Math.max;
  */
 function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arity) {
   var isBindKey = bitmask & WRAP_BIND_KEY_FLAG;
-  if (!isBindKey && typeof func != 'function') {
+  if (!isBindKey && typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$1);
   }
   var length = partials ? partials.length : 0;
@@ -2154,12 +2154,12 @@ function ary(func, n, guard) {
  * @param {*} value The value to assign.
  */
 function baseAssignValue(object, key, value) {
-  if (key == '__proto__' && defineProperty$1) {
+  if (key == "__proto__" && defineProperty$1) {
     defineProperty$1(object, key, {
-      'configurable': true,
-      'enumerable': true,
-      'value': value,
-      'writable': true
+      "configurable": true,
+      "enumerable": true,
+      "value": value,
+      "writable": true
     });
   } else {
     object[key] = value;
@@ -2301,7 +2301,7 @@ function overRest(func, start, transform) {
  * @returns {Function} Returns the new function.
  */
 function baseRest(func, start) {
-  return setToString(overRest(func, start, identity), func + '');
+  return setToString(overRest(func, start, identity), func + "");
 }
 
 /** Used as references for various `Number` constants. */
@@ -2334,7 +2334,7 @@ var MAX_SAFE_INTEGER$1 = 9007199254740991;
  * // => false
  */
 function isLength(value) {
-  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER$1;
+  return typeof value === "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER$1;
 }
 
 /**
@@ -2380,8 +2380,8 @@ function isIterateeCall(value, index, object) {
   if (!isObject(object)) {
     return false;
   }
-  var type = typeof index === 'undefined' ? 'undefined' : _typeof(index);
-  if (type == 'number' ? isArrayLike(object) && isIndex(index, object.length) : type == 'string' && index in object) {
+  var type = typeof index === "undefined" ? "undefined" : _typeof(index);
+  if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
     return eq(object[index], value);
   }
   return false;
@@ -2401,7 +2401,7 @@ function createAssigner(assigner) {
         customizer = length > 1 ? sources[length - 1] : undefined,
         guard = length > 2 ? sources[2] : undefined;
 
-    customizer = assigner.length > 3 && typeof customizer == 'function' ? (length--, customizer) : undefined;
+    customizer = assigner.length > 3 && typeof customizer === "function" ? (length--, customizer) : undefined;
 
     if (guard && isIterateeCall(sources[0], sources[1], guard)) {
       customizer = length < 3 ? undefined : customizer;
@@ -2430,7 +2430,7 @@ var objectProto$7 = Object.prototype;
  */
 function isPrototype(value) {
   var Ctor = value && value.constructor,
-      proto = typeof Ctor == 'function' && Ctor.prototype || objectProto$7;
+      proto = typeof Ctor === "function" && Ctor.prototype || objectProto$7;
 
   return value === proto;
 }
@@ -2455,7 +2455,7 @@ function baseTimes(n, iteratee) {
 }
 
 /** `Object#toString` result references. */
-var argsTag = '[object Arguments]';
+var argsTag = "[object Arguments]";
 
 /**
  * The base implementation of `_.isArguments`.
@@ -2498,7 +2498,7 @@ var propertyIsEnumerable = objectProto$9.propertyIsEnumerable;
 var isArguments = baseIsArguments(function () {
   return arguments;
 }()) ? baseIsArguments : function (value) {
-  return isObjectLike(value) && hasOwnProperty$7.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
+  return isObjectLike(value) && hasOwnProperty$7.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
 };
 
 /**
@@ -2519,10 +2519,10 @@ function stubFalse() {
 }
 
 /** Detect free variable `exports`. */
-var freeExports = (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) == 'object' && exports && !exports.nodeType && exports;
+var freeExports = (typeof exports === "undefined" ? "undefined" : _typeof(exports)) == "object" && exports && !exports.nodeType && exports;
 
 /** Detect free variable `module`. */
-var freeModule = freeExports && (typeof module === 'undefined' ? 'undefined' : _typeof(module)) == 'object' && module && !module.nodeType && module;
+var freeModule = freeExports && (typeof module === "undefined" ? "undefined" : _typeof(module)) == "object" && module && !module.nodeType && module;
 
 /** Detect the popular CommonJS extension `module.exports`. */
 var moduleExports = freeModule && freeModule.exports === freeExports;
@@ -2553,31 +2553,31 @@ var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
 var isBuffer = nativeIsBuffer || stubFalse;
 
 /** `Object#toString` result references. */
-var argsTag$1 = '[object Arguments]';
-var arrayTag = '[object Array]';
-var boolTag = '[object Boolean]';
-var dateTag = '[object Date]';
-var errorTag = '[object Error]';
-var funcTag$1 = '[object Function]';
-var mapTag = '[object Map]';
-var numberTag = '[object Number]';
-var objectTag = '[object Object]';
-var regexpTag = '[object RegExp]';
-var setTag = '[object Set]';
-var stringTag = '[object String]';
-var weakMapTag = '[object WeakMap]';
+var argsTag$1 = "[object Arguments]";
+var arrayTag = "[object Array]";
+var boolTag = "[object Boolean]";
+var dateTag = "[object Date]";
+var errorTag = "[object Error]";
+var funcTag$1 = "[object Function]";
+var mapTag = "[object Map]";
+var numberTag = "[object Number]";
+var objectTag = "[object Object]";
+var regexpTag = "[object RegExp]";
+var setTag = "[object Set]";
+var stringTag = "[object String]";
+var weakMapTag = "[object WeakMap]";
 
-var arrayBufferTag = '[object ArrayBuffer]';
-var dataViewTag = '[object DataView]';
-var float32Tag = '[object Float32Array]';
-var float64Tag = '[object Float64Array]';
-var int8Tag = '[object Int8Array]';
-var int16Tag = '[object Int16Array]';
-var int32Tag = '[object Int32Array]';
-var uint8Tag = '[object Uint8Array]';
-var uint8ClampedTag = '[object Uint8ClampedArray]';
-var uint16Tag = '[object Uint16Array]';
-var uint32Tag = '[object Uint32Array]';
+var arrayBufferTag = "[object ArrayBuffer]";
+var dataViewTag = "[object DataView]";
+var float32Tag = "[object Float32Array]";
+var float64Tag = "[object Float64Array]";
+var int8Tag = "[object Int8Array]";
+var int16Tag = "[object Int16Array]";
+var int32Tag = "[object Int32Array]";
+var uint8Tag = "[object Uint8Array]";
+var uint8ClampedTag = "[object Uint8ClampedArray]";
+var uint16Tag = "[object Uint16Array]";
+var uint32Tag = "[object Uint32Array]";
 
 /** Used to identify `toStringTag` values of typed arrays. */
 var typedArrayTags = {};
@@ -2609,10 +2609,10 @@ function baseUnary(func) {
 }
 
 /** Detect free variable `exports`. */
-var freeExports$1 = (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) == 'object' && exports && !exports.nodeType && exports;
+var freeExports$1 = (typeof exports === "undefined" ? "undefined" : _typeof(exports)) == "object" && exports && !exports.nodeType && exports;
 
 /** Detect free variable `module`. */
-var freeModule$1 = freeExports$1 && (typeof module === 'undefined' ? 'undefined' : _typeof(module)) == 'object' && module && !module.nodeType && module;
+var freeModule$1 = freeExports$1 && (typeof module === "undefined" ? "undefined" : _typeof(module)) == "object" && module && !module.nodeType && module;
 
 /** Detect the popular CommonJS extension `module.exports`. */
 var moduleExports$1 = freeModule$1 && freeModule$1.exports === freeExports$1;
@@ -2623,7 +2623,7 @@ var freeProcess = moduleExports$1 && freeGlobal.process;
 /** Used to access faster Node.js helpers. */
 var nodeUtil = function () {
   try {
-    return freeProcess && freeProcess.binding && freeProcess.binding('util');
+    return freeProcess && freeProcess.binding && freeProcess.binding("util");
   } catch (e) {}
 }();
 
@@ -2675,11 +2675,11 @@ function arrayLikeKeys(value, inherited) {
   for (var key in value) {
     if ((inherited || hasOwnProperty$6.call(value, key)) && !(skipIndexes && (
     // Safari 9 has enumerable `arguments.length` in strict mode.
-    key == 'length' ||
+    key == "length" ||
     // Node.js 0.10 has enumerable non-index properties on buffers.
-    isBuff && (key == 'offset' || key == 'parent') ||
+    isBuff && (key == "offset" || key == "parent") ||
     // PhantomJS 2 has enumerable non-index properties on typed arrays.
-    isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset') ||
+    isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") ||
     // Skip index properties.
     isIndex(key, length)))) {
       result.push(key);
@@ -2724,7 +2724,7 @@ function baseKeys(object) {
   }
   var result = [];
   for (var key in Object(object)) {
-    if (hasOwnProperty$8.call(object, key) && key != 'constructor') {
+    if (hasOwnProperty$8.call(object, key) && key != "constructor") {
       result.push(key);
     }
   }
@@ -2853,7 +2853,7 @@ function baseKeysIn(object) {
       result = [];
 
   for (var key in object) {
-    if (!(key == 'constructor' && (isProto || !hasOwnProperty$9.call(object, key)))) {
+    if (!(key == "constructor" && (isProto || !hasOwnProperty$9.call(object, key)))) {
       result.push(key);
     }
   }
@@ -3003,15 +3003,15 @@ function isKey(value, object) {
   if (isArray(value)) {
     return false;
   }
-  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-  if (type == 'number' || type == 'symbol' || type == 'boolean' || value == null || isSymbol(value)) {
+  var type = typeof value === "undefined" ? "undefined" : _typeof(value);
+  if (type == "number" || type == "symbol" || type == "boolean" || value == null || isSymbol(value)) {
     return true;
   }
   return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object);
 }
 
 /* Built-in method references that are verified to be native. */
-var nativeCreate = getNative(Object, 'create');
+var nativeCreate = getNative(Object, "create");
 
 /**
  * Removes all key-value entries from the hash.
@@ -3042,7 +3042,7 @@ function hashDelete(key) {
 }
 
 /** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED = '__lodash_hash_undefined__';
+var HASH_UNDEFINED = "__lodash_hash_undefined__";
 
 /** Used for built-in method references. */
 var objectProto$12 = Object.prototype;
@@ -3089,7 +3089,7 @@ function hashHas(key) {
 }
 
 /** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED$1 = '__lodash_hash_undefined__';
+var HASH_UNDEFINED$1 = "__lodash_hash_undefined__";
 
 /**
  * Sets the hash `key` to `value`.
@@ -3128,7 +3128,7 @@ function Hash(entries) {
 
 // Add methods to `Hash`.
 Hash.prototype.clear = hashClear;
-Hash.prototype['delete'] = hashDelete;
+Hash.prototype["delete"] = hashDelete;
 Hash.prototype.get = hashGet;
 Hash.prototype.has = hashHas;
 Hash.prototype.set = hashSet;
@@ -3267,13 +3267,13 @@ function ListCache(entries) {
 
 // Add methods to `ListCache`.
 ListCache.prototype.clear = listCacheClear;
-ListCache.prototype['delete'] = listCacheDelete;
+ListCache.prototype["delete"] = listCacheDelete;
 ListCache.prototype.get = listCacheGet;
 ListCache.prototype.has = listCacheHas;
 ListCache.prototype.set = listCacheSet;
 
 /* Built-in method references that are verified to be native. */
-var Map = getNative(root, 'Map');
+var Map = getNative(root, "Map");
 
 /**
  * Removes all key-value entries from the map.
@@ -3285,9 +3285,9 @@ var Map = getNative(root, 'Map');
 function mapCacheClear() {
   this.size = 0;
   this.__data__ = {
-    'hash': new Hash(),
-    'map': new (Map || ListCache)(),
-    'string': new Hash()
+    "hash": new Hash(),
+    "map": new (Map || ListCache)(),
+    "string": new Hash()
   };
 }
 
@@ -3299,8 +3299,8 @@ function mapCacheClear() {
  * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
  */
 function isKeyable(value) {
-  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-  return type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean' ? value !== '__proto__' : value === null;
+  var type = typeof value === "undefined" ? "undefined" : _typeof(value);
+  return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
 }
 
 /**
@@ -3313,7 +3313,7 @@ function isKeyable(value) {
  */
 function getMapData(map, key) {
   var data = map.__data__;
-  return isKeyable(key) ? data[typeof key == 'string' ? 'string' : 'hash'] : data.map;
+  return isKeyable(key) ? data[typeof key === "string" ? "string" : "hash"] : data.map;
 }
 
 /**
@@ -3326,7 +3326,7 @@ function getMapData(map, key) {
  * @returns {boolean} Returns `true` if the entry was removed, else `false`.
  */
 function mapCacheDelete(key) {
-  var result = getMapData(this, key)['delete'](key);
+  var result = getMapData(this, key)["delete"](key);
   this.size -= result ? 1 : 0;
   return result;
 }
@@ -3396,13 +3396,13 @@ function MapCache(entries) {
 
 // Add methods to `MapCache`.
 MapCache.prototype.clear = mapCacheClear;
-MapCache.prototype['delete'] = mapCacheDelete;
+MapCache.prototype["delete"] = mapCacheDelete;
 MapCache.prototype.get = mapCacheGet;
 MapCache.prototype.has = mapCacheHas;
 MapCache.prototype.set = mapCacheSet;
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$2 = 'Expected a function';
+var FUNC_ERROR_TEXT$2 = "Expected a function";
 
 /**
  * Creates a function that memoizes the result of `func`. If `resolver` is
@@ -3449,7 +3449,7 @@ var FUNC_ERROR_TEXT$2 = 'Expected a function';
  * _.memoize.Cache = WeakMap;
  */
 function memoize(func, resolver) {
-  if (typeof func != 'function' || resolver != null && typeof resolver != 'function') {
+  if (typeof func !== "function" || resolver != null && typeof resolver !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$2);
   }
   var memoized = function memoized() {
@@ -3511,10 +3511,10 @@ var reEscapeChar = /\\(\\)?/g;
 var stringToPath = memoizeCapped(function (string) {
   var result = [];
   if (reLeadingDot.test(string)) {
-    result.push('');
+    result.push("");
   }
   string.replace(rePropName, function (match, number, quote, string) {
-    result.push(quote ? string.replace(reEscapeChar, '$1') : number || match);
+    result.push(quote ? string.replace(reEscapeChar, "$1") : number || match);
   });
   return result;
 });
@@ -3541,7 +3541,7 @@ var stringToPath = memoizeCapped(function (string) {
  * // => '1,2,3'
  */
 function toString(value) {
-  return value == null ? '' : baseToString(value);
+  return value == null ? "" : baseToString(value);
 }
 
 /**
@@ -3570,11 +3570,11 @@ var INFINITY$2 = 1 / 0;
  * @returns {string|symbol} Returns the key.
  */
 function toKey(value) {
-  if (typeof value == 'string' || isSymbol(value)) {
+  if (typeof value === "string" || isSymbol(value)) {
     return value;
   }
-  var result = value + '';
-  return result == '0' && 1 / value == -INFINITY$2 ? '-0' : result;
+  var result = value + "";
+  return result == "0" && 1 / value == -INFINITY$2 ? "-0" : result;
 }
 
 /**
@@ -3741,7 +3741,7 @@ function flatten(array) {
  * @returns {Function} Returns the new function.
  */
 function flatRest(func) {
-  return setToString(overRest(func, undefined, flatten), func + '');
+  return setToString(overRest(func, undefined, flatten), func + "");
 }
 
 /**
@@ -3767,7 +3767,7 @@ var at = flatRest(baseAt);
 var getPrototype = overArg(Object.getPrototypeOf, Object);
 
 /** `Object#toString` result references. */
-var objectTag$1 = '[object Object]';
+var objectTag$1 = "[object Object]";
 
 /** Used for built-in method references. */
 var funcProto$2 = Function.prototype;
@@ -3818,13 +3818,13 @@ function isPlainObject(value) {
   if (proto === null) {
     return true;
   }
-  var Ctor = hasOwnProperty$12.call(proto, 'constructor') && proto.constructor;
-  return typeof Ctor == 'function' && Ctor instanceof Ctor && funcToString$2.call(Ctor) == objectCtorString;
+  var Ctor = hasOwnProperty$12.call(proto, "constructor") && proto.constructor;
+  return typeof Ctor === "function" && Ctor instanceof Ctor && funcToString$2.call(Ctor) == objectCtorString;
 }
 
 /** `Object#toString` result references. */
-var domExcTag = '[object DOMException]';
-var errorTag$1 = '[object Error]';
+var domExcTag = "[object DOMException]";
+var errorTag$1 = "[object Error]";
 
 /**
  * Checks if `value` is an `Error`, `EvalError`, `RangeError`, `ReferenceError`,
@@ -3849,7 +3849,7 @@ function isError(value) {
     return false;
   }
   var tag = baseGetTag(value);
-  return tag == errorTag$1 || tag == domExcTag || typeof value.message == 'string' && typeof value.name == 'string' && !isPlainObject(value);
+  return tag == errorTag$1 || tag == domExcTag || typeof value.message === "string" && typeof value.name === "string" && !isPlainObject(value);
 }
 
 /**
@@ -3883,7 +3883,7 @@ var attempt = baseRest(function (func, args) {
 });
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$3 = 'Expected a function';
+var FUNC_ERROR_TEXT$3 = "Expected a function";
 
 /**
  * Creates a function that invokes `func`, with the `this` binding and arguments
@@ -3904,7 +3904,7 @@ var FUNC_ERROR_TEXT$3 = 'Expected a function';
  */
 function before(n, func) {
   var result;
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$3);
   }
   n = toInteger(n);
@@ -4112,18 +4112,18 @@ function castSlice(array, start, end) {
 }
 
 /** Used to compose unicode character classes. */
-var rsAstralRange = '\\ud800-\\udfff';
-var rsComboMarksRange = '\\u0300-\\u036f';
-var reComboHalfMarksRange = '\\ufe20-\\ufe2f';
-var rsComboSymbolsRange = '\\u20d0-\\u20ff';
+var rsAstralRange = "\\ud800-\\udfff";
+var rsComboMarksRange = "\\u0300-\\u036f";
+var reComboHalfMarksRange = "\\ufe20-\\ufe2f";
+var rsComboSymbolsRange = "\\u20d0-\\u20ff";
 var rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange;
-var rsVarRange = '\\ufe0e\\ufe0f';
+var rsVarRange = "\\ufe0e\\ufe0f";
 
 /** Used to compose unicode capture groups. */
-var rsZWJ = '\\u200d';
+var rsZWJ = "\\u200d";
 
 /** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + ']');
+var reHasUnicode = RegExp("[" + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + "]");
 
 /**
  * Checks if `string` contains Unicode symbols.
@@ -4144,36 +4144,36 @@ function hasUnicode(string) {
  * @returns {Array} Returns the converted array.
  */
 function asciiToArray(string) {
-  return string.split('');
+  return string.split("");
 }
 
 /** Used to compose unicode character classes. */
-var rsAstralRange$1 = '\\ud800-\\udfff';
-var rsComboMarksRange$1 = '\\u0300-\\u036f';
-var reComboHalfMarksRange$1 = '\\ufe20-\\ufe2f';
-var rsComboSymbolsRange$1 = '\\u20d0-\\u20ff';
+var rsAstralRange$1 = "\\ud800-\\udfff";
+var rsComboMarksRange$1 = "\\u0300-\\u036f";
+var reComboHalfMarksRange$1 = "\\ufe20-\\ufe2f";
+var rsComboSymbolsRange$1 = "\\u20d0-\\u20ff";
 var rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1;
-var rsVarRange$1 = '\\ufe0e\\ufe0f';
+var rsVarRange$1 = "\\ufe0e\\ufe0f";
 
 /** Used to compose unicode capture groups. */
-var rsAstral = '[' + rsAstralRange$1 + ']';
-var rsCombo = '[' + rsComboRange$1 + ']';
-var rsFitz = '\\ud83c[\\udffb-\\udfff]';
-var rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')';
-var rsNonAstral = '[^' + rsAstralRange$1 + ']';
-var rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}';
-var rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]';
-var rsZWJ$1 = '\\u200d';
+var rsAstral = "[" + rsAstralRange$1 + "]";
+var rsCombo = "[" + rsComboRange$1 + "]";
+var rsFitz = "\\ud83c[\\udffb-\\udfff]";
+var rsModifier = "(?:" + rsCombo + "|" + rsFitz + ")";
+var rsNonAstral = "[^" + rsAstralRange$1 + "]";
+var rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}";
+var rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+var rsZWJ$1 = "\\u200d";
 
 /** Used to compose unicode regexes. */
-var reOptMod = rsModifier + '?';
-var rsOptVar = '[' + rsVarRange$1 + ']?';
-var rsOptJoin = '(?:' + rsZWJ$1 + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*';
+var reOptMod = rsModifier + "?";
+var rsOptVar = "[" + rsVarRange$1 + "]?";
+var rsOptJoin = "(?:" + rsZWJ$1 + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*";
 var rsSeq = rsOptVar + reOptMod + rsOptJoin;
-var rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
+var rsSymbol = "(?:" + [rsNonAstral + rsCombo + "?", rsCombo, rsRegional, rsSurrPair, rsAstral].join("|") + ")";
 
 /** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
+var reUnicode = RegExp(rsFitz + "(?=" + rsFitz + ")|" + rsSymbol + rsSeq, "g");
 
 /**
  * Converts a Unicode `string` to an array.
@@ -4212,7 +4212,7 @@ function createCaseFirst(methodName) {
 
     var chr = strSymbols ? strSymbols[0] : string.charAt(0);
 
-    var trailing = strSymbols ? castSlice(strSymbols, 1).join('') : string.slice(1);
+    var trailing = strSymbols ? castSlice(strSymbols, 1).join("") : string.slice(1);
 
     return chr[methodName]() + trailing;
   };
@@ -4235,7 +4235,7 @@ function createCaseFirst(methodName) {
  * _.upperFirst('FRED');
  * // => 'FRED'
  */
-var upperFirst = createCaseFirst('toUpperCase');
+var upperFirst = createCaseFirst("toUpperCase");
 
 /**
  * Converts the first character of `string` to upper case and the remaining
@@ -4297,59 +4297,59 @@ function basePropertyOf(object) {
 /** Used to map Latin Unicode letters to basic Latin letters. */
 var deburredLetters = {
   // Latin-1 Supplement block.
-  '\xc0': 'A', '\xc1': 'A', '\xc2': 'A', '\xc3': 'A', '\xc4': 'A', '\xc5': 'A',
-  '\xe0': 'a', '\xe1': 'a', '\xe2': 'a', '\xe3': 'a', '\xe4': 'a', '\xe5': 'a',
-  '\xc7': 'C', '\xe7': 'c',
-  '\xd0': 'D', '\xf0': 'd',
-  '\xc8': 'E', '\xc9': 'E', '\xca': 'E', '\xcb': 'E',
-  '\xe8': 'e', '\xe9': 'e', '\xea': 'e', '\xeb': 'e',
-  '\xcc': 'I', '\xcd': 'I', '\xce': 'I', '\xcf': 'I',
-  '\xec': 'i', '\xed': 'i', '\xee': 'i', '\xef': 'i',
-  '\xd1': 'N', '\xf1': 'n',
-  '\xd2': 'O', '\xd3': 'O', '\xd4': 'O', '\xd5': 'O', '\xd6': 'O', '\xd8': 'O',
-  '\xf2': 'o', '\xf3': 'o', '\xf4': 'o', '\xf5': 'o', '\xf6': 'o', '\xf8': 'o',
-  '\xd9': 'U', '\xda': 'U', '\xdb': 'U', '\xdc': 'U',
-  '\xf9': 'u', '\xfa': 'u', '\xfb': 'u', '\xfc': 'u',
-  '\xdd': 'Y', '\xfd': 'y', '\xff': 'y',
-  '\xc6': 'Ae', '\xe6': 'ae',
-  '\xde': 'Th', '\xfe': 'th',
-  '\xdf': 'ss',
+  "\xc0": "A", "\xc1": "A", "\xc2": "A", "\xc3": "A", "\xc4": "A", "\xc5": "A",
+  "\xe0": "a", "\xe1": "a", "\xe2": "a", "\xe3": "a", "\xe4": "a", "\xe5": "a",
+  "\xc7": "C", "\xe7": "c",
+  "\xd0": "D", "\xf0": "d",
+  "\xc8": "E", "\xc9": "E", "\xca": "E", "\xcb": "E",
+  "\xe8": "e", "\xe9": "e", "\xea": "e", "\xeb": "e",
+  "\xcc": "I", "\xcd": "I", "\xce": "I", "\xcf": "I",
+  "\xec": "i", "\xed": "i", "\xee": "i", "\xef": "i",
+  "\xd1": "N", "\xf1": "n",
+  "\xd2": "O", "\xd3": "O", "\xd4": "O", "\xd5": "O", "\xd6": "O", "\xd8": "O",
+  "\xf2": "o", "\xf3": "o", "\xf4": "o", "\xf5": "o", "\xf6": "o", "\xf8": "o",
+  "\xd9": "U", "\xda": "U", "\xdb": "U", "\xdc": "U",
+  "\xf9": "u", "\xfa": "u", "\xfb": "u", "\xfc": "u",
+  "\xdd": "Y", "\xfd": "y", "\xff": "y",
+  "\xc6": "Ae", "\xe6": "ae",
+  "\xde": "Th", "\xfe": "th",
+  "\xdf": "ss",
   // Latin Extended-A block.
-  '\u0100': 'A', '\u0102': 'A', '\u0104': 'A',
-  '\u0101': 'a', '\u0103': 'a', '\u0105': 'a',
-  '\u0106': 'C', '\u0108': 'C', '\u010A': 'C', '\u010C': 'C',
-  '\u0107': 'c', '\u0109': 'c', '\u010B': 'c', '\u010D': 'c',
-  '\u010E': 'D', '\u0110': 'D', '\u010F': 'd', '\u0111': 'd',
-  '\u0112': 'E', '\u0114': 'E', '\u0116': 'E', '\u0118': 'E', '\u011A': 'E',
-  '\u0113': 'e', '\u0115': 'e', '\u0117': 'e', '\u0119': 'e', '\u011B': 'e',
-  '\u011C': 'G', '\u011E': 'G', '\u0120': 'G', '\u0122': 'G',
-  '\u011D': 'g', '\u011F': 'g', '\u0121': 'g', '\u0123': 'g',
-  '\u0124': 'H', '\u0126': 'H', '\u0125': 'h', '\u0127': 'h',
-  '\u0128': 'I', '\u012A': 'I', '\u012C': 'I', '\u012E': 'I', '\u0130': 'I',
-  '\u0129': 'i', '\u012B': 'i', '\u012D': 'i', '\u012F': 'i', '\u0131': 'i',
-  '\u0134': 'J', '\u0135': 'j',
-  '\u0136': 'K', '\u0137': 'k', '\u0138': 'k',
-  '\u0139': 'L', '\u013B': 'L', '\u013D': 'L', '\u013F': 'L', '\u0141': 'L',
-  '\u013A': 'l', '\u013C': 'l', '\u013E': 'l', '\u0140': 'l', '\u0142': 'l',
-  '\u0143': 'N', '\u0145': 'N', '\u0147': 'N', '\u014A': 'N',
-  '\u0144': 'n', '\u0146': 'n', '\u0148': 'n', '\u014B': 'n',
-  '\u014C': 'O', '\u014E': 'O', '\u0150': 'O',
-  '\u014D': 'o', '\u014F': 'o', '\u0151': 'o',
-  '\u0154': 'R', '\u0156': 'R', '\u0158': 'R',
-  '\u0155': 'r', '\u0157': 'r', '\u0159': 'r',
-  '\u015A': 'S', '\u015C': 'S', '\u015E': 'S', '\u0160': 'S',
-  '\u015B': 's', '\u015D': 's', '\u015F': 's', '\u0161': 's',
-  '\u0162': 'T', '\u0164': 'T', '\u0166': 'T',
-  '\u0163': 't', '\u0165': 't', '\u0167': 't',
-  '\u0168': 'U', '\u016A': 'U', '\u016C': 'U', '\u016E': 'U', '\u0170': 'U', '\u0172': 'U',
-  '\u0169': 'u', '\u016B': 'u', '\u016D': 'u', '\u016F': 'u', '\u0171': 'u', '\u0173': 'u',
-  '\u0174': 'W', '\u0175': 'w',
-  '\u0176': 'Y', '\u0177': 'y', '\u0178': 'Y',
-  '\u0179': 'Z', '\u017B': 'Z', '\u017D': 'Z',
-  '\u017A': 'z', '\u017C': 'z', '\u017E': 'z',
-  '\u0132': 'IJ', '\u0133': 'ij',
-  '\u0152': 'Oe', '\u0153': 'oe',
-  '\u0149': "'n", '\u017F': 's'
+  "\u0100": "A", "\u0102": "A", "\u0104": "A",
+  "\u0101": "a", "\u0103": "a", "\u0105": "a",
+  "\u0106": "C", "\u0108": "C", "\u010A": "C", "\u010C": "C",
+  "\u0107": "c", "\u0109": "c", "\u010B": "c", "\u010D": "c",
+  "\u010E": "D", "\u0110": "D", "\u010F": "d", "\u0111": "d",
+  "\u0112": "E", "\u0114": "E", "\u0116": "E", "\u0118": "E", "\u011A": "E",
+  "\u0113": "e", "\u0115": "e", "\u0117": "e", "\u0119": "e", "\u011B": "e",
+  "\u011C": "G", "\u011E": "G", "\u0120": "G", "\u0122": "G",
+  "\u011D": "g", "\u011F": "g", "\u0121": "g", "\u0123": "g",
+  "\u0124": "H", "\u0126": "H", "\u0125": "h", "\u0127": "h",
+  "\u0128": "I", "\u012A": "I", "\u012C": "I", "\u012E": "I", "\u0130": "I",
+  "\u0129": "i", "\u012B": "i", "\u012D": "i", "\u012F": "i", "\u0131": "i",
+  "\u0134": "J", "\u0135": "j",
+  "\u0136": "K", "\u0137": "k", "\u0138": "k",
+  "\u0139": "L", "\u013B": "L", "\u013D": "L", "\u013F": "L", "\u0141": "L",
+  "\u013A": "l", "\u013C": "l", "\u013E": "l", "\u0140": "l", "\u0142": "l",
+  "\u0143": "N", "\u0145": "N", "\u0147": "N", "\u014A": "N",
+  "\u0144": "n", "\u0146": "n", "\u0148": "n", "\u014B": "n",
+  "\u014C": "O", "\u014E": "O", "\u0150": "O",
+  "\u014D": "o", "\u014F": "o", "\u0151": "o",
+  "\u0154": "R", "\u0156": "R", "\u0158": "R",
+  "\u0155": "r", "\u0157": "r", "\u0159": "r",
+  "\u015A": "S", "\u015C": "S", "\u015E": "S", "\u0160": "S",
+  "\u015B": "s", "\u015D": "s", "\u015F": "s", "\u0161": "s",
+  "\u0162": "T", "\u0164": "T", "\u0166": "T",
+  "\u0163": "t", "\u0165": "t", "\u0167": "t",
+  "\u0168": "U", "\u016A": "U", "\u016C": "U", "\u016E": "U", "\u0170": "U", "\u0172": "U",
+  "\u0169": "u", "\u016B": "u", "\u016D": "u", "\u016F": "u", "\u0171": "u", "\u0173": "u",
+  "\u0174": "W", "\u0175": "w",
+  "\u0176": "Y", "\u0177": "y", "\u0178": "Y",
+  "\u0179": "Z", "\u017B": "Z", "\u017D": "Z",
+  "\u017A": "z", "\u017C": "z", "\u017E": "z",
+  "\u0132": "IJ", "\u0133": "ij",
+  "\u0152": "Oe", "\u0153": "oe",
+  "\u0149": "'n", "\u017F": "s"
 };
 
 /**
@@ -4366,19 +4366,19 @@ var deburrLetter = basePropertyOf(deburredLetters);
 var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
 
 /** Used to compose unicode character classes. */
-var rsComboMarksRange$2 = '\\u0300-\\u036f';
-var reComboHalfMarksRange$2 = '\\ufe20-\\ufe2f';
-var rsComboSymbolsRange$2 = '\\u20d0-\\u20ff';
+var rsComboMarksRange$2 = "\\u0300-\\u036f";
+var reComboHalfMarksRange$2 = "\\ufe20-\\ufe2f";
+var rsComboSymbolsRange$2 = "\\u20d0-\\u20ff";
 var rsComboRange$2 = rsComboMarksRange$2 + reComboHalfMarksRange$2 + rsComboSymbolsRange$2;
 
 /** Used to compose unicode capture groups. */
-var rsCombo$1 = '[' + rsComboRange$2 + ']';
+var rsCombo$1 = "[" + rsComboRange$2 + "]";
 
 /**
  * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
  * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
  */
-var reComboMark = RegExp(rsCombo$1, 'g');
+var reComboMark = RegExp(rsCombo$1, "g");
 
 /**
  * Deburrs `string` by converting
@@ -4400,7 +4400,7 @@ var reComboMark = RegExp(rsCombo$1, 'g');
  */
 function deburr(string) {
   string = toString(string);
-  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
+  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, "");
 }
 
 /** Used to match words composed of alphanumeric characters. */
@@ -4432,52 +4432,52 @@ function hasUnicodeWord(string) {
 }
 
 /** Used to compose unicode character classes. */
-var rsAstralRange$2 = '\\ud800-\\udfff';
-var rsComboMarksRange$3 = '\\u0300-\\u036f';
-var reComboHalfMarksRange$3 = '\\ufe20-\\ufe2f';
-var rsComboSymbolsRange$3 = '\\u20d0-\\u20ff';
+var rsAstralRange$2 = "\\ud800-\\udfff";
+var rsComboMarksRange$3 = "\\u0300-\\u036f";
+var reComboHalfMarksRange$3 = "\\ufe20-\\ufe2f";
+var rsComboSymbolsRange$3 = "\\u20d0-\\u20ff";
 var rsComboRange$3 = rsComboMarksRange$3 + reComboHalfMarksRange$3 + rsComboSymbolsRange$3;
-var rsDingbatRange = '\\u2700-\\u27bf';
-var rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff';
-var rsMathOpRange = '\\xac\\xb1\\xd7\\xf7';
-var rsNonCharRange = '\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf';
-var rsPunctuationRange = '\\u2000-\\u206f';
-var rsSpaceRange = ' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000';
-var rsUpperRange = 'A-Z\\xc0-\\xd6\\xd8-\\xde';
-var rsVarRange$2 = '\\ufe0e\\ufe0f';
+var rsDingbatRange = "\\u2700-\\u27bf";
+var rsLowerRange = "a-z\\xdf-\\xf6\\xf8-\\xff";
+var rsMathOpRange = "\\xac\\xb1\\xd7\\xf7";
+var rsNonCharRange = "\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf";
+var rsPunctuationRange = "\\u2000-\\u206f";
+var rsSpaceRange = " \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000";
+var rsUpperRange = "A-Z\\xc0-\\xd6\\xd8-\\xde";
+var rsVarRange$2 = "\\ufe0e\\ufe0f";
 var rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpaceRange;
 
 /** Used to compose unicode capture groups. */
-var rsApos$1 = '[\'\u2019]';
-var rsBreak = '[' + rsBreakRange + ']';
-var rsCombo$2 = '[' + rsComboRange$3 + ']';
-var rsDigits = '\\d+';
-var rsDingbat = '[' + rsDingbatRange + ']';
-var rsLower = '[' + rsLowerRange + ']';
-var rsMisc = '[^' + rsAstralRange$2 + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + ']';
-var rsFitz$1 = '\\ud83c[\\udffb-\\udfff]';
-var rsModifier$1 = '(?:' + rsCombo$2 + '|' + rsFitz$1 + ')';
-var rsNonAstral$1 = '[^' + rsAstralRange$2 + ']';
-var rsRegional$1 = '(?:\\ud83c[\\udde6-\\uddff]){2}';
-var rsSurrPair$1 = '[\\ud800-\\udbff][\\udc00-\\udfff]';
-var rsUpper = '[' + rsUpperRange + ']';
-var rsZWJ$2 = '\\u200d';
+var rsApos$1 = "['\u2019]";
+var rsBreak = "[" + rsBreakRange + "]";
+var rsCombo$2 = "[" + rsComboRange$3 + "]";
+var rsDigits = "\\d+";
+var rsDingbat = "[" + rsDingbatRange + "]";
+var rsLower = "[" + rsLowerRange + "]";
+var rsMisc = "[^" + rsAstralRange$2 + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + "]";
+var rsFitz$1 = "\\ud83c[\\udffb-\\udfff]";
+var rsModifier$1 = "(?:" + rsCombo$2 + "|" + rsFitz$1 + ")";
+var rsNonAstral$1 = "[^" + rsAstralRange$2 + "]";
+var rsRegional$1 = "(?:\\ud83c[\\udde6-\\uddff]){2}";
+var rsSurrPair$1 = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+var rsUpper = "[" + rsUpperRange + "]";
+var rsZWJ$2 = "\\u200d";
 
 /** Used to compose unicode regexes. */
-var rsMiscLower = '(?:' + rsLower + '|' + rsMisc + ')';
-var rsMiscUpper = '(?:' + rsUpper + '|' + rsMisc + ')';
-var rsOptContrLower = '(?:' + rsApos$1 + '(?:d|ll|m|re|s|t|ve))?';
-var rsOptContrUpper = '(?:' + rsApos$1 + '(?:D|LL|M|RE|S|T|VE))?';
-var reOptMod$1 = rsModifier$1 + '?';
-var rsOptVar$1 = '[' + rsVarRange$2 + ']?';
-var rsOptJoin$1 = '(?:' + rsZWJ$2 + '(?:' + [rsNonAstral$1, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsOptVar$1 + reOptMod$1 + ')*';
-var rsOrdLower = '\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)';
-var rsOrdUpper = '\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)';
+var rsMiscLower = "(?:" + rsLower + "|" + rsMisc + ")";
+var rsMiscUpper = "(?:" + rsUpper + "|" + rsMisc + ")";
+var rsOptContrLower = "(?:" + rsApos$1 + "(?:d|ll|m|re|s|t|ve))?";
+var rsOptContrUpper = "(?:" + rsApos$1 + "(?:D|LL|M|RE|S|T|VE))?";
+var reOptMod$1 = rsModifier$1 + "?";
+var rsOptVar$1 = "[" + rsVarRange$2 + "]?";
+var rsOptJoin$1 = "(?:" + rsZWJ$2 + "(?:" + [rsNonAstral$1, rsRegional$1, rsSurrPair$1].join("|") + ")" + rsOptVar$1 + reOptMod$1 + ")*";
+var rsOrdLower = "\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)";
+var rsOrdUpper = "\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)";
 var rsSeq$1 = rsOptVar$1 + reOptMod$1 + rsOptJoin$1;
-var rsEmoji = '(?:' + [rsDingbat, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsSeq$1;
+var rsEmoji = "(?:" + [rsDingbat, rsRegional$1, rsSurrPair$1].join("|") + ")" + rsSeq$1;
 
 /** Used to match complex or compound words. */
-var reUnicodeWord = RegExp([rsUpper + '?' + rsLower + '+' + rsOptContrLower + '(?=' + [rsBreak, rsUpper, '$'].join('|') + ')', rsMiscUpper + '+' + rsOptContrUpper + '(?=' + [rsBreak, rsUpper + rsMiscLower, '$'].join('|') + ')', rsUpper + '?' + rsMiscLower + '+' + rsOptContrLower, rsUpper + '+' + rsOptContrUpper, rsOrdUpper, rsOrdLower, rsDigits, rsEmoji].join('|'), 'g');
+var reUnicodeWord = RegExp([rsUpper + "?" + rsLower + "+" + rsOptContrLower + "(?=" + [rsBreak, rsUpper, "$"].join("|") + ")", rsMiscUpper + "+" + rsOptContrUpper + "(?=" + [rsBreak, rsUpper + rsMiscLower, "$"].join("|") + ")", rsUpper + "?" + rsMiscLower + "+" + rsOptContrLower, rsUpper + "+" + rsOptContrUpper, rsOrdUpper, rsOrdLower, rsDigits, rsEmoji].join("|"), "g");
 
 /**
  * Splits a Unicode `string` into an array of its words.
@@ -4520,10 +4520,10 @@ function words(string, pattern, guard) {
 }
 
 /** Used to compose unicode capture groups. */
-var rsApos = '[\'\u2019]';
+var rsApos = "['\u2019]";
 
 /** Used to match apostrophes. */
-var reApos = RegExp(rsApos, 'g');
+var reApos = RegExp(rsApos, "g");
 
 /**
  * Creates a function like `_.camelCase`.
@@ -4534,7 +4534,7 @@ var reApos = RegExp(rsApos, 'g');
  */
 function createCompounder(callback) {
   return function (string) {
-    return arrayReduce(words(deburr(string).replace(reApos, '')), callback, '');
+    return arrayReduce(words(deburr(string).replace(reApos, "")), callback, "");
   };
 }
 
@@ -4622,11 +4622,11 @@ function createRound(methodName) {
     if (precision) {
       // Shift with exponential notation to avoid floating-point issues.
       // See [MDN](https://mdn.io/round#Examples) for more details.
-      var pair = (toString(number) + 'e').split('e'),
-          value = func(pair[0] + 'e' + (+pair[1] + precision));
+      var pair = (toString(number) + "e").split("e"),
+          value = func(pair[0] + "e" + (+pair[1] + precision));
 
-      pair = (toString(value) + 'e').split('e');
-      return +(pair[0] + 'e' + (+pair[1] - precision));
+      pair = (toString(value) + "e").split("e");
+      return +(pair[0] + "e" + (+pair[1] - precision));
     }
     return func(number);
   };
@@ -4653,7 +4653,7 @@ function createRound(methodName) {
  * _.ceil(6040, -2);
  * // => 6100
  */
-var ceil = createRound('ceil');
+var ceil = createRound("ceil");
 
 /**
  * Creates a `lodash` wrapper instance that wraps `value` with explicit method
@@ -4814,7 +4814,7 @@ function stackClear() {
  */
 function stackDelete(key) {
   var data = this.__data__,
-      result = data['delete'](key);
+      result = data["delete"](key);
 
   this.size = data.size;
   return result;
@@ -4889,7 +4889,7 @@ function Stack(entries) {
 
 // Add methods to `Stack`.
 Stack.prototype.clear = stackClear;
-Stack.prototype['delete'] = stackDelete;
+Stack.prototype["delete"] = stackDelete;
 Stack.prototype.get = stackGet;
 Stack.prototype.has = stackHas;
 Stack.prototype.set = stackSet;
@@ -4921,10 +4921,10 @@ function baseAssignIn(object, source) {
 }
 
 /** Detect free variable `exports`. */
-var freeExports$2 = (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) == 'object' && exports && !exports.nodeType && exports;
+var freeExports$2 = (typeof exports === "undefined" ? "undefined" : _typeof(exports)) == "object" && exports && !exports.nodeType && exports;
 
 /** Detect free variable `module`. */
-var freeModule$2 = freeExports$2 && (typeof module === 'undefined' ? 'undefined' : _typeof(module)) == 'object' && module && !module.nodeType && module;
+var freeModule$2 = freeExports$2 && (typeof module === "undefined" ? "undefined" : _typeof(module)) == "object" && module && !module.nodeType && module;
 
 /** Detect the popular CommonJS extension `module.exports`. */
 var moduleExports$2 = freeModule$2 && freeModule$2.exports === freeExports$2;
@@ -5107,22 +5107,22 @@ function getAllKeysIn(object) {
 }
 
 /* Built-in method references that are verified to be native. */
-var DataView = getNative(root, 'DataView');
+var DataView = getNative(root, "DataView");
 
 /* Built-in method references that are verified to be native. */
-var Promise$1 = getNative(root, 'Promise');
+var Promise$1 = getNative(root, "Promise");
 
 /* Built-in method references that are verified to be native. */
-var Set = getNative(root, 'Set');
+var Set = getNative(root, "Set");
 
 /** `Object#toString` result references. */
-var mapTag$2 = '[object Map]';
-var objectTag$3 = '[object Object]';
-var promiseTag = '[object Promise]';
-var setTag$2 = '[object Set]';
-var weakMapTag$2 = '[object WeakMap]';
+var mapTag$2 = "[object Map]";
+var objectTag$3 = "[object Object]";
+var promiseTag = "[object Promise]";
+var setTag$2 = "[object Set]";
+var weakMapTag$2 = "[object WeakMap]";
 
-var dataViewTag$2 = '[object DataView]';
+var dataViewTag$2 = "[object DataView]";
 
 /** Used to detect maps, sets, and weakmaps. */
 var dataViewCtorString = toSource(DataView);
@@ -5145,7 +5145,7 @@ if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag$2 || Map
     getTag = function getTag(value) {
         var result = baseGetTag(value),
             Ctor = result == objectTag$3 ? value.constructor : undefined,
-            ctorString = Ctor ? toSource(Ctor) : '';
+            ctorString = Ctor ? toSource(Ctor) : "";
 
         if (ctorString) {
             switch (ctorString) {
@@ -5185,7 +5185,7 @@ function initCloneArray(array) {
       result = array.constructor(length);
 
   // Add properties assigned by `RegExp#exec`.
-  if (length && typeof array[0] == 'string' && hasOwnProperty$13.call(array, 'index')) {
+  if (length && typeof array[0] === "string" && hasOwnProperty$13.call(array, "index")) {
     result.index = array.index;
     result.input = array.input;
   }
@@ -5362,26 +5362,26 @@ function cloneTypedArray(typedArray, isDeep) {
 }
 
 /** `Object#toString` result references. */
-var boolTag$2 = '[object Boolean]';
-var dateTag$2 = '[object Date]';
-var mapTag$3 = '[object Map]';
-var numberTag$2 = '[object Number]';
-var regexpTag$2 = '[object RegExp]';
-var setTag$3 = '[object Set]';
-var stringTag$2 = '[object String]';
-var symbolTag$2 = '[object Symbol]';
+var boolTag$2 = "[object Boolean]";
+var dateTag$2 = "[object Date]";
+var mapTag$3 = "[object Map]";
+var numberTag$2 = "[object Number]";
+var regexpTag$2 = "[object RegExp]";
+var setTag$3 = "[object Set]";
+var stringTag$2 = "[object String]";
+var symbolTag$2 = "[object Symbol]";
 
-var arrayBufferTag$2 = '[object ArrayBuffer]';
-var dataViewTag$3 = '[object DataView]';
-var float32Tag$2 = '[object Float32Array]';
-var float64Tag$2 = '[object Float64Array]';
-var int8Tag$2 = '[object Int8Array]';
-var int16Tag$2 = '[object Int16Array]';
-var int32Tag$2 = '[object Int32Array]';
-var uint8Tag$2 = '[object Uint8Array]';
-var uint8ClampedTag$2 = '[object Uint8ClampedArray]';
-var uint16Tag$2 = '[object Uint16Array]';
-var uint32Tag$2 = '[object Uint32Array]';
+var arrayBufferTag$2 = "[object ArrayBuffer]";
+var dataViewTag$3 = "[object DataView]";
+var float32Tag$2 = "[object Float32Array]";
+var float64Tag$2 = "[object Float64Array]";
+var int8Tag$2 = "[object Int8Array]";
+var int16Tag$2 = "[object Int16Array]";
+var int32Tag$2 = "[object Int32Array]";
+var uint8Tag$2 = "[object Uint8Array]";
+var uint8ClampedTag$2 = "[object Uint8ClampedArray]";
+var uint16Tag$2 = "[object Uint16Array]";
+var uint32Tag$2 = "[object Uint32Array]";
 
 /**
  * Initializes an object clone based on its `toStringTag`.
@@ -5440,7 +5440,7 @@ function initCloneByTag(object, tag, cloneFunc, isDeep) {
  * @returns {Object} Returns the initialized clone.
  */
 function initCloneObject(object) {
-  return typeof object.constructor == 'function' && !isPrototype(object) ? baseCreate(getPrototype(object)) : {};
+  return typeof object.constructor === "function" && !isPrototype(object) ? baseCreate(getPrototype(object)) : {};
 }
 
 /** Used to compose bitmasks for cloning. */
@@ -5449,33 +5449,33 @@ var CLONE_FLAT_FLAG = 2;
 var CLONE_SYMBOLS_FLAG$1 = 4;
 
 /** `Object#toString` result references. */
-var argsTag$2 = '[object Arguments]';
-var arrayTag$1 = '[object Array]';
-var boolTag$1 = '[object Boolean]';
-var dateTag$1 = '[object Date]';
-var errorTag$2 = '[object Error]';
-var funcTag$2 = '[object Function]';
-var genTag$1 = '[object GeneratorFunction]';
-var mapTag$1 = '[object Map]';
-var numberTag$1 = '[object Number]';
-var objectTag$2 = '[object Object]';
-var regexpTag$1 = '[object RegExp]';
-var setTag$1 = '[object Set]';
-var stringTag$1 = '[object String]';
-var symbolTag$1 = '[object Symbol]';
-var weakMapTag$1 = '[object WeakMap]';
+var argsTag$2 = "[object Arguments]";
+var arrayTag$1 = "[object Array]";
+var boolTag$1 = "[object Boolean]";
+var dateTag$1 = "[object Date]";
+var errorTag$2 = "[object Error]";
+var funcTag$2 = "[object Function]";
+var genTag$1 = "[object GeneratorFunction]";
+var mapTag$1 = "[object Map]";
+var numberTag$1 = "[object Number]";
+var objectTag$2 = "[object Object]";
+var regexpTag$1 = "[object RegExp]";
+var setTag$1 = "[object Set]";
+var stringTag$1 = "[object String]";
+var symbolTag$1 = "[object Symbol]";
+var weakMapTag$1 = "[object WeakMap]";
 
-var arrayBufferTag$1 = '[object ArrayBuffer]';
-var dataViewTag$1 = '[object DataView]';
-var float32Tag$1 = '[object Float32Array]';
-var float64Tag$1 = '[object Float64Array]';
-var int8Tag$1 = '[object Int8Array]';
-var int16Tag$1 = '[object Int16Array]';
-var int32Tag$1 = '[object Int32Array]';
-var uint8Tag$1 = '[object Uint8Array]';
-var uint8ClampedTag$1 = '[object Uint8ClampedArray]';
-var uint16Tag$1 = '[object Uint16Array]';
-var uint32Tag$1 = '[object Uint32Array]';
+var arrayBufferTag$1 = "[object ArrayBuffer]";
+var dataViewTag$1 = "[object DataView]";
+var float32Tag$1 = "[object Float32Array]";
+var float64Tag$1 = "[object Float64Array]";
+var int8Tag$1 = "[object Int8Array]";
+var int16Tag$1 = "[object Int16Array]";
+var int32Tag$1 = "[object Int32Array]";
+var uint8Tag$1 = "[object Uint8Array]";
+var uint8ClampedTag$1 = "[object Uint8ClampedArray]";
+var uint16Tag$1 = "[object Uint16Array]";
+var uint32Tag$1 = "[object Uint32Array]";
 
 /** Used to identify `toStringTag` values supported by `_.clone`. */
 var cloneableTags = {};
@@ -5652,7 +5652,7 @@ var CLONE_SYMBOLS_FLAG$3 = 4;
  * // => 20
  */
 function cloneDeepWith(value, customizer) {
-  customizer = typeof customizer == 'function' ? customizer : undefined;
+  customizer = typeof customizer === "function" ? customizer : undefined;
   return baseClone(value, CLONE_DEEP_FLAG$4 | CLONE_SYMBOLS_FLAG$3, customizer);
 }
 
@@ -5691,7 +5691,7 @@ var CLONE_SYMBOLS_FLAG$4 = 4;
  * // => 0
  */
 function cloneWith(value, customizer) {
-  customizer = typeof customizer == 'function' ? customizer : undefined;
+  customizer = typeof customizer === "function" ? customizer : undefined;
   return baseClone(value, CLONE_SYMBOLS_FLAG$4, customizer);
 }
 
@@ -5793,7 +5793,7 @@ function concat() {
 }
 
 /** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED$2 = '__lodash_hash_undefined__';
+var HASH_UNDEFINED$2 = "__lodash_hash_undefined__";
 
 /**
  * Adds `value` to the array cache.
@@ -5946,8 +5946,8 @@ function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
       break;
     }
   }
-  stack['delete'](array);
-  stack['delete'](other);
+  stack["delete"](array);
+  stack["delete"](other);
   return result;
 }
 
@@ -5956,18 +5956,18 @@ var COMPARE_PARTIAL_FLAG$3 = 1;
 var COMPARE_UNORDERED_FLAG$2 = 2;
 
 /** `Object#toString` result references. */
-var boolTag$3 = '[object Boolean]';
-var dateTag$3 = '[object Date]';
-var errorTag$3 = '[object Error]';
-var mapTag$4 = '[object Map]';
-var numberTag$3 = '[object Number]';
-var regexpTag$3 = '[object RegExp]';
-var setTag$4 = '[object Set]';
-var stringTag$3 = '[object String]';
-var symbolTag$3 = '[object Symbol]';
+var boolTag$3 = "[object Boolean]";
+var dateTag$3 = "[object Date]";
+var errorTag$3 = "[object Error]";
+var mapTag$4 = "[object Map]";
+var numberTag$3 = "[object Number]";
+var regexpTag$3 = "[object RegExp]";
+var setTag$4 = "[object Set]";
+var stringTag$3 = "[object String]";
+var symbolTag$3 = "[object Symbol]";
 
-var arrayBufferTag$3 = '[object ArrayBuffer]';
-var dataViewTag$4 = '[object DataView]';
+var arrayBufferTag$3 = "[object ArrayBuffer]";
+var dataViewTag$4 = "[object DataView]";
 
 /** Used to convert symbols to primitives and strings. */
 var symbolProto$2 = _Symbol ? _Symbol.prototype : undefined;
@@ -6020,7 +6020,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
       // Coerce regexes to strings and treat strings, primitives and objects,
       // as equal. See http://www.ecma-international.org/ecma-262/7.0/#sec-regexp.prototype.tostring
       // for more details.
-      return object == other + '';
+      return object == other + "";
 
     case mapTag$4:
       var convert = mapToArray;
@@ -6042,7 +6042,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
       // Recursively compare objects (susceptible to call stack limits).
       stack.set(object, other);
       var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
-      stack['delete'](object);
+      stack["delete"](object);
       return result;
 
     case symbolTag$3:
@@ -6115,19 +6115,19 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
       result = false;
       break;
     }
-    skipCtor || (skipCtor = key == 'constructor');
+    skipCtor || (skipCtor = key == "constructor");
   }
   if (result && !skipCtor) {
     var objCtor = object.constructor,
         othCtor = other.constructor;
 
     // Non `Object` object instances with different constructors are not equal.
-    if (objCtor != othCtor && 'constructor' in object && 'constructor' in other && !(typeof objCtor == 'function' && objCtor instanceof objCtor && typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+    if (objCtor != othCtor && "constructor" in object && "constructor" in other && !(typeof objCtor === "function" && objCtor instanceof objCtor && typeof othCtor === "function" && othCtor instanceof othCtor)) {
       result = false;
     }
   }
-  stack['delete'](object);
-  stack['delete'](other);
+  stack["delete"](object);
+  stack["delete"](other);
   return result;
 }
 
@@ -6135,9 +6135,9 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
 var COMPARE_PARTIAL_FLAG$1 = 1;
 
 /** `Object#toString` result references. */
-var argsTag$3 = '[object Arguments]';
-var arrayTag$2 = '[object Array]';
-var objectTag$4 = '[object Object]';
+var argsTag$3 = "[object Arguments]";
+var arrayTag$2 = "[object Array]";
+var objectTag$4 = "[object Object]";
 
 /** Used for built-in method references. */
 var objectProto$17 = Object.prototype;
@@ -6184,8 +6184,8 @@ function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
     return objIsArr || isTypedArray(object) ? equalArrays(object, other, bitmask, customizer, equalFunc, stack) : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
   }
   if (!(bitmask & COMPARE_PARTIAL_FLAG$1)) {
-    var objIsWrapped = objIsObj && hasOwnProperty$14.call(object, '__wrapped__'),
-        othIsWrapped = othIsObj && hasOwnProperty$14.call(other, '__wrapped__');
+    var objIsWrapped = objIsObj && hasOwnProperty$14.call(object, "__wrapped__"),
+        othIsWrapped = othIsObj && hasOwnProperty$14.call(other, "__wrapped__");
 
     if (objIsWrapped || othIsWrapped) {
       var objUnwrapped = objIsWrapped ? object.value() : object,
@@ -6501,20 +6501,20 @@ function property(path) {
 function baseIteratee(value) {
   // Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
   // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
-  if (typeof value == 'function') {
+  if (typeof value === "function") {
     return value;
   }
   if (value == null) {
     return identity;
   }
-  if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object') {
+  if ((typeof value === "undefined" ? "undefined" : _typeof(value)) == "object") {
     return isArray(value) ? baseMatchesProperty(value[0], value[1]) : baseMatches(value);
   }
   return property(value);
 }
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$4 = 'Expected a function';
+var FUNC_ERROR_TEXT$4 = "Expected a function";
 
 /**
  * Creates a function that iterates over `pairs` and invokes the corresponding
@@ -6550,7 +6550,7 @@ function cond(pairs) {
       toIteratee = baseIteratee;
 
   pairs = !length ? [] : arrayMap(pairs, function (pair) {
-    if (typeof pair[1] != 'function') {
+    if (typeof pair[1] !== "function") {
       throw new TypeError(FUNC_ERROR_TEXT$4);
     }
     return [toIteratee(pair[0]), pair[1]];
@@ -7011,7 +7011,7 @@ var now = function now() {
 };
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$5 = 'Expected a function';
+var FUNC_ERROR_TEXT$5 = "Expected a function";
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax$5 = Math.max;
@@ -7083,15 +7083,15 @@ function debounce(func, wait, options) {
       maxing = false,
       trailing = true;
 
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$5);
   }
   wait = toNumber(wait) || 0;
   if (isObject(options)) {
     leading = !!options.leading;
-    maxing = 'maxWait' in options;
+    maxing = "maxWait" in options;
     maxWait = maxing ? nativeMax$5(toNumber(options.maxWait) || 0, wait) : maxWait;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
+    trailing = "trailing" in options ? !!options.trailing : trailing;
   }
 
   function invokeFunc(time) {
@@ -7363,7 +7363,7 @@ function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, sta
     assignMergeValue(object, key, stacked);
     return;
   }
-  var newValue = customizer ? customizer(objValue, srcValue, key + '', object, source, stack) : undefined;
+  var newValue = customizer ? customizer(objValue, srcValue, key + "", object, source, stack) : undefined;
 
   var isCommon = newValue === undefined;
 
@@ -7402,7 +7402,7 @@ function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, sta
     // Recursively merge objects and arrays (susceptible to call stack limits).
     stack.set(srcValue, newValue);
     mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
-    stack['delete'](srcValue);
+    stack["delete"](srcValue);
   }
   assignMergeValue(object, key, newValue);
 }
@@ -7427,7 +7427,7 @@ function baseMerge(object, source, srcIndex, customizer, stack) {
       stack || (stack = new Stack());
       baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
     } else {
-      var newValue = customizer ? customizer(object[key], srcValue, key + '', object, source, stack) : undefined;
+      var newValue = customizer ? customizer(object[key], srcValue, key + "", object, source, stack) : undefined;
 
       if (newValue === undefined) {
         newValue = srcValue;
@@ -7456,7 +7456,7 @@ function customDefaultsMerge(objValue, srcValue, key, object, source, stack) {
     // Recursively merge objects and arrays (susceptible to call stack limits).
     stack.set(srcValue, objValue);
     baseMerge(objValue, srcValue, undefined, customDefaultsMerge, stack);
-    stack['delete'](srcValue);
+    stack["delete"](srcValue);
   }
   return objValue;
 }
@@ -7521,7 +7521,7 @@ var defaultsDeep = baseRest(function (args) {
 });
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$6 = 'Expected a function';
+var FUNC_ERROR_TEXT$6 = "Expected a function";
 
 /**
  * The base implementation of `_.delay` and `_.defer` which accepts `args`
@@ -7534,7 +7534,7 @@ var FUNC_ERROR_TEXT$6 = 'Expected a function';
  * @returns {number|Object} Returns the timer id or timeout object.
  */
 function baseDelay(func, wait, args) {
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$6);
   }
   return setTimeout(function () {
@@ -7967,7 +7967,7 @@ function dropWhile(array, predicate) {
  * @returns {Function} Returns cast function.
  */
 function castFunction(value) {
-  return typeof value == 'function' ? value : identity;
+  return typeof value === "function" ? value : identity;
 }
 
 /**
@@ -8152,8 +8152,8 @@ function setToPairs(set) {
 }
 
 /** `Object#toString` result references. */
-var mapTag$5 = '[object Map]';
-var setTag$5 = '[object Set]';
+var mapTag$5 = "[object Map]";
+var setTag$5 = "[object Set]";
 
 /**
  * Creates a `_.toPairs` or `_.toPairsIn` function.
@@ -8229,11 +8229,11 @@ var toPairsIn = createToPairs(keysIn$1);
 
 /** Used to map characters to HTML entities. */
 var htmlEscapes = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;'
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  "\"": "&quot;",
+  "'": "&#39;"
 };
 
 /**
@@ -8306,7 +8306,7 @@ var reHasRegExpChar = RegExp(reRegExpChar$1.source);
  */
 function escapeRegExp(string) {
   string = toString(string);
-  return string && reHasRegExpChar.test(string) ? string.replace(reRegExpChar$1, '\\$&') : string;
+  return string && reHasRegExpChar.test(string) ? string.replace(reRegExpChar$1, "\\$&") : string;
 }
 
 /**
@@ -8494,7 +8494,7 @@ function fill(array, value, start, end) {
   if (!length) {
     return [];
   }
-  if (start && typeof start != 'number' && isIterateeCall(array, value, start)) {
+  if (start && typeof start !== "number" && isIterateeCall(array, value, start)) {
     start = 0;
     end = length;
   }
@@ -9106,10 +9106,10 @@ function flip(func) {
  * _.floor(4060, -2);
  * // => 4000
  */
-var floor = createRound('floor');
+var floor = createRound("floor");
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$7 = 'Expected a function';
+var FUNC_ERROR_TEXT$7 = "Expected a function";
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_CURRY_FLAG$6 = 8;
@@ -9135,10 +9135,10 @@ function createFlow(fromRight) {
     }
     while (index--) {
       var func = funcs[index];
-      if (typeof func != 'function') {
+      if (typeof func !== "function") {
         throw new TypeError(FUNC_ERROR_TEXT$7);
       }
-      if (prereq && !wrapper && getFuncName(func) == 'wrapper') {
+      if (prereq && !wrapper && getFuncName(func) == "wrapper") {
         var wrapper = new LodashWrapper([], true);
       }
     }
@@ -9147,7 +9147,7 @@ function createFlow(fromRight) {
       func = funcs[index];
 
       var funcName = getFuncName(func),
-          data = funcName == 'wrapper' ? getData(func) : undefined;
+          data = funcName == "wrapper" ? getData(func) : undefined;
 
       if (data && isLaziable(data[0]) && data[1] == (WRAP_ARY_FLAG$4 | WRAP_CURRY_FLAG$6 | WRAP_PARTIAL_FLAG$5 | WRAP_REARG_FLAG$2) && !data[4].length && data[9] == 1) {
         wrapper = wrapper[getFuncName(data[0])].apply(wrapper, data[3]);
@@ -9499,7 +9499,7 @@ function baseGt(value, other) {
  */
 function createRelationalOperation(operator) {
   return function (value, other) {
-    if (!(typeof value == 'string' && typeof other == 'string')) {
+    if (!(typeof value === "string" && typeof other === "string")) {
       value = toNumber(value);
       other = toNumber(other);
     }
@@ -9676,7 +9676,7 @@ function inRange(number, start, end) {
 }
 
 /** `Object#toString` result references. */
-var stringTag$4 = '[object String]';
+var stringTag$4 = "[object String]";
 
 /**
  * Checks if `value` is classified as a `String` primitive or object.
@@ -9696,7 +9696,7 @@ var stringTag$4 = '[object String]';
  * // => false
  */
 function isString(value) {
-  return typeof value == 'string' || !isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag$4;
+  return typeof value === "string" || !isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag$4;
 }
 
 /**
@@ -9996,7 +9996,7 @@ var intersectionWith = baseRest(function (arrays) {
   var comparator = last(arrays),
       mapped = arrayMap(arrays, castArrayLikeObject);
 
-  comparator = typeof comparator == 'function' ? comparator : undefined;
+  comparator = typeof comparator === "function" ? comparator : undefined;
   if (comparator) {
     mapped.pop();
   }
@@ -10171,7 +10171,7 @@ var invoke = baseRest(baseInvoke);
  */
 var invokeMap = baseRest(function (collection, path, args) {
   var index = -1,
-      isFunc = typeof path == 'function',
+      isFunc = typeof path === "function",
       result = isArrayLike(collection) ? Array(collection.length) : [];
 
   baseEach(collection, function (value) {
@@ -10180,7 +10180,7 @@ var invokeMap = baseRest(function (collection, path, args) {
   return result;
 });
 
-var arrayBufferTag$4 = '[object ArrayBuffer]';
+var arrayBufferTag$4 = "[object ArrayBuffer]";
 
 /**
  * The base implementation of `_.isArrayBuffer` without Node.js optimizations.
@@ -10216,7 +10216,7 @@ var nodeIsArrayBuffer = nodeUtil && nodeUtil.isArrayBuffer;
 var isArrayBuffer = nodeIsArrayBuffer ? baseUnary(nodeIsArrayBuffer) : baseIsArrayBuffer;
 
 /** `Object#toString` result references. */
-var boolTag$4 = '[object Boolean]';
+var boolTag$4 = "[object Boolean]";
 
 /**
  * Checks if `value` is classified as a boolean primitive or object.
@@ -10240,7 +10240,7 @@ function isBoolean(value) {
 }
 
 /** `Object#toString` result references. */
-var dateTag$4 = '[object Date]';
+var dateTag$4 = "[object Date]";
 
 /**
  * The base implementation of `_.isDate` without Node.js optimizations.
@@ -10297,8 +10297,8 @@ function isElement(value) {
 }
 
 /** `Object#toString` result references. */
-var mapTag$6 = '[object Map]';
-var setTag$6 = '[object Set]';
+var mapTag$6 = "[object Map]";
+var setTag$6 = "[object Set]";
 
 /** Used for built-in method references. */
 var objectProto$24 = Object.prototype;
@@ -10343,7 +10343,7 @@ function isEmpty(value) {
   if (value == null) {
     return true;
   }
-  if (isArrayLike(value) && (isArray(value) || typeof value == 'string' || typeof value.splice == 'function' || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+  if (isArrayLike(value) && (isArray(value) || typeof value === "string" || typeof value.splice === "function" || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
     return !value.length;
   }
   var tag = getTag$1(value);
@@ -10426,7 +10426,7 @@ function isEqual(value, other) {
  * // => true
  */
 function isEqualWith(value, other, customizer) {
-  customizer = typeof customizer == 'function' ? customizer : undefined;
+  customizer = typeof customizer === "function" ? customizer : undefined;
   var result = customizer ? customizer(value, other) : undefined;
   return result === undefined ? baseIsEqual(value, other, undefined, customizer) : !!result;
 }
@@ -10461,7 +10461,7 @@ var nativeIsFinite = root.isFinite;
  * // => false
  */
 function isFinite(value) {
-  return typeof value == 'number' && nativeIsFinite(value);
+  return typeof value === "number" && nativeIsFinite(value);
 }
 
 /**
@@ -10491,11 +10491,11 @@ function isFinite(value) {
  * // => false
  */
 function isInteger(value) {
-  return typeof value == 'number' && value == toInteger(value);
+  return typeof value === "number" && value == toInteger(value);
 }
 
 /** `Object#toString` result references. */
-var mapTag$7 = '[object Map]';
+var mapTag$7 = "[object Map]";
 
 /**
  * The base implementation of `_.isMap` without Node.js optimizations.
@@ -10595,12 +10595,12 @@ function isMatch(object, source) {
  * // => true
  */
 function isMatchWith(object, source, customizer) {
-  customizer = typeof customizer == 'function' ? customizer : undefined;
+  customizer = typeof customizer === "function" ? customizer : undefined;
   return baseIsMatch(object, source, getMatchData(source), customizer);
 }
 
 /** `Object#toString` result references. */
-var numberTag$4 = '[object Number]';
+var numberTag$4 = "[object Number]";
 
 /**
  * Checks if `value` is classified as a `Number` primitive or object.
@@ -10629,7 +10629,7 @@ var numberTag$4 = '[object Number]';
  * // => false
  */
 function isNumber(value) {
-  return typeof value == 'number' || isObjectLike(value) && baseGetTag(value) == numberTag$4;
+  return typeof value === "number" || isObjectLike(value) && baseGetTag(value) == numberTag$4;
 }
 
 /**
@@ -10677,7 +10677,7 @@ function isNaN(value) {
 var isMaskable = coreJsData ? isFunction : stubFalse;
 
 /** Error message constants. */
-var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.';
+var CORE_ERROR_TEXT = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.";
 
 /**
  * Checks if `value` is a pristine native function.
@@ -10758,7 +10758,7 @@ function isNull(value) {
 }
 
 /** `Object#toString` result references. */
-var regexpTag$4 = '[object RegExp]';
+var regexpTag$4 = "[object RegExp]";
 
 /**
  * The base implementation of `_.isRegExp` without Node.js optimizations.
@@ -10828,7 +10828,7 @@ function isSafeInteger(value) {
 }
 
 /** `Object#toString` result references. */
-var setTag$7 = '[object Set]';
+var setTag$7 = "[object Set]";
 
 /**
  * The base implementation of `_.isSet` without Node.js optimizations.
@@ -10885,7 +10885,7 @@ function isUndefined(value) {
 }
 
 /** `Object#toString` result references. */
-var weakMapTag$3 = '[object WeakMap]';
+var weakMapTag$3 = "[object WeakMap]";
 
 /**
  * Checks if `value` is classified as a `WeakMap` object.
@@ -10909,7 +10909,7 @@ function isWeakMap(value) {
 }
 
 /** `Object#toString` result references. */
-var weakSetTag = '[object WeakSet]';
+var weakSetTag = "[object WeakSet]";
 
 /**
  * Checks if `value` is classified as a `WeakSet` object.
@@ -10978,7 +10978,7 @@ var CLONE_DEEP_FLAG$6 = 1;
  * // => ['def']
  */
 function iteratee(func) {
-  return baseIteratee(typeof func == 'function' ? func : baseClone(func, CLONE_DEEP_FLAG$6));
+  return baseIteratee(typeof func === "function" ? func : baseClone(func, CLONE_DEEP_FLAG$6));
 }
 
 /** Used for built-in method references. */
@@ -11003,7 +11003,7 @@ var nativeJoin = arrayProto$1.join;
  * // => 'a~b~c'
  */
 function join(array, separator) {
-  return array == null ? '' : nativeJoin.call(array, separator);
+  return array == null ? "" : nativeJoin.call(array, separator);
 }
 
 /**
@@ -11028,7 +11028,7 @@ function join(array, separator) {
  * // => 'foo-bar'
  */
 var kebabCase = createCompounder(function (result, word, index) {
-  return result + (index ? '-' : '') + word.toLowerCase();
+  return result + (index ? "-" : "") + word.toLowerCase();
 });
 
 /**
@@ -11142,7 +11142,7 @@ function lastIndexOf(array, value, fromIndex) {
  * // => 'foo bar'
  */
 var lowerCase = createCompounder(function (result, word, index) {
-  return result + (index ? ' ' : '') + word.toLowerCase();
+  return result + (index ? " " : "") + word.toLowerCase();
 });
 
 /**
@@ -11162,7 +11162,7 @@ var lowerCase = createCompounder(function (result, word, index) {
  * _.lowerFirst('FRED');
  * // => 'fRED'
  */
-var lowerFirst = createCaseFirst('toLowerCase');
+var lowerFirst = createCaseFirst("toLowerCase");
 
 /**
  * The base implementation of `_.lt` which doesn't coerce arguments.
@@ -11709,7 +11709,7 @@ function mixin(object, source, options) {
   var props = keys(source),
       methodNames = baseFunctions(source, props);
 
-  var chain = !(isObject(options) && 'chain' in options) || !!options.chain,
+  var chain = !(isObject(options) && "chain" in options) || !!options.chain,
       isFunc = isFunction(object);
 
   arrayEach(methodNames, function (methodName) {
@@ -11722,7 +11722,7 @@ function mixin(object, source, options) {
           var result = object(this.__wrapped__),
               actions = result.__actions__ = copyArray(this.__actions__);
 
-          actions.push({ 'func': func, 'args': arguments, 'thisArg': object });
+          actions.push({ "func": func, "args": arguments, "thisArg": object });
           result.__chain__ = chainAll;
           return result;
         }
@@ -11754,7 +11754,7 @@ var multiply = createMathOperation(function (multiplier, multiplicand) {
 }, 1);
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$8 = 'Expected a function';
+var FUNC_ERROR_TEXT$8 = "Expected a function";
 
 /**
  * Creates a function that negates the result of the predicate `func`. The
@@ -11777,7 +11777,7 @@ var FUNC_ERROR_TEXT$8 = 'Expected a function';
  * // => [1, 3, 5]
  */
 function negate(predicate) {
-  if (typeof predicate != 'function') {
+  if (typeof predicate !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$8);
   }
   return function () {
@@ -11814,8 +11814,8 @@ function iteratorToArray(iterator) {
 }
 
 /** `Object#toString` result references. */
-var mapTag$8 = '[object Map]';
-var setTag$8 = '[object Set]';
+var mapTag$8 = "[object Map]";
+var setTag$8 = "[object Set]";
 
 /** Built-in value references. */
 var symIterator = _Symbol ? _Symbol.iterator : undefined;
@@ -11888,7 +11888,7 @@ function wrapperNext() {
   var done = this.__index__ >= this.__values__.length,
       value = done ? undefined : this.__values__[this.__index__++];
 
-  return { 'done': done, 'value': value };
+  return { "done": done, "value": value };
 }
 
 /**
@@ -12252,7 +12252,7 @@ function compareMultiple(object, other, orders) {
         return result;
       }
       var order = orders[index];
-      return result * (order == 'desc' ? -1 : 1);
+      return result * (order == "desc" ? -1 : 1);
     }
   }
   // Fixes an `Array#sort` bug in the JS engine embedded in Adobe applications
@@ -12282,7 +12282,7 @@ function baseOrderBy(collection, iteratees, orders) {
     var criteria = arrayMap(iteratees, function (iteratee) {
       return iteratee(value);
     });
-    return { 'criteria': criteria, 'index': ++index, 'value': value };
+    return { "criteria": criteria, "index": ++index, "value": value };
   });
 
   return baseSortBy(result, function (object, other) {
@@ -12499,7 +12499,7 @@ var nativeFloor$1 = Math.floor;
  * @returns {string} Returns the repeated string.
  */
 function baseRepeat(string, n) {
-  var result = '';
+  var result = "";
   if (!string || n < 1 || n > MAX_SAFE_INTEGER$3) {
     return result;
   }
@@ -12525,35 +12525,35 @@ function baseRepeat(string, n) {
  * @param {string} string The string inspect.
  * @returns {number} Returns the string size.
  */
-var asciiSize = baseProperty('length');
+var asciiSize = baseProperty("length");
 
 /** Used to compose unicode character classes. */
-var rsAstralRange$3 = '\\ud800-\\udfff';
-var rsComboMarksRange$4 = '\\u0300-\\u036f';
-var reComboHalfMarksRange$4 = '\\ufe20-\\ufe2f';
-var rsComboSymbolsRange$4 = '\\u20d0-\\u20ff';
+var rsAstralRange$3 = "\\ud800-\\udfff";
+var rsComboMarksRange$4 = "\\u0300-\\u036f";
+var reComboHalfMarksRange$4 = "\\ufe20-\\ufe2f";
+var rsComboSymbolsRange$4 = "\\u20d0-\\u20ff";
 var rsComboRange$4 = rsComboMarksRange$4 + reComboHalfMarksRange$4 + rsComboSymbolsRange$4;
-var rsVarRange$3 = '\\ufe0e\\ufe0f';
+var rsVarRange$3 = "\\ufe0e\\ufe0f";
 
 /** Used to compose unicode capture groups. */
-var rsAstral$1 = '[' + rsAstralRange$3 + ']';
-var rsCombo$3 = '[' + rsComboRange$4 + ']';
-var rsFitz$2 = '\\ud83c[\\udffb-\\udfff]';
-var rsModifier$2 = '(?:' + rsCombo$3 + '|' + rsFitz$2 + ')';
-var rsNonAstral$2 = '[^' + rsAstralRange$3 + ']';
-var rsRegional$2 = '(?:\\ud83c[\\udde6-\\uddff]){2}';
-var rsSurrPair$2 = '[\\ud800-\\udbff][\\udc00-\\udfff]';
-var rsZWJ$3 = '\\u200d';
+var rsAstral$1 = "[" + rsAstralRange$3 + "]";
+var rsCombo$3 = "[" + rsComboRange$4 + "]";
+var rsFitz$2 = "\\ud83c[\\udffb-\\udfff]";
+var rsModifier$2 = "(?:" + rsCombo$3 + "|" + rsFitz$2 + ")";
+var rsNonAstral$2 = "[^" + rsAstralRange$3 + "]";
+var rsRegional$2 = "(?:\\ud83c[\\udde6-\\uddff]){2}";
+var rsSurrPair$2 = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+var rsZWJ$3 = "\\u200d";
 
 /** Used to compose unicode regexes. */
-var reOptMod$2 = rsModifier$2 + '?';
-var rsOptVar$2 = '[' + rsVarRange$3 + ']?';
-var rsOptJoin$2 = '(?:' + rsZWJ$3 + '(?:' + [rsNonAstral$2, rsRegional$2, rsSurrPair$2].join('|') + ')' + rsOptVar$2 + reOptMod$2 + ')*';
+var reOptMod$2 = rsModifier$2 + "?";
+var rsOptVar$2 = "[" + rsVarRange$3 + "]?";
+var rsOptJoin$2 = "(?:" + rsZWJ$3 + "(?:" + [rsNonAstral$2, rsRegional$2, rsSurrPair$2].join("|") + ")" + rsOptVar$2 + reOptMod$2 + ")*";
 var rsSeq$2 = rsOptVar$2 + reOptMod$2 + rsOptJoin$2;
-var rsSymbol$1 = '(?:' + [rsNonAstral$2 + rsCombo$3 + '?', rsCombo$3, rsRegional$2, rsSurrPair$2, rsAstral$1].join('|') + ')';
+var rsSymbol$1 = "(?:" + [rsNonAstral$2 + rsCombo$3 + "?", rsCombo$3, rsRegional$2, rsSurrPair$2, rsAstral$1].join("|") + ")";
 
 /** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-var reUnicode$1 = RegExp(rsFitz$2 + '(?=' + rsFitz$2 + ')|' + rsSymbol$1 + rsSeq$2, 'g');
+var reUnicode$1 = RegExp(rsFitz$2 + "(?=" + rsFitz$2 + ")|" + rsSymbol$1 + rsSeq$2, "g");
 
 /**
  * Gets the size of a Unicode `string`.
@@ -12594,14 +12594,14 @@ var nativeCeil$2 = Math.ceil;
  * @returns {string} Returns the padding for `string`.
  */
 function createPadding(length, chars) {
-  chars = chars === undefined ? ' ' : baseToString(chars);
+  chars = chars === undefined ? " " : baseToString(chars);
 
   var charsLength = chars.length;
   if (charsLength < 2) {
     return charsLength ? baseRepeat(chars, length) : chars;
   }
   var result = baseRepeat(chars, nativeCeil$2(length / stringSize(chars)));
-  return hasUnicode(chars) ? castSlice(stringToArray(result), 0, length).join('') : result.slice(0, length);
+  return hasUnicode(chars) ? castSlice(stringToArray(result), 0, length).join("") : result.slice(0, length);
 }
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -12741,7 +12741,7 @@ function parseInt$1(string, radix, guard) {
   } else if (radix) {
     radix = +radix;
   }
-  return nativeParseInt(toString(string).replace(reTrimStart, ''), radix || 0);
+  return nativeParseInt(toString(string).replace(reTrimStart, ""), radix || 0);
 }
 
 /** Used to compose bitmasks for function metadata. */
@@ -13273,14 +13273,14 @@ var nativeRandom = Math.random;
  * // => a floating-point number between 1.2 and 5.2
  */
 function random(lower, upper, floating) {
-  if (floating && typeof floating != 'boolean' && isIterateeCall(lower, upper, floating)) {
+  if (floating && typeof floating !== "boolean" && isIterateeCall(lower, upper, floating)) {
     upper = floating = undefined;
   }
   if (floating === undefined) {
-    if (typeof upper == 'boolean') {
+    if (typeof upper === "boolean") {
       floating = upper;
       upper = undefined;
-    } else if (typeof lower == 'boolean') {
+    } else if (typeof lower === "boolean") {
       floating = lower;
       lower = undefined;
     }
@@ -13304,7 +13304,7 @@ function random(lower, upper, floating) {
   }
   if (floating || lower % 1 || upper % 1) {
     var rand = nativeRandom();
-    return nativeMin$9(lower + rand * (upper - lower + freeParseFloat('1e-' + ((rand + '').length - 1))), upper);
+    return nativeMin$9(lower + rand * (upper - lower + freeParseFloat("1e-" + ((rand + "").length - 1))), upper);
   }
   return baseRandom(lower, upper);
 }
@@ -13345,7 +13345,7 @@ function baseRange(start, end, step, fromRight) {
  */
 function createRange(fromRight) {
   return function (start, end, step) {
-    if (step && typeof step != 'number' && isIterateeCall(start, end, step)) {
+    if (step && typeof step !== "number" && isIterateeCall(start, end, step)) {
       end = step = undefined;
     }
     // Ensure the sign of `-0` is preserved.
@@ -13733,7 +13733,7 @@ function replace() {
 }
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$9 = 'Expected a function';
+var FUNC_ERROR_TEXT$9 = "Expected a function";
 
 /**
  * Creates a function that invokes `func` with the `this` binding of the
@@ -13761,7 +13761,7 @@ var FUNC_ERROR_TEXT$9 = 'Expected a function';
  * // => 'hello fred, barney, & pebbles'
  */
 function rest(func, start) {
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$9);
   }
   start = start === undefined ? start : toInteger(start);
@@ -13873,7 +13873,7 @@ function reverse(array) {
  * _.round(4060, -2);
  * // => 4100
  */
-var round = createRound('round');
+var round = createRound("round");
 
 /**
  * A specialized version of `_.sample` for arrays.
@@ -14054,7 +14054,7 @@ function set$1(object, path, value) {
  * // => { '0': { '1': 'a' } }
  */
 function setWith(object, path, value, customizer) {
-  customizer = typeof customizer == 'function' ? customizer : undefined;
+  customizer = typeof customizer === "function" ? customizer : undefined;
   return object == null ? object : baseSet(object, path, value, customizer);
 }
 
@@ -14101,8 +14101,8 @@ function shuffle(collection) {
 }
 
 /** `Object#toString` result references. */
-var mapTag$9 = '[object Map]';
-var setTag$9 = '[object Set]';
+var mapTag$9 = "[object Map]";
+var setTag$9 = "[object Set]";
 
 /**
  * Gets the size of `collection` by returning its length for array-like
@@ -14160,7 +14160,7 @@ function slice(array, start, end) {
   if (!length) {
     return [];
   }
-  if (end && typeof end != 'number' && isIterateeCall(array, start, end)) {
+  if (end && typeof end !== "number" && isIterateeCall(array, start, end)) {
     start = 0;
     end = length;
   } else {
@@ -14192,7 +14192,7 @@ function slice(array, start, end) {
  * // => 'foo_bar'
  */
 var snakeCase = createCompounder(function (result, word, index) {
-  return result + (index ? '_' : '') + word.toLowerCase();
+  return result + (index ? "_" : "") + word.toLowerCase();
 });
 
 /**
@@ -14381,7 +14381,7 @@ function baseSortedIndex(array, value, retHighest) {
   var low = 0,
       high = array == null ? low : array.length;
 
-  if (typeof value == 'number' && value === value && high <= HALF_MAX_ARRAY_LENGTH) {
+  if (typeof value === "number" && value === value && high <= HALF_MAX_ARRAY_LENGTH) {
     while (low < high) {
       var mid = low + high >>> 1,
           computed = array[mid];
@@ -14641,7 +14641,7 @@ var MAX_ARRAY_LENGTH$4 = 4294967295;
  * // => ['a', 'b']
  */
 function split(string, separator, limit) {
-  if (limit && typeof limit != 'number' && isIterateeCall(string, separator, limit)) {
+  if (limit && typeof limit !== "number" && isIterateeCall(string, separator, limit)) {
     separator = limit = undefined;
   }
   limit = limit === undefined ? MAX_ARRAY_LENGTH$4 : limit >>> 0;
@@ -14649,7 +14649,7 @@ function split(string, separator, limit) {
     return [];
   }
   string = toString(string);
-  if (string && (typeof separator == 'string' || separator != null && !isRegExp(separator))) {
+  if (string && (typeof separator === "string" || separator != null && !isRegExp(separator))) {
     separator = baseToString(separator);
     if (!separator && hasUnicode(string)) {
       return castSlice(stringToArray(string), 0, limit);
@@ -14659,7 +14659,7 @@ function split(string, separator, limit) {
 }
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$10 = 'Expected a function';
+var FUNC_ERROR_TEXT$10 = "Expected a function";
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax$13 = Math.max;
@@ -14699,7 +14699,7 @@ var nativeMax$13 = Math.max;
  * // => a Promise of 76
  */
 function spread(func, start) {
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$10);
   }
   start = start == null ? 0 : nativeMax$13(toInteger(start), 0);
@@ -14736,7 +14736,7 @@ function spread(func, start) {
  * // => 'FOO BAR'
  */
 var startCase = createCompounder(function (result, word, index) {
-  return result + (index ? ' ' : '') + upperFirst(word);
+  return result + (index ? " " : "") + upperFirst(word);
 });
 
 /**
@@ -14806,7 +14806,7 @@ function stubObject() {
  * // => ['', '']
  */
 function stubString() {
-  return '';
+  return "";
 }
 
 /**
@@ -15085,12 +15085,12 @@ function tap(value, interceptor) {
 
 /** Used to escape characters for inclusion in compiled string literals. */
 var stringEscapes = {
-  '\\': '\\',
+  "\\": "\\",
   "'": "'",
-  '\n': 'n',
-  '\r': 'r',
-  '\u2028': 'u2028',
-  '\u2029': 'u2029'
+  "\n": "n",
+  "\r": "r",
+  "\u2028": "u2028",
+  "\u2029": "u2029"
 };
 
 /**
@@ -15101,7 +15101,7 @@ var stringEscapes = {
  * @returns {string} Returns the escaped character.
  */
 function escapeStringChar(chr) {
-  return '\\' + stringEscapes[chr];
+  return "\\" + stringEscapes[chr];
 }
 
 /** Used to match template delimiters. */
@@ -15130,7 +15130,7 @@ var templateSettings = {
    * @memberOf _.templateSettings
    * @type {RegExp}
    */
-  'escape': reEscape,
+  "escape": reEscape,
 
   /**
    * Used to detect code to be evaluated.
@@ -15138,7 +15138,7 @@ var templateSettings = {
    * @memberOf _.templateSettings
    * @type {RegExp}
    */
-  'evaluate': reEvaluate,
+  "evaluate": reEvaluate,
 
   /**
    * Used to detect `data` property values to inject.
@@ -15146,7 +15146,7 @@ var templateSettings = {
    * @memberOf _.templateSettings
    * @type {RegExp}
    */
-  'interpolate': reInterpolate,
+  "interpolate": reInterpolate,
 
   /**
    * Used to reference the data object in the template text.
@@ -15154,7 +15154,7 @@ var templateSettings = {
    * @memberOf _.templateSettings
    * @type {string}
    */
-  'variable': '',
+  "variable": "",
 
   /**
    * Used to import variables into the compiled template.
@@ -15162,7 +15162,7 @@ var templateSettings = {
    * @memberOf _.templateSettings
    * @type {Object}
    */
-  'imports': {
+  "imports": {
 
     /**
      * A reference to the `lodash` function.
@@ -15170,7 +15170,7 @@ var templateSettings = {
      * @memberOf _.templateSettings.imports
      * @type {Function}
      */
-    '_': { 'escape': escape }
+    "_": { "escape": escape }
   }
 };
 
@@ -15318,10 +15318,10 @@ function template(string, options, guard) {
       source = "__p += '";
 
   // Compile the regexp to match each delimiter.
-  var reDelimiters = RegExp((options.escape || reNoMatch).source + '|' + interpolate.source + '|' + (interpolate === reInterpolate ? reEsTemplate : reNoMatch).source + '|' + (options.evaluate || reNoMatch).source + '|$', 'g');
+  var reDelimiters = RegExp((options.escape || reNoMatch).source + "|" + interpolate.source + "|" + (interpolate === reInterpolate ? reEsTemplate : reNoMatch).source + "|" + (options.evaluate || reNoMatch).source + "|$", "g");
 
   // Use a sourceURL for easier debugging.
-  var sourceURL = 'sourceURL' in options ? '//# sourceURL=' + options.sourceURL + '\n' : '';
+  var sourceURL = "sourceURL" in options ? "//# sourceURL=" + options.sourceURL + "\n" : "";
 
   string.replace(reDelimiters, function (match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset) {
     interpolateValue || (interpolateValue = esTemplateValue);
@@ -15354,16 +15354,16 @@ function template(string, options, guard) {
   // code to add the data object to the top of the scope chain.
   var variable = options.variable;
   if (!variable) {
-    source = 'with (obj) {\n' + source + '\n}\n';
+    source = "with (obj) {\n" + source + "\n}\n";
   }
   // Cleanup code by stripping empty strings.
-  source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source).replace(reEmptyStringMiddle, '$1').replace(reEmptyStringTrailing, '$1;');
+  source = (isEvaluating ? source.replace(reEmptyStringLeading, "") : source).replace(reEmptyStringMiddle, "$1").replace(reEmptyStringTrailing, "$1;");
 
   // Frame code as the function body.
-  source = 'function(' + (variable || 'obj') + ') {\n' + (variable ? '' : 'obj || (obj = {});\n') + "var __t, __p = ''" + (isEscaping ? ', __e = _.escape' : '') + (isEvaluating ? ', __j = Array.prototype.join;\n' + "function print() { __p += __j.call(arguments, '') }\n" : ';\n') + source + 'return __p\n}';
+  source = "function(" + (variable || "obj") + ") {\n" + (variable ? "" : "obj || (obj = {});\n") + "var __t, __p = ''" + (isEscaping ? ", __e = _.escape" : "") + (isEvaluating ? ", __j = Array.prototype.join;\n" + "function print() { __p += __j.call(arguments, '') }\n" : ";\n") + source + "return __p\n}";
 
   var result = attempt(function () {
-    return Function(importsKeys, sourceURL + 'return ' + source).apply(undefined, importsValues);
+    return Function(importsKeys, sourceURL + "return " + source).apply(undefined, importsValues);
   });
 
   // Provide the compiled function's source by its `toString` method or
@@ -15376,7 +15376,7 @@ function template(string, options, guard) {
 }
 
 /** Error message constants. */
-var FUNC_ERROR_TEXT$11 = 'Expected a function';
+var FUNC_ERROR_TEXT$11 = "Expected a function";
 
 /**
  * Creates a throttled function that only invokes `func` at most once per
@@ -15426,17 +15426,17 @@ function throttle(func, wait, options) {
   var leading = true,
       trailing = true;
 
-  if (typeof func != 'function') {
+  if (typeof func !== "function") {
     throw new TypeError(FUNC_ERROR_TEXT$11);
   }
   if (isObject(options)) {
-    leading = 'leading' in options ? !!options.leading : leading;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
+    leading = "leading" in options ? !!options.leading : leading;
+    trailing = "trailing" in options ? !!options.trailing : trailing;
   }
   return debounce(func, wait, {
-    'leading': leading,
-    'maxWait': wait,
-    'trailing': trailing
+    "leading": leading,
+    "maxWait": wait,
+    "trailing": trailing
   });
 }
 
@@ -15790,7 +15790,7 @@ var reTrim$1 = /^\s+|\s+$/g;
 function trim(string, chars, guard) {
   string = toString(string);
   if (string && (guard || chars === undefined)) {
-    return string.replace(reTrim$1, '');
+    return string.replace(reTrim$1, "");
   }
   if (!string || !(chars = baseToString(chars))) {
     return string;
@@ -15800,7 +15800,7 @@ function trim(string, chars, guard) {
       start = charsStartIndex(strSymbols, chrSymbols),
       end = charsEndIndex(strSymbols, chrSymbols) + 1;
 
-  return castSlice(strSymbols, start, end).join('');
+  return castSlice(strSymbols, start, end).join("");
 }
 
 /** Used to match leading and trailing whitespace. */
@@ -15828,7 +15828,7 @@ var reTrimEnd = /\s+$/;
 function trimEnd(string, chars, guard) {
   string = toString(string);
   if (string && (guard || chars === undefined)) {
-    return string.replace(reTrimEnd, '');
+    return string.replace(reTrimEnd, "");
   }
   if (!string || !(chars = baseToString(chars))) {
     return string;
@@ -15836,7 +15836,7 @@ function trimEnd(string, chars, guard) {
   var strSymbols = stringToArray(string),
       end = charsEndIndex(strSymbols, stringToArray(chars)) + 1;
 
-  return castSlice(strSymbols, 0, end).join('');
+  return castSlice(strSymbols, 0, end).join("");
 }
 
 /** Used to match leading and trailing whitespace. */
@@ -15864,7 +15864,7 @@ var reTrimStart$1 = /^\s+/;
 function trimStart(string, chars, guard) {
   string = toString(string);
   if (string && (guard || chars === undefined)) {
-    return string.replace(reTrimStart$1, '');
+    return string.replace(reTrimStart$1, "");
   }
   if (!string || !(chars = baseToString(chars))) {
     return string;
@@ -15872,12 +15872,12 @@ function trimStart(string, chars, guard) {
   var strSymbols = stringToArray(string),
       start = charsStartIndex(strSymbols, stringToArray(chars));
 
-  return castSlice(strSymbols, start).join('');
+  return castSlice(strSymbols, start).join("");
 }
 
 /** Used as default options for `_.truncate`. */
 var DEFAULT_TRUNC_LENGTH = 30;
-var DEFAULT_TRUNC_OMISSION = '...';
+var DEFAULT_TRUNC_OMISSION = "...";
 
 /** Used to match `RegExp` flags from their coerced string values. */
 var reFlags$1 = /\w*$/;
@@ -15924,9 +15924,9 @@ function truncate(string, options) {
       omission = DEFAULT_TRUNC_OMISSION;
 
   if (isObject(options)) {
-    var separator = 'separator' in options ? options.separator : separator;
-    length = 'length' in options ? toInteger(options.length) : length;
-    omission = 'omission' in options ? baseToString(options.omission) : omission;
+    var separator = "separator" in options ? options.separator : separator;
+    length = "length" in options ? toInteger(options.length) : length;
+    omission = "omission" in options ? baseToString(options.omission) : omission;
   }
   string = toString(string);
 
@@ -15942,7 +15942,7 @@ function truncate(string, options) {
   if (end < 1) {
     return omission;
   }
-  var result = strSymbols ? castSlice(strSymbols, 0, end).join('') : string.slice(0, end);
+  var result = strSymbols ? castSlice(strSymbols, 0, end).join("") : string.slice(0, end);
 
   if (separator === undefined) {
     return result + omission;
@@ -15956,7 +15956,7 @@ function truncate(string, options) {
           substring = result;
 
       if (!separator.global) {
-        separator = RegExp(separator.source, toString(reFlags$1.exec(separator)) + 'g');
+        separator = RegExp(separator.source, toString(reFlags$1.exec(separator)) + "g");
       }
       separator.lastIndex = 0;
       while (match = separator.exec(substring)) {
@@ -15994,11 +15994,11 @@ function unary(func) {
 
 /** Used to map HTML entities to characters. */
 var htmlUnescapes = {
-  '&amp;': '&',
-  '&lt;': '<',
-  '&gt;': '>',
-  '&quot;': '"',
-  '&#39;': "'"
+  "&amp;": "&",
+  "&lt;": "<",
+  "&gt;": ">",
+  "&quot;": "\"",
+  "&#39;": "'"
 };
 
 /**
@@ -16186,7 +16186,7 @@ var unionBy = baseRest(function (arrays) {
  */
 var unionWith = baseRest(function (arrays) {
   var comparator = last(arrays);
-  comparator = typeof comparator == 'function' ? comparator : undefined;
+  comparator = typeof comparator === "function" ? comparator : undefined;
   return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true), undefined, comparator);
 });
 
@@ -16260,7 +16260,7 @@ function uniqBy(array, iteratee) {
  * // => [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }]
  */
 function uniqWith(array, comparator) {
-  comparator = typeof comparator == 'function' ? comparator : undefined;
+  comparator = typeof comparator === "function" ? comparator : undefined;
   return array && array.length ? baseUniq(array, undefined, comparator) : [];
 }
 
@@ -16462,7 +16462,7 @@ function update(object, path, updater) {
  * // => { '0': { '1': 'a' } }
  */
 function updateWith(object, path, updater, customizer) {
-  customizer = typeof customizer == 'function' ? customizer : undefined;
+  customizer = typeof customizer === "function" ? customizer : undefined;
   return object == null ? object : baseUpdate(object, path, castFunction(updater), customizer);
 }
 
@@ -16487,7 +16487,7 @@ function updateWith(object, path, updater, customizer) {
  * // => 'FOO BAR'
  */
 var upperCase = createCompounder(function (result, word, index) {
-  return result + (index ? ' ' : '') + word.toUpperCase();
+  return result + (index ? " " : "") + word.toUpperCase();
 });
 
 /**
@@ -16597,9 +16597,9 @@ var wrapperAt = flatRest(function (paths) {
   }
   value = value.slice(start, +start + (length ? 1 : 0));
   value.__actions__.push({
-    'func': thru,
-    'args': [interceptor],
-    'thisArg': undefined
+    "func": thru,
+    "args": [interceptor],
+    "thisArg": undefined
   });
   return new LodashWrapper(value, this.__chain__).thru(function (array) {
     if (length && !array.length) {
@@ -16669,9 +16669,9 @@ function wrapperReverse() {
     }
     wrapped = wrapped.reverse();
     wrapped.__actions__.push({
-      'func': thru,
-      'args': [reverse],
-      'thisArg': undefined
+      "func": thru,
+      "args": [reverse],
+      "thisArg": undefined
     });
     return new LodashWrapper(wrapped, this.__chain__);
   }
@@ -16785,7 +16785,7 @@ var xorBy = baseRest(function (arrays) {
  */
 var xorWith = baseRest(function (arrays) {
   var comparator = last(arrays);
-  comparator = typeof comparator == 'function' ? comparator : undefined;
+  comparator = typeof comparator === "function" ? comparator : undefined;
   return baseXor(arrayFilter(arrays, isArrayLikeObject), undefined, comparator);
 });
 
@@ -16892,7 +16892,7 @@ var zipWith = baseRest(function (arrays) {
   var length = arrays.length,
       iteratee = length > 1 ? arrays[length - 1] : undefined;
 
-  iteratee = typeof iteratee == 'function' ? (arrays.pop(), iteratee) : undefined;
+  iteratee = typeof iteratee === "function" ? (arrays.pop(), iteratee) : undefined;
   return unzipWith(arrays, iteratee);
 });
 
@@ -17059,17 +17059,17 @@ function getView(start, end, transforms) {
         size = data.size;
 
     switch (data.type) {
-      case 'drop':
+      case "drop":
         start += size;break;
-      case 'dropRight':
+      case "dropRight":
         end -= size;break;
-      case 'take':
+      case "take":
         end = nativeMin$14(end, start + size);break;
-      case 'takeRight':
+      case "takeRight":
         start = nativeMax$16(start, end - size);break;
     }
   }
-  return { 'start': start, 'end': end };
+  return { "start": start, "end": end };
 }
 
 /** Used to indicate the type of lazy iteratees. */
@@ -17145,7 +17145,7 @@ function lazyValue() {
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
 /** Used as the semantic version number. */
-var VERSION = '4.17.4';
+var VERSION = "4.17.4";
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_BIND_KEY_FLAG$6 = 2;
@@ -17511,7 +17511,7 @@ mixin$2(lodash, function () {
     }
   });
   return source;
-}(), { 'chain': false });
+}(), { "chain": false });
 
 /**
  * The semantic version number.
@@ -17524,12 +17524,12 @@ lodash.VERSION = VERSION;
 (lodash.templateSettings = string.templateSettings).imports._ = lodash;
 
 // Assign default placeholders.
-arrayEach(['bind', 'bindKey', 'curry', 'curryRight', 'partial', 'partialRight'], function (methodName) {
+arrayEach(["bind", "bindKey", "curry", "curryRight", "partial", "partialRight"], function (methodName) {
   lodash[methodName].placeholder = lodash;
 });
 
 // Add `LazyWrapper` methods for `_.drop` and `_.take` variants.
-arrayEach(['drop', 'take'], function (methodName, index) {
+arrayEach(["drop", "take"], function (methodName, index) {
   LazyWrapper.prototype[methodName] = function (n) {
     n = n === undefined ? 1 : nativeMax$15(toInteger(n), 0);
 
@@ -17539,28 +17539,28 @@ arrayEach(['drop', 'take'], function (methodName, index) {
       result$$1.__takeCount__ = nativeMin$12(n, result$$1.__takeCount__);
     } else {
       result$$1.__views__.push({
-        'size': nativeMin$12(n, MAX_ARRAY_LENGTH$6),
-        'type': methodName + (result$$1.__dir__ < 0 ? 'Right' : '')
+        "size": nativeMin$12(n, MAX_ARRAY_LENGTH$6),
+        "type": methodName + (result$$1.__dir__ < 0 ? "Right" : "")
       });
     }
     return result$$1;
   };
 
-  LazyWrapper.prototype[methodName + 'Right'] = function (n) {
+  LazyWrapper.prototype[methodName + "Right"] = function (n) {
     return this.reverse()[methodName](n).reverse();
   };
 });
 
 // Add `LazyWrapper` methods that accept an `iteratee` value.
-arrayEach(['filter', 'map', 'takeWhile'], function (methodName, index) {
+arrayEach(["filter", "map", "takeWhile"], function (methodName, index) {
   var type = index + 1,
       isFilter = type == LAZY_FILTER_FLAG || type == LAZY_WHILE_FLAG;
 
   LazyWrapper.prototype[methodName] = function (iteratee$$1) {
     var result$$1 = this.clone();
     result$$1.__iteratees__.push({
-      'iteratee': baseIteratee(iteratee$$1, 3),
-      'type': type
+      "iteratee": baseIteratee(iteratee$$1, 3),
+      "type": type
     });
     result$$1.__filtered__ = result$$1.__filtered__ || isFilter;
     return result$$1;
@@ -17568,8 +17568,8 @@ arrayEach(['filter', 'map', 'takeWhile'], function (methodName, index) {
 });
 
 // Add `LazyWrapper` methods for `_.head` and `_.last`.
-arrayEach(['head', 'last'], function (methodName, index) {
-  var takeName = 'take' + (index ? 'Right' : '');
+arrayEach(["head", "last"], function (methodName, index) {
+  var takeName = "take" + (index ? "Right" : "");
 
   LazyWrapper.prototype[methodName] = function () {
     return this[takeName](1).value()[0];
@@ -17577,8 +17577,8 @@ arrayEach(['head', 'last'], function (methodName, index) {
 });
 
 // Add `LazyWrapper` methods for `_.initial` and `_.tail`.
-arrayEach(['initial', 'tail'], function (methodName, index) {
-  var dropName = 'drop' + (index ? '' : 'Right');
+arrayEach(["initial", "tail"], function (methodName, index) {
+  var dropName = "drop" + (index ? "" : "Right");
 
   LazyWrapper.prototype[methodName] = function () {
     return this.__filtered__ ? new LazyWrapper(this) : this[dropName](1);
@@ -17598,7 +17598,7 @@ LazyWrapper.prototype.findLast = function (predicate) {
 };
 
 LazyWrapper.prototype.invokeMap = baseRest(function (path, args) {
-  if (typeof path == 'function') {
+  if (typeof path === "function") {
     return new LazyWrapper(this);
   }
   return this.map(function (value$$1) {
@@ -17641,7 +17641,7 @@ LazyWrapper.prototype.toArray = function () {
 baseForOwn(LazyWrapper.prototype, function (func$$1, methodName) {
   var checkIteratee = /^(?:filter|find|map|reject)|While$/.test(methodName),
       isTaker = /^(?:head|last)$/.test(methodName),
-      lodashFunc = lodash[isTaker ? 'take' + (methodName == 'last' ? 'Right' : '') : methodName],
+      lodashFunc = lodash[isTaker ? "take" + (methodName == "last" ? "Right" : "") : methodName],
       retUnwrapped = isTaker || /^find/.test(methodName);
 
   if (!lodashFunc) {
@@ -17659,7 +17659,7 @@ baseForOwn(LazyWrapper.prototype, function (func$$1, methodName) {
       return isTaker && chainAll ? result$$1[0] : result$$1;
     };
 
-    if (useLazy && checkIteratee && typeof iteratee$$1 == 'function' && iteratee$$1.length != 1) {
+    if (useLazy && checkIteratee && typeof iteratee$$1 === "function" && iteratee$$1.length != 1) {
       // Avoid lazy use if the iteratee has a "length" value other than `1`.
       isLazy = useLazy = false;
     }
@@ -17671,7 +17671,7 @@ baseForOwn(LazyWrapper.prototype, function (func$$1, methodName) {
     if (!retUnwrapped && useLazy) {
       value$$1 = onlyLazy ? value$$1 : new LazyWrapper(this);
       var result$$1 = func$$1.apply(value$$1, args);
-      result$$1.__actions__.push({ 'func': thru, 'args': [interceptor], 'thisArg': undefined });
+      result$$1.__actions__.push({ "func": thru, "args": [interceptor], "thisArg": undefined });
       return new LodashWrapper(result$$1, chainAll);
     }
     if (isUnwrapped && onlyLazy) {
@@ -17683,9 +17683,9 @@ baseForOwn(LazyWrapper.prototype, function (func$$1, methodName) {
 });
 
 // Add `Array` methods to `lodash.prototype`.
-arrayEach(['pop', 'push', 'shift', 'sort', 'splice', 'unshift'], function (methodName) {
+arrayEach(["pop", "push", "shift", "sort", "splice", "unshift"], function (methodName) {
   var func$$1 = arrayProto$5[methodName],
-      chainName = /^(?:push|sort|unshift)$/.test(methodName) ? 'tap' : 'thru',
+      chainName = /^(?:push|sort|unshift)$/.test(methodName) ? "tap" : "thru",
       retUnwrapped = /^(?:pop|shift)$/.test(methodName);
 
   lodash.prototype[methodName] = function () {
@@ -17704,16 +17704,16 @@ arrayEach(['pop', 'push', 'shift', 'sort', 'splice', 'unshift'], function (metho
 baseForOwn(LazyWrapper.prototype, function (func$$1, methodName) {
   var lodashFunc = lodash[methodName];
   if (lodashFunc) {
-    var key = lodashFunc.name + '',
+    var key = lodashFunc.name + "",
         names = realNames[key] || (realNames[key] = []);
 
-    names.push({ 'name': methodName, 'func': lodashFunc });
+    names.push({ "name": methodName, "func": lodashFunc });
   }
 });
 
 realNames[createHybrid(undefined, WRAP_BIND_KEY_FLAG$6).name] = [{
-  'name': 'wrapper',
-  'func': undefined
+  "name": "wrapper",
+  "func": undefined
 }];
 
 // Add methods to `LazyWrapper`.
@@ -17782,13 +17782,13 @@ function serializer(replacer, cycleReplacer) {
 });
 
 function assemble() {
-  var str = '';
+  var str = "";
   var first$$1 = true;
   Array.prototype.slice.call(arguments).forEach(function (arg) {
     var appendend = void 0;
     if (Array.isArray(arg)) {
-      appendend = '[' + arg.toString() + ']';
-    } else if ((typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'object' && startsWith(arg.toString(), '[object')) {
+      appendend = "[" + arg.toString() + "]";
+    } else if ((typeof arg === "undefined" ? "undefined" : _typeof(arg)) === "object" && startsWith(arg.toString(), "[object")) {
       appendend = stringify_1(arg, null, 2);
     } else {
       appendend = arg;
@@ -17797,7 +17797,7 @@ function assemble() {
       str = appendend;
       first$$1 = false;
     } else {
-      str = str + ' ' + appendend;
+      str = str + " " + appendend;
     }
   });
   return str;
@@ -17817,86 +17817,86 @@ console = console$1;
 
 var buttons = {
   /* eslint-disable key-spacing, no-multi-spaces */
-  'up': { status: '0xB0', midino: '0x68', name: 'up' },
-  'down': { status: '0xB0', midino: '0x69', name: 'down' },
-  'left': { status: '0xB0', midino: '0x6A', name: 'left' },
-  'right': { status: '0xB0', midino: '0x6B', name: 'right' },
-  'session': { status: '0xB0', midino: '0x6C', name: 'session' },
-  'user1': { status: '0xB0', midino: '0x6D', name: 'user1' },
-  'user2': { status: '0xB0', midino: '0x6E', name: 'user2' },
-  'mixer': { status: '0xB0', midino: '0x6F', name: 'mixer' },
-  'vol': { status: '0x90', midino: '0x59', name: 'vol' },
-  'pan': { status: '0x90', midino: '0x4F', name: 'pan' },
-  'snda': { status: '0x90', midino: '0x45', name: 'snda' },
-  'sndb': { status: '0x90', midino: '0x3B', name: 'sndb' },
-  'stop': { status: '0x90', midino: '0x31', name: 'stop' },
-  'trkon': { status: '0x90', midino: '0x27', name: 'trkon' },
-  'solo': { status: '0x90', midino: '0x1D', name: 'solo' },
-  'arm': { status: '0x90', midino: '0x13', name: 'arm' },
-  '0,0': { status: '0x90', midino: '0x51', name: '0,0' },
-  '0,1': { status: '0x90', midino: '0x52', name: '0,1' },
-  '0,2': { status: '0x90', midino: '0x53', name: '0,2' },
-  '0,3': { status: '0x90', midino: '0x54', name: '0,3' },
-  '0,4': { status: '0x90', midino: '0x55', name: '0,4' },
-  '0,5': { status: '0x90', midino: '0x56', name: '0,5' },
-  '0,6': { status: '0x90', midino: '0x57', name: '0,6' },
-  '0,7': { status: '0x90', midino: '0x58', name: '0,7' },
-  '1,0': { status: '0x90', midino: '0x47', name: '1,0' },
-  '1,1': { status: '0x90', midino: '0x48', name: '1,1' },
-  '1,2': { status: '0x90', midino: '0x49', name: '1,2' },
-  '1,3': { status: '0x90', midino: '0x4A', name: '1,3' },
-  '1,4': { status: '0x90', midino: '0x4B', name: '1,4' },
-  '1,5': { status: '0x90', midino: '0x4C', name: '1,5' },
-  '1,6': { status: '0x90', midino: '0x4D', name: '1,6' },
-  '1,7': { status: '0x90', midino: '0x4E', name: '1,7' },
-  '2,0': { status: '0x90', midino: '0x3D', name: '2,0' },
-  '2,1': { status: '0x90', midino: '0x3E', name: '2,1' },
-  '2,2': { status: '0x90', midino: '0x3F', name: '2,2' },
-  '2,3': { status: '0x90', midino: '0x40', name: '2,3' },
-  '2,4': { status: '0x90', midino: '0x41', name: '2,4' },
-  '2,5': { status: '0x90', midino: '0x42', name: '2,5' },
-  '2,6': { status: '0x90', midino: '0x43', name: '2,6' },
-  '2,7': { status: '0x90', midino: '0x44', name: '2,7' },
-  '3,0': { status: '0x90', midino: '0x33', name: '3,0' },
-  '3,1': { status: '0x90', midino: '0x34', name: '3,1' },
-  '3,2': { status: '0x90', midino: '0x35', name: '3,2' },
-  '3,3': { status: '0x90', midino: '0x36', name: '3,3' },
-  '3,4': { status: '0x90', midino: '0x37', name: '3,4' },
-  '3,5': { status: '0x90', midino: '0x38', name: '3,5' },
-  '3,6': { status: '0x90', midino: '0x39', name: '3,6' },
-  '3,7': { status: '0x90', midino: '0x3A', name: '3,7' },
-  '4,0': { status: '0x90', midino: '0x29', name: '4,0' },
-  '4,1': { status: '0x90', midino: '0x2A', name: '4,1' },
-  '4,2': { status: '0x90', midino: '0x2B', name: '4,2' },
-  '4,3': { status: '0x90', midino: '0x2C', name: '4,3' },
-  '4,4': { status: '0x90', midino: '0x2D', name: '4,4' },
-  '4,5': { status: '0x90', midino: '0x2E', name: '4,5' },
-  '4,6': { status: '0x90', midino: '0x2F', name: '4,6' },
-  '4,7': { status: '0x90', midino: '0x30', name: '4,7' },
-  '5,0': { status: '0x90', midino: '0x1F', name: '5,0' },
-  '5,1': { status: '0x90', midino: '0x20', name: '5,1' },
-  '5,2': { status: '0x90', midino: '0x21', name: '5,2' },
-  '5,3': { status: '0x90', midino: '0x22', name: '5,3' },
-  '5,4': { status: '0x90', midino: '0x23', name: '5,4' },
-  '5,5': { status: '0x90', midino: '0x24', name: '5,5' },
-  '5,6': { status: '0x90', midino: '0x25', name: '5,6' },
-  '5,7': { status: '0x90', midino: '0x26', name: '5,7' },
-  '6,0': { status: '0x90', midino: '0x15', name: '6,0' },
-  '6,1': { status: '0x90', midino: '0x16', name: '6,1' },
-  '6,2': { status: '0x90', midino: '0x17', name: '6,2' },
-  '6,3': { status: '0x90', midino: '0x18', name: '6,3' },
-  '6,4': { status: '0x90', midino: '0x19', name: '6,4' },
-  '6,5': { status: '0x90', midino: '0x1A', name: '6,5' },
-  '6,6': { status: '0x90', midino: '0x1B', name: '6,6' },
-  '6,7': { status: '0x90', midino: '0x1C', name: '6,7' },
-  '7,0': { status: '0x90', midino: '0x0B', name: '7,0' },
-  '7,1': { status: '0x90', midino: '0x0C', name: '7,1' },
-  '7,2': { status: '0x90', midino: '0x0D', name: '7,2' },
-  '7,3': { status: '0x90', midino: '0x0E', name: '7,3' },
-  '7,4': { status: '0x90', midino: '0x0F', name: '7,4' },
-  '7,5': { status: '0x90', midino: '0x10', name: '7,5' },
-  '7,6': { status: '0x90', midino: '0x11', name: '7,6' },
-  '7,7': { status: '0x90', midino: '0x12', name: '7,7' }
+  "up": { status: "0xB0", midino: "0x68", name: "up" },
+  "down": { status: "0xB0", midino: "0x69", name: "down" },
+  "left": { status: "0xB0", midino: "0x6A", name: "left" },
+  "right": { status: "0xB0", midino: "0x6B", name: "right" },
+  "session": { status: "0xB0", midino: "0x6C", name: "session" },
+  "user1": { status: "0xB0", midino: "0x6D", name: "user1" },
+  "user2": { status: "0xB0", midino: "0x6E", name: "user2" },
+  "mixer": { status: "0xB0", midino: "0x6F", name: "mixer" },
+  "vol": { status: "0x90", midino: "0x59", name: "vol" },
+  "pan": { status: "0x90", midino: "0x4F", name: "pan" },
+  "snda": { status: "0x90", midino: "0x45", name: "snda" },
+  "sndb": { status: "0x90", midino: "0x3B", name: "sndb" },
+  "stop": { status: "0x90", midino: "0x31", name: "stop" },
+  "trkon": { status: "0x90", midino: "0x27", name: "trkon" },
+  "solo": { status: "0x90", midino: "0x1D", name: "solo" },
+  "arm": { status: "0x90", midino: "0x13", name: "arm" },
+  "0,0": { status: "0x90", midino: "0x51", name: "0,0" },
+  "0,1": { status: "0x90", midino: "0x52", name: "0,1" },
+  "0,2": { status: "0x90", midino: "0x53", name: "0,2" },
+  "0,3": { status: "0x90", midino: "0x54", name: "0,3" },
+  "0,4": { status: "0x90", midino: "0x55", name: "0,4" },
+  "0,5": { status: "0x90", midino: "0x56", name: "0,5" },
+  "0,6": { status: "0x90", midino: "0x57", name: "0,6" },
+  "0,7": { status: "0x90", midino: "0x58", name: "0,7" },
+  "1,0": { status: "0x90", midino: "0x47", name: "1,0" },
+  "1,1": { status: "0x90", midino: "0x48", name: "1,1" },
+  "1,2": { status: "0x90", midino: "0x49", name: "1,2" },
+  "1,3": { status: "0x90", midino: "0x4A", name: "1,3" },
+  "1,4": { status: "0x90", midino: "0x4B", name: "1,4" },
+  "1,5": { status: "0x90", midino: "0x4C", name: "1,5" },
+  "1,6": { status: "0x90", midino: "0x4D", name: "1,6" },
+  "1,7": { status: "0x90", midino: "0x4E", name: "1,7" },
+  "2,0": { status: "0x90", midino: "0x3D", name: "2,0" },
+  "2,1": { status: "0x90", midino: "0x3E", name: "2,1" },
+  "2,2": { status: "0x90", midino: "0x3F", name: "2,2" },
+  "2,3": { status: "0x90", midino: "0x40", name: "2,3" },
+  "2,4": { status: "0x90", midino: "0x41", name: "2,4" },
+  "2,5": { status: "0x90", midino: "0x42", name: "2,5" },
+  "2,6": { status: "0x90", midino: "0x43", name: "2,6" },
+  "2,7": { status: "0x90", midino: "0x44", name: "2,7" },
+  "3,0": { status: "0x90", midino: "0x33", name: "3,0" },
+  "3,1": { status: "0x90", midino: "0x34", name: "3,1" },
+  "3,2": { status: "0x90", midino: "0x35", name: "3,2" },
+  "3,3": { status: "0x90", midino: "0x36", name: "3,3" },
+  "3,4": { status: "0x90", midino: "0x37", name: "3,4" },
+  "3,5": { status: "0x90", midino: "0x38", name: "3,5" },
+  "3,6": { status: "0x90", midino: "0x39", name: "3,6" },
+  "3,7": { status: "0x90", midino: "0x3A", name: "3,7" },
+  "4,0": { status: "0x90", midino: "0x29", name: "4,0" },
+  "4,1": { status: "0x90", midino: "0x2A", name: "4,1" },
+  "4,2": { status: "0x90", midino: "0x2B", name: "4,2" },
+  "4,3": { status: "0x90", midino: "0x2C", name: "4,3" },
+  "4,4": { status: "0x90", midino: "0x2D", name: "4,4" },
+  "4,5": { status: "0x90", midino: "0x2E", name: "4,5" },
+  "4,6": { status: "0x90", midino: "0x2F", name: "4,6" },
+  "4,7": { status: "0x90", midino: "0x30", name: "4,7" },
+  "5,0": { status: "0x90", midino: "0x1F", name: "5,0" },
+  "5,1": { status: "0x90", midino: "0x20", name: "5,1" },
+  "5,2": { status: "0x90", midino: "0x21", name: "5,2" },
+  "5,3": { status: "0x90", midino: "0x22", name: "5,3" },
+  "5,4": { status: "0x90", midino: "0x23", name: "5,4" },
+  "5,5": { status: "0x90", midino: "0x24", name: "5,5" },
+  "5,6": { status: "0x90", midino: "0x25", name: "5,6" },
+  "5,7": { status: "0x90", midino: "0x26", name: "5,7" },
+  "6,0": { status: "0x90", midino: "0x15", name: "6,0" },
+  "6,1": { status: "0x90", midino: "0x16", name: "6,1" },
+  "6,2": { status: "0x90", midino: "0x17", name: "6,2" },
+  "6,3": { status: "0x90", midino: "0x18", name: "6,3" },
+  "6,4": { status: "0x90", midino: "0x19", name: "6,4" },
+  "6,5": { status: "0x90", midino: "0x1A", name: "6,5" },
+  "6,6": { status: "0x90", midino: "0x1B", name: "6,6" },
+  "6,7": { status: "0x90", midino: "0x1C", name: "6,7" },
+  "7,0": { status: "0x90", midino: "0x0B", name: "7,0" },
+  "7,1": { status: "0x90", midino: "0x0C", name: "7,1" },
+  "7,2": { status: "0x90", midino: "0x0D", name: "7,2" },
+  "7,3": { status: "0x90", midino: "0x0E", name: "7,3" },
+  "7,4": { status: "0x90", midino: "0x0F", name: "7,4" },
+  "7,5": { status: "0x90", midino: "0x10", name: "7,5" },
+  "7,6": { status: "0x90", midino: "0x11", name: "7,6" },
+  "7,7": { status: "0x90", midino: "0x12", name: "7,7" }
   /* eslint-enable key-spacing, no-multi-spaces */
 };
 
@@ -17923,7 +17923,7 @@ var LaunchpadMidiButton = function () {
   }
 
   createClass(LaunchpadMidiButton, [{
-    key: 'sendColor',
+    key: "sendColor",
     value: function sendColor(value$$1) {
       midi_1.sendShortMsg(this.def.status, this.def.midino, value$$1);
     }
@@ -17936,10 +17936,10 @@ var Buttons = Object.keys(buttons).reduce(function (obj, name) {
 }, {});
 
 var index$1 = createCommonjsModule(function (module) {
-'use strict';
+"use strict";
 
 var has = Object.prototype.hasOwnProperty,
-    prefix = '~';
+    prefix = "~";
 
 /**
  * Constructor to create a storage for our `EE` objects.
@@ -18242,12 +18242,12 @@ EventEmitter.EventEmitter = EventEmitter;
 }
 });
 
-var callbackPrefix = '__midi';
+var callbackPrefix = "__midi";
 
 var MidiBus = function (_EventEmitter) {
   inherits(MidiBus, _EventEmitter);
   createClass(MidiBus, null, [{
-    key: 'create',
+    key: "create",
     value: function create(registry) {
       return new MidiBus(registry);
     }
@@ -18263,7 +18263,7 @@ var MidiBus = function (_EventEmitter) {
     Object.keys(Buttons).forEach(function (buttonName) {
       var button = Buttons[buttonName];
       var def = button.def;
-      _this.registry[callbackPrefix + '_' + def.status + '_' + def.midino] = function (channel, control, value, status) {
+      _this.registry[callbackPrefix + "_" + def.status + "_" + def.midino] = function (channel, control, value, status) {
         var message = { value: value, button: button };
         _this.emit(def.name, message);
       };
@@ -18282,12 +18282,12 @@ var Control = function () {
   }
 
   createClass(Control, [{
-    key: 'setValue',
+    key: "setValue",
     value: function setValue(value$$1) {
       engine_1.setValue(this.def.group, this.def.name, value$$1);
     }
   }, {
-    key: 'getValue',
+    key: "getValue",
     value: function getValue() {
       return engine_1.getValue(this.def.group, this.def.name);
     }
@@ -18296,15 +18296,15 @@ var Control = function () {
 }();
 
 var playListControlDef = {
-  'LoadSelectedIntoFirstStopped': { group: '[Playlist]', name: 'LoadSelectedIntoFirstStopped', type: 'binary', description: 'Loads the currently highlighted song into the first stopped deck' },
-  'SelectNextPlaylist': { group: '[Playlist]', name: 'SelectNextPlaylist', type: 'binary', description: 'Switches to the next view (Library, Queue, etc.)' },
-  'SelectPrevPlaylist': { group: '[Playlist]', name: 'SelectPrevPlaylist', type: 'binary', description: 'Switches to the previous view (Library, Queue, etc.)' },
-  'ToggleSelectedSidebarItem': { group: '[Playlist]', name: 'ToggleSelectedSidebarItem', type: 'binary', description: 'Toggles (expands/collapses) the currently selected sidebar item.' },
-  'SelectNextTrack': { group: '[Playlist]', name: 'SelectNextTrack', type: 'binary', description: 'Scrolls to the next track in the track table.' },
-  'SelectPrevTrack': { group: '[Playlist]', name: 'SelectPrevTrack', type: 'binary', description: 'Scrolls to the previous track in the track table.' },
-  'SelectTrackKnob': { group: '[Playlist]', name: 'SelectTrackKnob', type: 'relative value', description: 'Scrolls the given number of tracks in the track table (can be negative for reverse direction).' },
-  'AutoDjAddBottom': { group: '[Playlist]', name: 'AutoDjAddBottom', type: 'binary', description: 'Add selected track(s) to Auto DJ Queue (bottom).' },
-  'AutoDjAddTop': { group: '[Playlist]', name: 'AutoDjAddTop', type: 'binary', description: 'Add selected track(s) to Auto DJ Queue (top).' }
+  "LoadSelectedIntoFirstStopped": { group: "[Playlist]", name: "LoadSelectedIntoFirstStopped", type: "binary", description: "Loads the currently highlighted song into the first stopped deck" },
+  "SelectNextPlaylist": { group: "[Playlist]", name: "SelectNextPlaylist", type: "binary", description: "Switches to the next view (Library, Queue, etc.)" },
+  "SelectPrevPlaylist": { group: "[Playlist]", name: "SelectPrevPlaylist", type: "binary", description: "Switches to the previous view (Library, Queue, etc.)" },
+  "ToggleSelectedSidebarItem": { group: "[Playlist]", name: "ToggleSelectedSidebarItem", type: "binary", description: "Toggles (expands/collapses) the currently selected sidebar item." },
+  "SelectNextTrack": { group: "[Playlist]", name: "SelectNextTrack", type: "binary", description: "Scrolls to the next track in the track table." },
+  "SelectPrevTrack": { group: "[Playlist]", name: "SelectPrevTrack", type: "binary", description: "Scrolls to the previous track in the track table." },
+  "SelectTrackKnob": { group: "[Playlist]", name: "SelectTrackKnob", type: "relative value", description: "Scrolls the given number of tracks in the track table (can be negative for reverse direction)." },
+  "AutoDjAddBottom": { group: "[Playlist]", name: "AutoDjAddBottom", type: "binary", description: "Add selected track(s) to Auto DJ Queue (bottom)." },
+  "AutoDjAddTop": { group: "[Playlist]", name: "AutoDjAddTop", type: "binary", description: "Add selected track(s) to Auto DJ Queue (top)." }
 };
 
 var playListControl = Object.keys(playListControlDef).reduce(function (obj, key) {
@@ -18313,131 +18313,131 @@ var playListControl = Object.keys(playListControlDef).reduce(function (obj, key)
 
 var channelDef = function channelDef(type, i) {
   return {
-    'back': { group: '[' + type + i + ']', name: 'back', type: 'binary' },
-    'beat_active': { group: '[' + type + i + ']', name: 'beat_active', type: 'binary' },
-    'beatjump': { group: '[' + type + i + ']', name: 'beatjump', type: 'real number' },
-    'beatjumps': function beatjumps(x) {
+    "back": { group: "[" + type + i + "]", name: "back", type: "binary" },
+    "beat_active": { group: "[" + type + i + "]", name: "beat_active", type: "binary" },
+    "beatjump": { group: "[" + type + i + "]", name: "beatjump", type: "real number" },
+    "beatjumps": function beatjumps(x) {
       return {
-        'forward': { group: '[' + type + i + ']', name: 'beatjump_' + x + '_forward', type: 'binary' },
-        'backward': { group: '[' + type + i + ']', name: 'beatjump_' + x + '_backward', type: 'binary' }
+        "forward": { group: "[" + type + i + "]", name: "beatjump_" + x + "_forward", type: "binary" },
+        "backward": { group: "[" + type + i + "]", name: "beatjump_" + x + "_backward", type: "binary" }
       };
     },
-    'beatloop': { group: '[' + type + i + ']', name: 'beatloop', type: 'positive real number' },
-    'beatloops': function beatloops(x) {
+    "beatloop": { group: "[" + type + i + "]", name: "beatloop", type: "positive real number" },
+    "beatloops": function beatloops(x) {
       return {
-        'activate': { group: '[' + type + i + ']', name: 'beatloop_' + x + '_activate', type: 'binary' },
-        'toggle': { group: '[' + type + i + ']', name: 'beatloop_' + x + '_toggle', type: 'binary' },
-        'enabled': { group: '[' + type + i + ']', name: 'beatloop_' + x + '_enabled', type: 'binary' }
+        "activate": { group: "[" + type + i + "]", name: "beatloop_" + x + "_activate", type: "binary" },
+        "toggle": { group: "[" + type + i + "]", name: "beatloop_" + x + "_toggle", type: "binary" },
+        "enabled": { group: "[" + type + i + "]", name: "beatloop_" + x + "_enabled", type: "binary" }
       };
     },
-    'beats_adjust_faster': { group: '[' + type + i + ']', name: 'beats_adjust_faster', type: 'binary' },
-    'beats_adjust_slower': { group: '[' + type + i + ']', name: 'beats_adjust_slower', type: 'binary' },
-    'beats_translate_curpos': { group: '[' + type + i + ']', name: 'beats_translate_curpos', type: 'binary' },
-    'beats_translate_match_alignment': { group: '[' + type + i + ']', name: 'beats_translate_match_alignment', type: 'binary' },
-    'beats_translate_earlier': { group: '[' + type + i + ']', name: 'beats_translate_earlier', type: 'binary' },
-    'beats_translate_later': { group: '[' + type + i + ']', name: 'beats_translate_later', type: 'binary' },
-    'beatsync': { group: '[' + type + i + ']', name: 'beatsync', type: 'binary' },
-    'beatsync_phase': { group: '[' + type + i + ']', name: 'beatsync_phase', type: 'binary' },
-    'beatsync_tempo': { group: '[' + type + i + ']', name: 'beatsync_tempo', type: 'binary' },
-    'bpm': { group: '[' + type + i + ']', name: 'bpm', type: 'real-valued' },
-    'bpm_tap': { group: '[' + type + i + ']', name: 'bpm_tap', type: 'binary' },
-    'cue_default': { group: '[' + type + i + ']', name: 'cue_default', type: 'binary' },
-    'cue_gotoandplay': { group: '[' + type + i + ']', name: 'cue_gotoandplay', type: 'binary' },
-    'cue_gotoandstop': { group: '[' + type + i + ']', name: 'cue_gotoandstop', type: 'binary' },
-    'cue_indicator': { group: '[' + type + i + ']', name: 'cue_indicator', type: 'binary' },
-    'cue_cdj': { group: '[' + type + i + ']', name: 'cue_cdj', type: 'binary' },
-    'cue_play': { group: '[' + type + i + ']', name: 'cue_play', type: 'binary' },
-    'cue_point': { group: '[' + type + i + ']', name: 'cue_point', type: 'absolute value' },
-    'cue_preview': { group: '[' + type + i + ']', name: 'cue_preview', type: 'binary' },
-    'cue_set': { group: '[' + type + i + ']', name: 'cue_set', type: 'binary' },
-    'cue_simple': { group: '[' + type + i + ']', name: 'cue_simple', type: 'binary' },
-    'duration': { group: '[' + type + i + ']', name: 'duration', type: 'absolute value' },
-    'eject': { group: '[' + type + i + ']', name: 'eject', type: 'binary' },
-    'end': { group: '[' + type + i + ']', name: 'end', type: 'binary' },
-    'file_bpm': { group: '[' + type + i + ']', name: 'file_bpm', type: 'positive value' },
-    'file_key': { group: '[' + type + i + ']', name: 'file_key', type: '?' },
-    'fwd': { group: '[' + type + i + ']', name: 'fwd', type: 'binary' },
-    'hotcues': function hotcues(x) {
+    "beats_adjust_faster": { group: "[" + type + i + "]", name: "beats_adjust_faster", type: "binary" },
+    "beats_adjust_slower": { group: "[" + type + i + "]", name: "beats_adjust_slower", type: "binary" },
+    "beats_translate_curpos": { group: "[" + type + i + "]", name: "beats_translate_curpos", type: "binary" },
+    "beats_translate_match_alignment": { group: "[" + type + i + "]", name: "beats_translate_match_alignment", type: "binary" },
+    "beats_translate_earlier": { group: "[" + type + i + "]", name: "beats_translate_earlier", type: "binary" },
+    "beats_translate_later": { group: "[" + type + i + "]", name: "beats_translate_later", type: "binary" },
+    "beatsync": { group: "[" + type + i + "]", name: "beatsync", type: "binary" },
+    "beatsync_phase": { group: "[" + type + i + "]", name: "beatsync_phase", type: "binary" },
+    "beatsync_tempo": { group: "[" + type + i + "]", name: "beatsync_tempo", type: "binary" },
+    "bpm": { group: "[" + type + i + "]", name: "bpm", type: "real-valued" },
+    "bpm_tap": { group: "[" + type + i + "]", name: "bpm_tap", type: "binary" },
+    "cue_default": { group: "[" + type + i + "]", name: "cue_default", type: "binary" },
+    "cue_gotoandplay": { group: "[" + type + i + "]", name: "cue_gotoandplay", type: "binary" },
+    "cue_gotoandstop": { group: "[" + type + i + "]", name: "cue_gotoandstop", type: "binary" },
+    "cue_indicator": { group: "[" + type + i + "]", name: "cue_indicator", type: "binary" },
+    "cue_cdj": { group: "[" + type + i + "]", name: "cue_cdj", type: "binary" },
+    "cue_play": { group: "[" + type + i + "]", name: "cue_play", type: "binary" },
+    "cue_point": { group: "[" + type + i + "]", name: "cue_point", type: "absolute value" },
+    "cue_preview": { group: "[" + type + i + "]", name: "cue_preview", type: "binary" },
+    "cue_set": { group: "[" + type + i + "]", name: "cue_set", type: "binary" },
+    "cue_simple": { group: "[" + type + i + "]", name: "cue_simple", type: "binary" },
+    "duration": { group: "[" + type + i + "]", name: "duration", type: "absolute value" },
+    "eject": { group: "[" + type + i + "]", name: "eject", type: "binary" },
+    "end": { group: "[" + type + i + "]", name: "end", type: "binary" },
+    "file_bpm": { group: "[" + type + i + "]", name: "file_bpm", type: "positive value" },
+    "file_key": { group: "[" + type + i + "]", name: "file_key", type: "?" },
+    "fwd": { group: "[" + type + i + "]", name: "fwd", type: "binary" },
+    "hotcues": function hotcues(x) {
       return {
-        'activate': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_activate', type: 'binary' },
-        'clear': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_clear', type: 'binary' },
-        'enabled': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_enabled', type: 'read-only, binary' },
-        'goto': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_goto', type: 'binary' },
-        'gotoandplay': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_gotoandplay', type: 'binary' },
-        'gotoandstop': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_gotoandstop', type: 'binary' },
-        'position': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_position', type: 'positive integer' },
-        'set': { group: '[' + type + i + ']', name: 'hotcue_' + x + '_set', type: 'binary' }
+        "activate": { group: "[" + type + i + "]", name: "hotcue_" + x + "_activate", type: "binary" },
+        "clear": { group: "[" + type + i + "]", name: "hotcue_" + x + "_clear", type: "binary" },
+        "enabled": { group: "[" + type + i + "]", name: "hotcue_" + x + "_enabled", type: "read-only, binary" },
+        "goto": { group: "[" + type + i + "]", name: "hotcue_" + x + "_goto", type: "binary" },
+        "gotoandplay": { group: "[" + type + i + "]", name: "hotcue_" + x + "_gotoandplay", type: "binary" },
+        "gotoandstop": { group: "[" + type + i + "]", name: "hotcue_" + x + "_gotoandstop", type: "binary" },
+        "position": { group: "[" + type + i + "]", name: "hotcue_" + x + "_position", type: "positive integer" },
+        "set": { group: "[" + type + i + "]", name: "hotcue_" + x + "_set", type: "binary" }
       };
     },
-    'key': { group: '[' + type + i + ']', name: 'key', type: 'real-valued' },
-    'keylock': { group: '[' + type + i + ']', name: 'keylock', type: 'binary' },
-    'LoadSelectedTrack': { group: '[' + type + i + ']', name: 'LoadSelectedTrack', type: 'binary' },
-    'LoadSelectedTrackAndPlay': { group: '[' + type + i + ']', name: 'LoadSelectedTrackAndPlay', type: 'binary' },
-    'loop_double': { group: '[' + type + i + ']', name: 'loop_double', type: 'binary' },
-    'loop_enabled': { group: '[' + type + i + ']', name: 'loop_enabled', type: 'read-only, binary' },
-    'loop_end_position': { group: '[' + type + i + ']', name: 'loop_end_position', type: 'positive integer' },
-    'loop_halve': { group: '[' + type + i + ']', name: 'loop_halve', type: 'binary' },
-    'loop_in': { group: '[' + type + i + ']', name: 'loop_in', type: 'binary' },
-    'loop_out': { group: '[' + type + i + ']', name: 'loop_out', type: 'binary' },
-    'loop_move': { group: '[' + type + i + ']', name: 'loop_move', type: 'real number' },
-    'loop_scale': { group: '[' + type + i + ']', name: 'loop_scale', type: '0.0 - infinity' },
-    'loop_start_position': { group: '[' + type + i + ']', name: 'loop_start_position', type: 'positive integer' },
-    'orientation': { group: '[' + type + i + ']', name: 'orientation', type: '0-2' },
-    'passthrough': { group: '[' + type + i + ']', name: 'passthrough', type: 'binary' },
-    'PeakIndicator': { group: '[' + type + i + ']', name: 'PeakIndicator', type: 'binary' },
-    'pfl': { group: '[' + type + i + ']', name: 'pfl', type: 'binary' },
-    'pitch': { group: '[' + type + i + ']', name: 'pitch', type: '-6.0..6.0' },
-    'pitch_adjust': { group: '[' + type + i + ']', name: 'pitch_adjust', type: '-3.0..3.0' },
-    'play': { group: '[' + type + i + ']', name: 'play', type: 'binary' },
-    'play_indicator': { group: '[' + type + i + ']', name: 'play_indicator', type: 'binary' },
-    'play_stutter': { group: '[' + type + i + ']', name: 'play_stutter', type: 'binary' },
-    'playposition': { group: '[' + type + i + ']', name: 'playposition', type: 'default' },
-    'pregain': { group: '[' + type + i + ']', name: 'pregain', type: '0.0..1.0..4.0' },
-    'quantize': { group: '[' + type + i + ']', name: 'quantize', type: 'binary' },
-    'rate': { group: '[' + type + i + ']', name: 'rate', type: '-1.0..1.0' },
-    'rate_dir': { group: '[' + type + i + ']', name: 'rate_dir', type: '-1 or 1' },
-    'rate_perm_down': { group: '[' + type + i + ']', name: 'rate_perm_down', type: 'binary' },
-    'rate_perm_down_small': { group: '[' + type + i + ']', name: 'rate_perm_down_small', type: 'binary' },
-    'rate_perm_up': { group: '[' + type + i + ']', name: 'rate_perm_up', type: 'binary' },
-    'rate_perm_up_small': { group: '[' + type + i + ']', name: 'rate_perm_up_small', type: 'binary' },
-    'rate_temp_down': { group: '[' + type + i + ']', name: 'rate_temp_down', type: 'binary' },
-    'rate_temp_down_small': { group: '[' + type + i + ']', name: 'rate_temp_down_small', type: 'binary' },
-    'rate_temp_up': { group: '[' + type + i + ']', name: 'rate_temp_up', type: 'binary' },
-    'rate_temp_up_small': { group: '[' + type + i + ']', name: 'rate_temp_up_small', type: 'binary' },
-    'rateRange': { group: '[' + type + i + ']', name: 'rateRange', type: '0.0..3.0' },
-    'reloop_exit': { group: '[' + type + i + ']', name: 'reloop_exit', type: 'binary' },
-    'repeat': { group: '[' + type + i + ']', name: 'repeat', type: 'binary' },
-    'reset_key': { group: '[' + type + i + ']', name: 'reset_key', type: 'binary' },
-    'reverse': { group: '[' + type + i + ']', name: 'reverse', type: 'binary' },
-    'reverseroll': { group: '[' + type + i + ']', name: 'reverseroll', type: 'binary' },
-    'slip_enabled': { group: '[' + type + i + ']', name: 'slip_enabled', type: 'binary' },
-    'start': { group: '[' + type + i + ']', name: 'start', type: 'binary' },
-    'start_play': { group: '[' + type + i + ']', name: 'start_play', type: 'binary' },
-    'start_stop': { group: '[' + type + i + ']', name: 'start_stop', type: 'binary' },
-    'stop': { group: '[' + type + i + ']', name: 'stop', type: 'binary' },
-    'sync_enabled': { group: '[' + type + i + ']', name: 'sync_enabled', type: 'binary' },
-    'sync_master': { group: '[' + type + i + ']', name: 'sync_master', type: 'binary' },
-    'sync_mode': { group: '[' + type + i + ']', name: 'sync_mode', type: 'binary' },
-    'sync_key': { group: '[' + type + i + ']', name: 'sync_key', type: '?' },
-    'track_samplerate': { group: '[' + type + i + ']', name: 'track_samplerate', type: 'absolute value' },
-    'track_samples': { group: '[' + type + i + ']', name: 'track_samples', type: 'absolute value' },
-    'volume': { group: '[' + type + i + ']', name: 'volume', type: 'default' },
-    'mute': { group: '[' + type + i + ']', name: 'mute', type: 'binary' },
-    'vinylcontrol_enabled': { group: '[' + type + i + ']', name: 'vinylcontrol_enabled', type: 'binary' },
-    'vinylcontrol_cueing': { group: '[' + type + i + ']', name: 'vinylcontrol_cueing', type: '0.0-2.0' },
-    'vinylcontrol_mode': { group: '[' + type + i + ']', name: 'vinylcontrol_mode', type: '0.0-2.0' },
-    'vinylcontrol_status': { group: '[' + type + i + ']', name: 'vinylcontrol_status', type: '0.0-3.0 (read-only)' },
-    'visual_bpm': { group: '[' + type + i + ']', name: 'visual_bpm', type: '?' },
-    'visual_key': { group: '[' + type + i + ']', name: 'visual_key', type: '?' },
-    'visual_key_distance': { group: '[' + type + i + ']', name: 'visual_key_distance', type: '-0.5..0.5' },
-    'VuMeter': { group: '[' + type + i + ']', name: 'VuMeter', type: 'default' },
-    'VuMeterL': { group: '[' + type + i + ']', name: 'VuMeterL', type: 'default' },
-    'VuMeterR': { group: '[' + type + i + ']', name: 'VuMeterR', type: 'default' },
-    'waveform_zoom': { group: '[' + type + i + ']', name: 'waveform_zoom', type: '1.0 - 6.0' },
-    'waveform_zoom_up': { group: '[' + type + i + ']', name: 'waveform_zoom_up', type: '?' },
-    'waveform_zoom_down': { group: '[' + type + i + ']', name: 'waveform_zoom_down', type: '?' },
-    'waveform_zoom_set_default': { group: '[' + type + i + ']', name: 'waveform_zoom_set_default', type: '?' },
-    'wheel': { group: '[' + type + i + ']', name: 'wheel', type: '-3.0..3.0' }
+    "key": { group: "[" + type + i + "]", name: "key", type: "real-valued" },
+    "keylock": { group: "[" + type + i + "]", name: "keylock", type: "binary" },
+    "LoadSelectedTrack": { group: "[" + type + i + "]", name: "LoadSelectedTrack", type: "binary" },
+    "LoadSelectedTrackAndPlay": { group: "[" + type + i + "]", name: "LoadSelectedTrackAndPlay", type: "binary" },
+    "loop_double": { group: "[" + type + i + "]", name: "loop_double", type: "binary" },
+    "loop_enabled": { group: "[" + type + i + "]", name: "loop_enabled", type: "read-only, binary" },
+    "loop_end_position": { group: "[" + type + i + "]", name: "loop_end_position", type: "positive integer" },
+    "loop_halve": { group: "[" + type + i + "]", name: "loop_halve", type: "binary" },
+    "loop_in": { group: "[" + type + i + "]", name: "loop_in", type: "binary" },
+    "loop_out": { group: "[" + type + i + "]", name: "loop_out", type: "binary" },
+    "loop_move": { group: "[" + type + i + "]", name: "loop_move", type: "real number" },
+    "loop_scale": { group: "[" + type + i + "]", name: "loop_scale", type: "0.0 - infinity" },
+    "loop_start_position": { group: "[" + type + i + "]", name: "loop_start_position", type: "positive integer" },
+    "orientation": { group: "[" + type + i + "]", name: "orientation", type: "0-2" },
+    "passthrough": { group: "[" + type + i + "]", name: "passthrough", type: "binary" },
+    "PeakIndicator": { group: "[" + type + i + "]", name: "PeakIndicator", type: "binary" },
+    "pfl": { group: "[" + type + i + "]", name: "pfl", type: "binary" },
+    "pitch": { group: "[" + type + i + "]", name: "pitch", type: "-6.0..6.0" },
+    "pitch_adjust": { group: "[" + type + i + "]", name: "pitch_adjust", type: "-3.0..3.0" },
+    "play": { group: "[" + type + i + "]", name: "play", type: "binary" },
+    "play_indicator": { group: "[" + type + i + "]", name: "play_indicator", type: "binary" },
+    "play_stutter": { group: "[" + type + i + "]", name: "play_stutter", type: "binary" },
+    "playposition": { group: "[" + type + i + "]", name: "playposition", type: "default" },
+    "pregain": { group: "[" + type + i + "]", name: "pregain", type: "0.0..1.0..4.0" },
+    "quantize": { group: "[" + type + i + "]", name: "quantize", type: "binary" },
+    "rate": { group: "[" + type + i + "]", name: "rate", type: "-1.0..1.0" },
+    "rate_dir": { group: "[" + type + i + "]", name: "rate_dir", type: "-1 or 1" },
+    "rate_perm_down": { group: "[" + type + i + "]", name: "rate_perm_down", type: "binary" },
+    "rate_perm_down_small": { group: "[" + type + i + "]", name: "rate_perm_down_small", type: "binary" },
+    "rate_perm_up": { group: "[" + type + i + "]", name: "rate_perm_up", type: "binary" },
+    "rate_perm_up_small": { group: "[" + type + i + "]", name: "rate_perm_up_small", type: "binary" },
+    "rate_temp_down": { group: "[" + type + i + "]", name: "rate_temp_down", type: "binary" },
+    "rate_temp_down_small": { group: "[" + type + i + "]", name: "rate_temp_down_small", type: "binary" },
+    "rate_temp_up": { group: "[" + type + i + "]", name: "rate_temp_up", type: "binary" },
+    "rate_temp_up_small": { group: "[" + type + i + "]", name: "rate_temp_up_small", type: "binary" },
+    "rateRange": { group: "[" + type + i + "]", name: "rateRange", type: "0.0..3.0" },
+    "reloop_exit": { group: "[" + type + i + "]", name: "reloop_exit", type: "binary" },
+    "repeat": { group: "[" + type + i + "]", name: "repeat", type: "binary" },
+    "reset_key": { group: "[" + type + i + "]", name: "reset_key", type: "binary" },
+    "reverse": { group: "[" + type + i + "]", name: "reverse", type: "binary" },
+    "reverseroll": { group: "[" + type + i + "]", name: "reverseroll", type: "binary" },
+    "slip_enabled": { group: "[" + type + i + "]", name: "slip_enabled", type: "binary" },
+    "start": { group: "[" + type + i + "]", name: "start", type: "binary" },
+    "start_play": { group: "[" + type + i + "]", name: "start_play", type: "binary" },
+    "start_stop": { group: "[" + type + i + "]", name: "start_stop", type: "binary" },
+    "stop": { group: "[" + type + i + "]", name: "stop", type: "binary" },
+    "sync_enabled": { group: "[" + type + i + "]", name: "sync_enabled", type: "binary" },
+    "sync_master": { group: "[" + type + i + "]", name: "sync_master", type: "binary" },
+    "sync_mode": { group: "[" + type + i + "]", name: "sync_mode", type: "binary" },
+    "sync_key": { group: "[" + type + i + "]", name: "sync_key", type: "?" },
+    "track_samplerate": { group: "[" + type + i + "]", name: "track_samplerate", type: "absolute value" },
+    "track_samples": { group: "[" + type + i + "]", name: "track_samples", type: "absolute value" },
+    "volume": { group: "[" + type + i + "]", name: "volume", type: "default" },
+    "mute": { group: "[" + type + i + "]", name: "mute", type: "binary" },
+    "vinylcontrol_enabled": { group: "[" + type + i + "]", name: "vinylcontrol_enabled", type: "binary" },
+    "vinylcontrol_cueing": { group: "[" + type + i + "]", name: "vinylcontrol_cueing", type: "0.0-2.0" },
+    "vinylcontrol_mode": { group: "[" + type + i + "]", name: "vinylcontrol_mode", type: "0.0-2.0" },
+    "vinylcontrol_status": { group: "[" + type + i + "]", name: "vinylcontrol_status", type: "0.0-3.0 (read-only)" },
+    "visual_bpm": { group: "[" + type + i + "]", name: "visual_bpm", type: "?" },
+    "visual_key": { group: "[" + type + i + "]", name: "visual_key", type: "?" },
+    "visual_key_distance": { group: "[" + type + i + "]", name: "visual_key_distance", type: "-0.5..0.5" },
+    "VuMeter": { group: "[" + type + i + "]", name: "VuMeter", type: "default" },
+    "VuMeterL": { group: "[" + type + i + "]", name: "VuMeterL", type: "default" },
+    "VuMeterR": { group: "[" + type + i + "]", name: "VuMeterR", type: "default" },
+    "waveform_zoom": { group: "[" + type + i + "]", name: "waveform_zoom", type: "1.0 - 6.0" },
+    "waveform_zoom_up": { group: "[" + type + i + "]", name: "waveform_zoom_up", type: "?" },
+    "waveform_zoom_down": { group: "[" + type + i + "]", name: "waveform_zoom_down", type: "?" },
+    "waveform_zoom_set_default": { group: "[" + type + i + "]", name: "waveform_zoom_set_default", type: "?" },
+    "wheel": { group: "[" + type + i + "]", name: "wheel", type: "-3.0..3.0" }
   };
 };
 
@@ -18455,21 +18455,21 @@ var createEnumeratedControl = function createEnumeratedControl(array, one) {
 };
 
 var createChannelControl = function createChannelControl(i) {
-  var _ref = i < 5 ? ['Channel', i] : ['Sampler', i - 4],
+  var _ref = i < 5 ? ["Channel", i] : ["Sampler", i - 4],
       _ref2 = slicedToArray(_ref, 2),
       name = _ref2[0],
       number = _ref2[1];
 
   var channelDefInstance = channelDef(name, number);
   var channel = Object.keys(channelDefInstance).filter(function (key) {
-    return key !== 'beatjumps' && key !== 'beatloops' && key !== 'hotcues';
+    return key !== "beatjumps" && key !== "beatloops" && key !== "hotcues";
   }).reduce(function (obj, key) {
     return assign(obj, defineProperty({}, key, new Control(channelDefInstance[key])));
   }, {});
   return assign(channel, {
-    'beatjumps': createEnumeratedControl(beatjumps, channelDefInstance.beatjumps),
-    'beatloops': createEnumeratedControl(beatloops, channelDefInstance.beatloops),
-    'hotcues': createEnumeratedControl(range(16).map(function (x) {
+    "beatjumps": createEnumeratedControl(beatjumps, channelDefInstance.beatjumps),
+    "beatloops": createEnumeratedControl(beatloops, channelDefInstance.beatloops),
+    "hotcues": createEnumeratedControl(range(16).map(function (x) {
       return x + 1;
     }), channelDefInstance.hotcues)
   });
@@ -18479,15 +18479,15 @@ var channelControls = range(8).map(function (i) {
   return createChannelControl(i + 1);
 });
 
-var callbackPrefix$1 = '__ctrl';
+var callbackPrefix$1 = "__ctrl";
 
 var sanitize = function sanitize(name) {
-  return name.replace('.', '$dot$').replace('[', '$sbs$').replace(']', '$sbe$');
+  return name.replace(".", "$dot$").replace("[", "$sbs$").replace("]", "$sbe$");
 };
 
 var ControlBus = function () {
   createClass(ControlBus, null, [{
-    key: 'create',
+    key: "create",
     value: function create(moduleName, registry) {
       return new ControlBus(moduleName, registry);
     }
@@ -18502,15 +18502,15 @@ var ControlBus = function () {
   }
 
   createClass(ControlBus, [{
-    key: 'connect',
+    key: "connect",
     value: function connect(id, control, cb) {
       var _this = this;
 
       var group = control.group,
           name = control.name;
 
-      var key = sanitize(group) + '_' + sanitize(name);
-      var engineCb = callbackPrefix$1 + '_' + key;
+      var key = sanitize(group) + "_" + sanitize(name);
+      var engineCb = callbackPrefix$1 + "_" + key;
 
       if (!this._callbackList[key]) {
         this._callbackList[key] = {};
@@ -18523,26 +18523,26 @@ var ControlBus = function () {
             _this._callbackList[key][_id]({ value: value, control: control, id: _id });
           }
         };
-        engine_1.connectControl(group, name, this._registryName + '.' + engineCb);
+        engine_1.connectControl(group, name, this._registryName + "." + engineCb);
       }
       return { id: id, group: group, name: name, key: key };
     }
   }, {
-    key: 'disconnect',
+    key: "disconnect",
     value: function disconnect(handle) {
       var id = handle.id,
           group = handle.group,
           name = handle.name,
           key = handle.key;
 
-      var engineCb = callbackPrefix$1 + '_' + key;
+      var engineCb = callbackPrefix$1 + "_" + key;
 
       if (this._callbackList[key] && this._callbackList[key][id]) {
         delete this._callbackList[key][id];
       }
 
       if (!Object.keys(this._callbackList[key]).length && this._registry[engineCb]) {
-        engine_1.connectControl(group, name, this._registryName + '.' + engineCb, true);
+        engine_1.connectControl(group, name, this._registryName + "." + engineCb, true);
         delete this._callbackList[key];
         delete this._registry[engineCb];
       }
@@ -18551,7 +18551,7 @@ var ControlBus = function () {
   return ControlBus;
 }();
 
-var timerPrefix = '__timer';
+var timerPrefix = "__timer";
 
 var makeTimer = function makeTimer(moduleName, registry) {
   return function (task) {
@@ -18570,19 +18570,19 @@ var Timer = function () {
   }
 
   createClass(Timer, [{
-    key: 'start',
+    key: "start",
     value: function start(interval) {
       if (this._state == null) {
         var _started = Date.now();
-        var _key = timerPrefix + '_' + _started + '_' + parseInt(Math.random() * 100);
-        var _handle = engine_1.beginTimer(interval, this._registryName + '.' + _key);
+        var _key = timerPrefix + "_" + _started + "_" + parseInt(Math.random() * 100);
+        var _handle = engine_1.beginTimer(interval, this._registryName + "." + _key);
         this._state = { handle: _handle, key: _key, started: _started };
         this._registry[_key] = this.task;
         return _started;
       }
     }
   }, {
-    key: 'end',
+    key: "end",
     value: function end() {
       var state = this._state;
       if (state != null) {
@@ -18592,7 +18592,7 @@ var Timer = function () {
       }
     }
   }, {
-    key: 'restart',
+    key: "restart",
     value: function restart(interval) {
       if (this._state != null) {
         this.end();
@@ -18600,7 +18600,7 @@ var Timer = function () {
       }
     }
   }, {
-    key: 'getStartTime',
+    key: "getStartTime",
     value: function getStartTime() {
       return this._state && this._state.started;
     }
@@ -18617,22 +18617,22 @@ var Component = function (_EventEmitter) {
   }
 
   createClass(Component, [{
-    key: 'mount',
+    key: "mount",
     value: function mount() {
       this.onMount(this);
-      this.emit('mount', this);
+      this.emit("mount", this);
     }
   }, {
-    key: 'unmount',
+    key: "unmount",
     value: function unmount() {
       this.onUnmount(this);
-      this.emit('unmount', this);
+      this.emit("unmount", this);
     }
   }, {
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {}
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {}
   }]);
   return Component;
@@ -18651,7 +18651,7 @@ var autoscrolled = function autoscrolled(binding) {
     var interval = void 0;
     var timer = void 0;
 
-    binding.on('midi', function (data) {
+    binding.on("midi", function (data) {
       if (data.value) {
         interval = 250;
         started = timer.start(interval);
@@ -18660,9 +18660,9 @@ var autoscrolled = function autoscrolled(binding) {
       }
     });
 
-    binding.on('mount', function () {
+    binding.on("mount", function () {
       timer = timerBuilder(function () {
-        binding.emit('scroll');
+        binding.emit("scroll");
         if (interval > minInterval) {
           var current = Date.now();
           // silence Flow with unsafe casts
@@ -18680,7 +18680,7 @@ var autoscrolled = function autoscrolled(binding) {
       });
     });
 
-    binding.on('unmount', function () {
+    binding.on("unmount", function () {
       timer.end();
     });
 
@@ -18733,14 +18733,14 @@ var PlaylistSidebar = function (_Component) {
   }
 
   createClass(PlaylistSidebar, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.buttons.forEach(function (button) {
         return button.mount();
       });
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       this.buttons.forEach(function (button) {
         return button.unmount();
@@ -18760,29 +18760,29 @@ var makePlaylistSidebar = function makePlaylistSidebar(timerBuilder) {
     var prevTrack = autoscrolled(btns[3])(timerBuilder);
     var nextTrack = autoscrolled(btns[4])(timerBuilder);
 
-    prevPlaylist.on('scroll', onScroll(playListControl.SelectPrevPlaylist));
-    prevPlaylist.on('midi', onMidi(playListControl.SelectPrevPlaylist));
-    prevPlaylist.on('mount', onMount);
-    prevPlaylist.on('unmount', onUnmount);
+    prevPlaylist.on("scroll", onScroll(playListControl.SelectPrevPlaylist));
+    prevPlaylist.on("midi", onMidi(playListControl.SelectPrevPlaylist));
+    prevPlaylist.on("mount", onMount);
+    prevPlaylist.on("unmount", onUnmount);
 
-    nextPlaylist.on('scroll', onScroll(playListControl.SelectNextPlaylist));
-    nextPlaylist.on('midi', onMidi(playListControl.SelectNextPlaylist));
-    nextPlaylist.on('mount', onMount);
-    nextPlaylist.on('unmount', onUnmount);
+    nextPlaylist.on("scroll", onScroll(playListControl.SelectNextPlaylist));
+    nextPlaylist.on("midi", onMidi(playListControl.SelectNextPlaylist));
+    nextPlaylist.on("mount", onMount);
+    nextPlaylist.on("unmount", onUnmount);
 
-    prevTrack.on('scroll', onScroll(playListControl.SelectPrevTrack));
-    prevTrack.on('midi', onMidi(playListControl.SelectPrevTrack));
-    prevTrack.on('mount', onMount);
-    prevTrack.on('unmount', onUnmount);
+    prevTrack.on("scroll", onScroll(playListControl.SelectPrevTrack));
+    prevTrack.on("midi", onMidi(playListControl.SelectPrevTrack));
+    prevTrack.on("mount", onMount);
+    prevTrack.on("unmount", onUnmount);
 
-    nextTrack.on('scroll', onScroll(playListControl.SelectNextTrack));
-    nextTrack.on('midi', onMidi(playListControl.SelectNextTrack));
-    nextTrack.on('mount', onMount);
-    nextTrack.on('unmount', onUnmount);
+    nextTrack.on("scroll", onScroll(playListControl.SelectNextTrack));
+    nextTrack.on("midi", onMidi(playListControl.SelectNextTrack));
+    nextTrack.on("mount", onMount);
+    nextTrack.on("unmount", onUnmount);
 
-    toggleItem.on('midi', onMidi(playListControl.ToggleSelectedSidebarItem));
-    toggleItem.on('mount', onMount);
-    toggleItem.on('unmount', onUnmount);
+    toggleItem.on("midi", onMidi(playListControl.ToggleSelectedSidebarItem));
+    toggleItem.on("mount", onMount);
+    toggleItem.on("unmount", onUnmount);
 
     return new PlaylistSidebar(btns);
   };
@@ -18815,35 +18815,35 @@ var ModifierSidebar = function (_Component) {
       }
       if (button.def.name === Buttons.solo.def.name) {
         _this.state.shift = !!value;
-        _this.emit('shift', value);
+        _this.emit("shift", value);
       } else {
         _this.state.ctrl = !!value;
-        _this.emit('ctrl', value);
+        _this.emit("ctrl", value);
       }
     };
     return _this;
   }
 
   createClass(ModifierSidebar, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.shift.mount();
       this.ctrl.mount();
 
-      this.shift.on('midi', this.listener);
-      this.ctrl.on('midi', this.listener);
+      this.shift.on("midi", this.listener);
+      this.ctrl.on("midi", this.listener);
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
-      this.shift.removeListener('midi', this.listener);
-      this.ctrl.removeListener('midi', this.listener);
+      this.shift.removeListener("midi", this.listener);
+      this.ctrl.removeListener("midi", this.listener);
 
       this.shift.unmount();
       this.ctrl.unmount();
     }
   }, {
-    key: 'getState',
+    key: "getState",
     value: function getState() {
       return this.state;
     }
@@ -18916,7 +18916,7 @@ var Preset = function (_Component) {
   }
 
   createClass(Preset, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       var _preset = this.preset,
           controlBindings = _preset.controlBindings,
@@ -18934,7 +18934,7 @@ var Preset = function (_Component) {
       });
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       var _preset2 = this.preset,
           controlBindings = _preset2.controlBindings,
@@ -18970,35 +18970,35 @@ var initTemplate = function initTemplate(controlComponentBuilder, midiComponentB
       Object.keys(bindings).forEach(function (bk) {
         if (bindings[bk]) {
           var binding = bindings[bk];
-          if (binding.type === 'control') {
-            var name = '' + binding.target.def.group + binding.target.def.name;
+          if (binding.type === "control") {
+            var name = "" + binding.target.def.group + binding.target.def.name;
             if (!controlBindings[name]) {
-              controlBindings[name] = controlComponentBuilder(id + '.' + tk + '.' + bk)(binding.target);
+              controlBindings[name] = controlComponentBuilder(id + "." + tk + "." + bk)(binding.target);
             }
             instance.bindings[bk] = controlBindings[name];
-            controlListeners[name] = controlListeners[name] || {};['update', 'mount', 'unmount'].forEach(function (action) {
-              if (typeof binding[action] === 'function') {
+            controlListeners[name] = controlListeners[name] || {};["update", "mount", "unmount"].forEach(function (action) {
+              if (typeof binding[action] === "function") {
                 appendListener(action, controlListeners[name], function (data) {
                   return binding[action](data, instance, modifier);
                 });
               }
             });
-          } else if (binding.type === 'button') {
+          } else if (binding.type === "button") {
             var position = tr(binding.target, offset);
             var _name = nameOf(position[0], position[1]);
             if (!buttonBindings[_name]) {
               buttonBindings[_name] = midiComponentBuilder(Buttons[_name]);
             }
             instance.bindings[bk] = buttonBindings[_name];
-            buttonListeners[_name] = buttonListeners[_name] || {};['attack', 'release', 'midi', 'mount', 'unmount'].forEach(function (action) {
-              if (typeof binding[action] === 'function') {
+            buttonListeners[_name] = buttonListeners[_name] || {};["attack", "release", "midi", "mount", "unmount"].forEach(function (action) {
+              if (typeof binding[action] === "function") {
                 appendListener(action, buttonListeners[_name], function (data) {
                   return binding[action](data, instance);
                 });
               }
             });
-            if (typeof binding['unmount'] !== 'function') {
-              appendListener('unmount', buttonListeners[_name], function (data) {
+            if (typeof binding["unmount"] !== "function") {
+              appendListener("unmount", buttonListeners[_name], function (data) {
                 instance.bindings[bk].button.sendColor(colors.black);
               });
             }
@@ -19015,7 +19015,7 @@ var tr = function tr(a, b) {
 };
 
 var nameOf = function nameOf(x, y) {
-  return 7 - y + ',' + x;
+  return 7 - y + "," + x;
 };
 
 var appendListener = function appendListener(type, bindings, binding) {
@@ -19067,7 +19067,7 @@ var play = (function (gridPosition) {
       return {
         bindings: {
           playIndicator: {
-            type: 'control',
+            type: "control",
             target: deck.play_indicator,
             update: function update(_ref, _ref2) {
               var value = _ref.value;
@@ -19081,7 +19081,7 @@ var play = (function (gridPosition) {
             }
           },
           play: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack() {
               modes(modifier.getState(), function () {
@@ -19105,7 +19105,7 @@ var sync = (function (gridPosition) {
       return {
         bindings: {
           sync: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack(message, _ref) {
               var bindings = _ref.bindings;
@@ -19126,7 +19126,7 @@ var sync = (function (gridPosition) {
             }
           },
           syncMode: {
-            type: 'control',
+            type: "control",
             target: deck.sync_mode,
             update: function update(_ref2, _ref3) {
               var value = _ref2.value;
@@ -19154,11 +19154,11 @@ var nudge = (function (gridPosition) {
 
       var getDirection = function getDirection(rate) {
         if (rate < -rateEpsilon) {
-          return 'down';
+          return "down";
         } else if (rate > rateEpsilon) {
-          return 'up';
+          return "up";
         } else {
-          return '';
+          return "";
         }
       };
 
@@ -19178,20 +19178,20 @@ var nudge = (function (gridPosition) {
                   state[dir].nudging = true;
                   bindings[dir].button.sendColor(colors.hi_yellow);
                   // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-                  deck['rate_temp_' + dir].setValue(1);
+                  deck["rate_temp_" + dir].setValue(1);
                 }, function () {
                   bindings[dir].button.sendColor(colors.hi_red);
                   // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-                  deck['rate_perm_' + dir].setValue(1);
+                  deck["rate_perm_" + dir].setValue(1);
                 }, function () {
                   state[dir].nudging = true;
                   bindings[dir].button.sendColor(colors.lo_yellow);
                   // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-                  deck['rate_temp_' + dir + '_small'].setValue(1);
+                  deck["rate_temp_" + dir + "_small"].setValue(1);
                 }, function () {
                   bindings[dir].button.sendColor(colors.lo_red);
                   // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-                  deck['rate_perm_' + dir + '_small'].setValue(1);
+                  deck["rate_perm_" + dir + "_small"].setValue(1);
                 });
               }
             } else {
@@ -19204,11 +19204,11 @@ var nudge = (function (gridPosition) {
               modes(mode,
               // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
               function () {
-                return deck['rate_temp_' + dir].setValue(0);
+                return deck["rate_temp_" + dir].setValue(0);
               }, undefined,
               // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
               function () {
-                return deck['rate_temp_' + dir + '_small'].setValue(0);
+                return deck["rate_temp_" + dir + "_small"].setValue(0);
               });
             }
           });
@@ -19240,17 +19240,17 @@ var nudge = (function (gridPosition) {
       return {
         bindings: {
           down: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
-            midi: onNudgeMidi('down')(modifier)
+            midi: onNudgeMidi("down")(modifier)
           },
           up: {
-            type: 'button',
+            type: "button",
             target: [gridPosition[0] + 1, gridPosition[1]],
-            midi: onNudgeMidi('up')(modifier)
+            midi: onNudgeMidi("up")(modifier)
           },
           rate: {
-            type: 'control',
+            type: "control",
             target: deck.rate,
             update: onRate
           }
@@ -19277,7 +19277,7 @@ var cue = (function (gridPosition) {
       return {
         bindings: {
           cue: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             midi: retainAttackMode(modifier, function (mode, _ref) {
               var value = _ref.value;
@@ -19294,7 +19294,7 @@ var cue = (function (gridPosition) {
             })
           },
           cueIndicator: {
-            type: 'control',
+            type: "control",
             target: deck.cue_indicator,
             update: function update(_ref2, _ref3) {
               var value = _ref2.value;
@@ -19331,12 +19331,12 @@ var Bpm = function (_EventEmitter) {
   }
 
   createClass(Bpm, [{
-    key: 'reset',
+    key: "reset",
     value: function reset() {
       this.taps = [];
     }
   }, {
-    key: 'tap',
+    key: "tap",
     value: function tap() {
       var now = Date.now();
       var tapDelta = now - this.tapTime;
@@ -19352,7 +19352,7 @@ var Bpm = function (_EventEmitter) {
           sum += v;
         });
         var avg = sum / this.taps.length;
-        this.emit('tap', avg);
+        this.emit("tap", avg);
       }
     }
   }]);
@@ -19363,13 +19363,13 @@ var tap$2 = (function (gridPosition) {
   return function (deck) {
     return function (modifier) {
       var tempoBpm = new Bpm();
-      tempoBpm.on('tap', function (avg) {
+      tempoBpm.on("tap", function (avg) {
         deck.bpm.setValue(avg);
       });
       return {
         bindings: {
           tap: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack() {
               modes(modifier.getState(), function () {
@@ -19382,7 +19382,7 @@ var tap$2 = (function (gridPosition) {
             }
           },
           beat: {
-            type: 'control',
+            type: "control",
             target: deck.beat_active,
             update: function update(_ref, _ref2) {
               var value = _ref.value;
@@ -19426,14 +19426,14 @@ var grid = (function (gridPosition) {
       return {
         bindings: {
           back: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
-            midi: onGrid('back')
+            midi: onGrid("back")
           },
           forth: {
-            type: 'button',
+            type: "button",
             target: [gridPosition[0] + 1, gridPosition[1]],
-            midi: onGrid('forth')
+            midi: onGrid("forth")
           }
         },
         state: {
@@ -19457,7 +19457,7 @@ var pfl = (function (gridPosition) {
       return {
         bindings: {
           pfl: {
-            type: 'control',
+            type: "control",
             target: deck.pfl,
             update: function update(_ref, _ref2) {
               var value = _ref.value;
@@ -19466,7 +19466,7 @@ var pfl = (function (gridPosition) {
             }
           },
           button: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack(message, _ref3) {
               var bindings = _ref3.bindings;
@@ -19487,7 +19487,7 @@ var quantize = (function (gridPosition) {
       return {
         bindings: {
           quantize: {
-            type: 'control',
+            type: "control",
             target: deck.quantize,
             update: function update(_ref, _ref2) {
               var value = _ref.value;
@@ -19496,7 +19496,7 @@ var quantize = (function (gridPosition) {
             }
           },
           button: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack(message, _ref3) {
               var bindings = _ref3.bindings;
@@ -19521,15 +19521,15 @@ var keyshift = (function (shifts, d) {
           if (value) {
             var base = state.on === -1 ? deck.key.getValue() : state.base;
             if (state.on !== -1) {
-              bindings[state.on].button.sendColor(colors['lo_' + state.color[state.set]]);
+              bindings[state.on].button.sendColor(colors["lo_" + state.color[state.set]]);
             }
-            bindings[i].button.sendColor(colors['hi_' + state.color[state.set]]);
+            bindings[i].button.sendColor(colors["hi_" + state.color[state.set]]);
             deck.key.setValue((base + shifts[i][state.set]) % 12 + 12);
             state.on = i;
             state.base = base;
           } else {
             if (state.on === i) {
-              bindings[i].button.sendColor(colors['lo_' + state.color[state.set]]);
+              bindings[i].button.sendColor(colors["lo_" + state.color[state.set]]);
               deck.key.setValue(state.base);
               state.on = -1;
             }
@@ -19550,7 +19550,7 @@ var keyshift = (function (shifts, d) {
                   if (state.set === 1) {
                     state.set = 0;
                     for (var _i = 0; _i < shifts.length; ++_i) {
-                      bindings[_i].button.sendColor(colors['lo_' + state.color[state.set]]);
+                      bindings[_i].button.sendColor(colors["lo_" + state.color[state.set]]);
                     }
                   }
                 }
@@ -19559,7 +19559,7 @@ var keyshift = (function (shifts, d) {
                   if (state.set === 0) {
                     state.set = 1;
                     for (var _i2 = 0; _i2 < shifts.length; ++_i2) {
-                      bindings[_i2].button.sendColor(colors['lo_' + state.color[state.set]]);
+                      bindings[_i2].button.sendColor(colors["lo_" + state.color[state.set]]);
                     }
                   }
                 }
@@ -19573,14 +19573,14 @@ var keyshift = (function (shifts, d) {
           var dy = ~~(i / d);
           var position = [gridPosition[0] + dx, gridPosition[1] + dy];
           bindings[i] = {
-            type: 'button',
+            type: "button",
             target: position,
             midi: onMidi(i)(modifier),
             mount: function mount(dontKnow, _ref3) {
               var bindings = _ref3.bindings,
                   state = _ref3.state;
 
-              bindings[i].button.sendColor(colors['lo_' + state.color[state.set]]);
+              bindings[i].button.sendColor(colors["lo_" + state.color[state.set]]);
             }
           };
         });
@@ -19590,7 +19590,7 @@ var keyshift = (function (shifts, d) {
             on: -1,
             base: null,
             set: 0,
-            color: ['green', 'red']
+            color: ["green", "red"]
           }
         };
       };
@@ -19616,7 +19616,7 @@ var hotcue = (function (n, d) {
               }
             }, function () {
               if (value$$1) {
-                if (bindings[i + '.enabled'].getValue()) {
+                if (bindings[i + ".enabled"].getValue()) {
                   deck.hotcues[1 + i + s].clear.setValue(1);
                 } else {
                   deck.hotcues[1 + i + s].set.setValue(1);
@@ -19631,9 +19631,9 @@ var hotcue = (function (n, d) {
             var bindings = _ref4.bindings;
 
             if (value$$1) {
-              bindings[i + '.btn'].button.sendColor(colors.lo_yellow);
+              bindings[i + ".btn"].button.sendColor(colors.lo_yellow);
             } else {
-              bindings[i + '.btn'].button.sendColor(colors.black);
+              bindings[i + ".btn"].button.sendColor(colors.black);
             }
           };
         };
@@ -19641,13 +19641,13 @@ var hotcue = (function (n, d) {
         range(n).map(function (i) {
           var dx = i % d;
           var dy = ~~(i / d);
-          bindings[i + '.btn'] = {
-            type: 'button',
+          bindings[i + ".btn"] = {
+            type: "button",
             target: [gridPosition[0] + dx, gridPosition[1] + dy],
             midi: onHotcueMidi(i)
           };
-          bindings[i + '.enabled'] = {
-            type: 'control',
+          bindings[i + ".enabled"] = {
+            type: "control",
             target: deck.hotcues[1 + i + s].enabled,
             update: onHotcueEnabled(i)
           };
@@ -19675,7 +19675,7 @@ var load = (function (gridPosition) {
       return {
         bindings: {
           samples: {
-            type: 'control',
+            type: "control",
             target: deck.track_samples,
             update: function update(_ref, _ref2) {
               var value = _ref.value;
@@ -19684,7 +19684,7 @@ var load = (function (gridPosition) {
             }
           },
           play: {
-            type: 'control',
+            type: "control",
             target: deck.play,
             update: function update(_ref3, _ref4) {
               var value = _ref3.value;
@@ -19693,7 +19693,7 @@ var load = (function (gridPosition) {
             }
           },
           button: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack(message, _ref5) {
               var bindings = _ref5.bindings;
@@ -19721,7 +19721,7 @@ var key = (function (gridPosition) {
       return {
         bindings: {
           button: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack(message, _ref) {
               var bindings = _ref.bindings;
@@ -19738,7 +19738,7 @@ var key = (function (gridPosition) {
             }
           },
           keylock: {
-            type: 'control',
+            type: "control",
             target: deck.keylock,
             update: function update(_ref2, _ref3) {
               var value = _ref2.value;
@@ -19779,14 +19779,14 @@ var beatjump = (function (jumps, vertical) {
                     var currentJump = j[state.set] * d;
                     deck.beatjump.setValue(currentJump);
                     if (state.pressing != null) {
-                      bindings[state.pressing].button.sendColor(colors['lo_' + state.color[state.set]]);
+                      bindings[state.pressing].button.sendColor(colors["lo_" + state.color[state.set]]);
                     }
-                    bindings[k].button.sendColor(colors['hi_' + state.color[state.set]]);
+                    bindings[k].button.sendColor(colors["hi_" + state.color[state.set]]);
                     state.pressing = k;
                     state.diff = state.diff + currentJump;
                   } else {
                     if (state.pressing === k) {
-                      bindings[k].button.sendColor(colors['lo_' + state.color[state.set]]);
+                      bindings[k].button.sendColor(colors["lo_" + state.color[state.set]]);
                       state.pressing = null;
                       deck.beatjump.setValue(-state.diff);
                       state.diff = 0;
@@ -19797,9 +19797,9 @@ var beatjump = (function (jumps, vertical) {
                 if (value$$1) {
                   if (state.set === 1) {
                     state.set = 0;
-                    var prefix = state.mode ? 'lo' : 'hi';
+                    var prefix = state.mode ? "lo" : "hi";
                     for (var b = 0; b < spec.length; ++b) {
-                      bindings[b].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+                      bindings[b].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
                     }
                   }
                 }
@@ -19807,18 +19807,18 @@ var beatjump = (function (jumps, vertical) {
                 if (value$$1) {
                   if (state.set === 0) {
                     state.set = 1;
-                    var prefix = state.mode ? 'lo' : 'hi';
+                    var prefix = state.mode ? "lo" : "hi";
                     for (var b = 0; b < spec.length; ++b) {
-                      bindings[b].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+                      bindings[b].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
                     }
                   }
                 }
               }, function () {
                 if (value$$1) {
                   state.mode = !state.mode;
-                  var prefix = state.mode ? 'lo' : 'hi';
+                  var prefix = state.mode ? "lo" : "hi";
                   for (var b = 0; b < spec.length; ++b) {
-                    bindings[b].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+                    bindings[b].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
                   }
                 }
               });
@@ -19830,8 +19830,8 @@ var beatjump = (function (jumps, vertical) {
             var bindings = _ref3.bindings,
                 state = _ref3.state;
 
-            var prefix = state.mode ? 'lo' : 'hi';
-            bindings[k].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+            var prefix = state.mode ? "lo" : "hi";
+            bindings[k].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
           };
         };
         var spec = flatMap(jumps, function (j, i) {
@@ -19844,7 +19844,7 @@ var beatjump = (function (jumps, vertical) {
               dir = _ref5[1];
 
           bindings[i] = {
-            type: 'button',
+            type: "button",
             target: vertical ? [gridPosition[0] + i % 2, gridPosition[1] + ~~(i / 2)] : [gridPosition[0] + ~~(i / 2), gridPosition[1] + i % 2],
             midi: onMidi(i, jump, dir)(modifier),
             mount: onMount(i)
@@ -19857,7 +19857,7 @@ var beatjump = (function (jumps, vertical) {
             pressing: 0,
             diff: 0,
             set: 0,
-            color: ['green', 'red']
+            color: ["green", "red"]
           }
         };
       };
@@ -19897,12 +19897,12 @@ var beatloop = (function (loops, d) {
           var dx = i % d;
           var dy = ~~(i / d);
           bindings[i] = {
-            type: 'button',
+            type: "button",
             target: [gridPosition[0] + dx, gridPosition[1] + dy],
             attack: onAttack(loop)(modifier)
           };
-          bindings[loop + '.enabled'] = {
-            type: 'control',
+          bindings[loop + ".enabled"] = {
+            type: "control",
             target: deck.beatloops[loop].enabled,
             update: onUpdate(i)
           };
@@ -19937,14 +19937,14 @@ var loopjump = function loopjump(jumps) {
                     var currentJump = j[state.set] * d;
                     deck.loop_move.setValue(currentJump);
                     if (state.pressing != null) {
-                      bindings[state.pressing].button.sendColor(colors['lo_' + state.color[state.set]]);
+                      bindings[state.pressing].button.sendColor(colors["lo_" + state.color[state.set]]);
                     }
-                    bindings[k].button.sendColor(colors['hi_' + state.color[state.set]]);
+                    bindings[k].button.sendColor(colors["hi_" + state.color[state.set]]);
                     state.pressing = k;
                     state.diff = state.diff + currentJump;
                   } else {
                     if (state.pressing === k) {
-                      bindings[k].button.sendColor(colors['lo_' + state.color[state.set]]);
+                      bindings[k].button.sendColor(colors["lo_" + state.color[state.set]]);
                       state.pressing = null;
                       deck.loop_move.setValue(-state.diff);
                       state.diff = 0;
@@ -19955,9 +19955,9 @@ var loopjump = function loopjump(jumps) {
                 if (value$$1) {
                   if (state.set === 1) {
                     state.set = 0;
-                    var prefix = state.mode ? 'lo' : 'hi';
+                    var prefix = state.mode ? "lo" : "hi";
                     for (var b = 0; b < spec.length; ++b) {
-                      bindings[b].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+                      bindings[b].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
                     }
                   }
                 }
@@ -19965,18 +19965,18 @@ var loopjump = function loopjump(jumps) {
                 if (value$$1) {
                   if (state.set === 0) {
                     state.set = 1;
-                    var prefix = state.mode ? 'lo' : 'hi';
+                    var prefix = state.mode ? "lo" : "hi";
                     for (var b = 0; b < spec.length; ++b) {
-                      bindings[b].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+                      bindings[b].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
                     }
                   }
                 }
               }, function () {
                 if (value$$1) {
                   state.mode = !state.mode;
-                  var prefix = state.mode ? 'lo' : 'hi';
+                  var prefix = state.mode ? "lo" : "hi";
                   for (var b = 0; b < spec.length; ++b) {
-                    bindings[b].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+                    bindings[b].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
                   }
                 }
               });
@@ -19988,8 +19988,8 @@ var loopjump = function loopjump(jumps) {
             var bindings = _ref3.bindings,
                 state = _ref3.state;
 
-            var prefix = state.mode ? 'lo' : 'hi';
-            bindings[k].button.sendColor(colors[prefix + '_' + state.color[state.set]]);
+            var prefix = state.mode ? "lo" : "hi";
+            bindings[k].button.sendColor(colors[prefix + "_" + state.color[state.set]]);
           };
         };
         var spec = flatMap(jumps, function (j, i) {
@@ -20002,7 +20002,7 @@ var loopjump = function loopjump(jumps) {
               dir = _ref5[1];
 
           bindings[i] = {
-            type: 'button',
+            type: "button",
             target: [gridPosition[0] + i % 2, gridPosition[1] + ~~(i / 2)],
             midi: onMidi(i, jump, dir)(modifier),
             mount: onMount(i)
@@ -20015,7 +20015,7 @@ var loopjump = function loopjump(jumps) {
             pressing: 0,
             diff: 0,
             set: 0,
-            color: ['green', 'red']
+            color: ["green", "red"]
           }
         };
       };
@@ -20037,7 +20037,7 @@ var loopjumpSmall = function loopjumpSmall(amount) {
         return {
           bindings: {
             back: {
-              type: 'button',
+              type: "button",
               target: button,
               attack: onAttack(-1),
               mount: function mount(dk, _ref6) {
@@ -20047,7 +20047,7 @@ var loopjumpSmall = function loopjumpSmall(amount) {
               }
             },
             forth: {
-              type: 'button',
+              type: "button",
               target: [button[0] + 1, button[1]],
               attack: onAttack(1),
               mount: function mount(dk, _ref7) {
@@ -20076,22 +20076,22 @@ var loopMultiply = (function (gridPosition) {
       var onAttack = function onAttack(k) {
         return function () {
           // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-          deck['loop_' + k].setValue(1);
+          deck["loop_" + k].setValue(1);
         };
       };
       return {
         bindings: {
           halve: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
-            mount: onMount('halve'),
-            attack: onAttack('halve')
+            mount: onMount("halve"),
+            attack: onAttack("halve")
           },
           double: {
-            type: 'button',
+            type: "button",
             target: [gridPosition[0] + 1, gridPosition[1]],
-            mount: onMount('double'),
-            attack: onAttack('double')
+            mount: onMount("double"),
+            attack: onAttack("double")
           }
         }
       };
@@ -20105,7 +20105,7 @@ var reloop = (function (gridPosition) {
       return {
         bindings: {
           button: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             attack: function attack() {
               modes(modifier.getState(), function () {
@@ -20114,7 +20114,7 @@ var reloop = (function (gridPosition) {
             }
           },
           control: {
-            type: 'control',
+            type: "control",
             target: deck.loop_enabled,
             update: function update(_ref, _ref2) {
               var value = _ref.value;
@@ -20144,11 +20144,11 @@ var loopIo = (function (gridPosition) {
           modes(modifier.getState(), function () {
             if (value) {
               // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-              deck['loop_' + dir].setValue(1);
+              deck["loop_" + dir].setValue(1);
               bindings[dir].button.sendColor(colors.hi_green);
             } else {
               // TODO: remove unsafe cast once flow supports https://github.com/facebook/flow/issues/3637
-              deck['loop_' + dir].setValue(0);
+              deck["loop_" + dir].setValue(0);
               bindings[dir].button.sendColor(colors.black);
             }
           });
@@ -20156,15 +20156,15 @@ var loopIo = (function (gridPosition) {
       };
       return {
         bindings: {
-          'in': {
-            type: 'button',
+          "in": {
+            type: "button",
             target: gridPosition,
-            midi: onMidi('in')
+            midi: onMidi("in")
           },
           out: {
-            type: 'button',
+            type: "button",
             target: [gridPosition[0] + 1, gridPosition[1]],
-            midi: onMidi('out')
+            midi: onMidi("out")
           }
         }
       };
@@ -20192,8 +20192,8 @@ var slip = (function (gridPosition) {
           }, function () {
             if (value) {
               state.mode = !state.mode;
-              var color = state.mode ? 'orange' : 'red';
-              bindings.button.button.sendColor(colors['lo_' + color]);
+              var color = state.mode ? "orange" : "red";
+              bindings.button.button.sendColor(colors["lo_" + color]);
             }
           });
         });
@@ -20201,31 +20201,31 @@ var slip = (function (gridPosition) {
       return {
         bindings: {
           control: {
-            type: 'control',
+            type: "control",
             target: deck.slip_enabled,
             update: function update(_ref3, _ref4) {
               var value = _ref3.value;
               var bindings = _ref4.bindings,
                   state = _ref4.state;
 
-              var color = state.mode ? 'orange' : 'red';
+              var color = state.mode ? "orange" : "red";
               if (value) {
-                bindings.button.button.sendColor(colors['hi_' + color]);
+                bindings.button.button.sendColor(colors["hi_" + color]);
               } else {
-                bindings.button.button.sendColor(colors['lo_' + color]);
+                bindings.button.button.sendColor(colors["lo_" + color]);
               }
             }
           },
           button: {
-            type: 'button',
+            type: "button",
             target: gridPosition,
             midi: onMidi(modifier),
             mount: function mount(dk, _ref5) {
               var bindings = _ref5.bindings,
                   state = _ref5.state;
 
-              var color = state.mode ? 'orange' : 'red';
-              bindings.button.button.sendColor(colors['lo_' + color]);
+              var color = state.mode ? "orange" : "red";
+              bindings.button.button.sendColor(colors["lo_" + color]);
             }
           }
         },
@@ -20440,7 +20440,7 @@ var SelectorBar = function (_Component) {
   }
 
   createClass(SelectorBar, [{
-    key: 'getLayout',
+    key: "getLayout",
     value: function getLayout() {
       var res = [];
       for (var k in this.layout) {
@@ -20449,7 +20449,7 @@ var SelectorBar = function (_Component) {
       return res;
     }
   }, {
-    key: 'updateLayout',
+    key: "updateLayout",
     value: function updateLayout(diff) {
       var _this2 = this;
 
@@ -20469,12 +20469,12 @@ var SelectorBar = function (_Component) {
         } else {
           _this2.bindings[block.channel][0].button.sendColor(colors.hi_green);
         }
-        _this2.mountedPresets[block.channel] = cycled[block.size][block.index](_this2.controlComponentBuilder)(_this2.midiComponentBuilder)(_this2.modifier)(_this2.id + '.deck.' + block.channel)(block.channel)(block.offset);
+        _this2.mountedPresets[block.channel] = cycled[block.size][block.index](_this2.controlComponentBuilder)(_this2.midiComponentBuilder)(_this2.modifier)(_this2.id + ".deck." + block.channel)(block.channel)(block.offset);
         _this2.mountedPresets[block.channel].mount();
       });
     }
   }, {
-    key: 'removeChord',
+    key: "removeChord",
     value: function removeChord() {
       var _this3 = this;
 
@@ -20497,7 +20497,7 @@ var SelectorBar = function (_Component) {
       });
     }
   }, {
-    key: 'addToChord',
+    key: "addToChord",
     value: function addToChord(channel) {
       if (this.chord.length === 4) {
         var rem = this.chord.shift();
@@ -20519,12 +20519,12 @@ var SelectorBar = function (_Component) {
       this.bindings[channel][0].button.sendColor(colors.hi_red);
     }
   }, {
-    key: 'getChord',
+    key: "getChord",
     value: function getChord() {
       return this.chord;
     }
   }, {
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.bindings.forEach(function (_ref2) {
         var _ref3 = slicedToArray(_ref2, 2),
@@ -20532,18 +20532,18 @@ var SelectorBar = function (_Component) {
             midi = _ref3[1];
 
         binding.mount();
-        binding.on('midi', midi);
+        binding.on("midi", midi);
       });
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       this.bindings.forEach(function (_ref4) {
         var _ref5 = slicedToArray(_ref4, 2),
             binding = _ref5[0],
             midi = _ref5[1];
 
-        binding.removeListener('midi', midi);
+        binding.removeListener("midi", midi);
         binding.unmount();
       });
     }
@@ -20551,7 +20551,7 @@ var SelectorBar = function (_Component) {
   return SelectorBar;
 }(Component);
 
-SelectorBar.buttons = ['up', 'down', 'left', 'right', 'session', 'user1', 'user2', 'mixer'];
+SelectorBar.buttons = ["up", "down", "left", "right", "session", "user1", "user2", "mixer"];
 SelectorBar.channels = [0, 1, 2, 3, 4, 5, 6, 7];
 
 var Layout = function (_Component2) {
@@ -20562,19 +20562,19 @@ var Layout = function (_Component2) {
 
     var _this4 = possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
 
-    _this4.selectorBar = new SelectorBar(controlComponentBuilder, midiComponentBuilder, modifier, id + '.selectorBar');
+    _this4.selectorBar = new SelectorBar(controlComponentBuilder, midiComponentBuilder, modifier, id + ".selectorBar");
     return _this4;
   }
 
   createClass(Layout, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.selectorBar.mount();
       var diff = reorganize([], initialChannels);
       this.selectorBar.updateLayout(diff);
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       var diff = reorganize(this.selectorBar.getLayout(), []);
       this.selectorBar.updateLayout(diff);
@@ -20588,7 +20588,7 @@ var makeLayout = function makeLayout(controlComponentBuilder) {
   return function (midiComponentBuilder) {
     return function (modifier) {
       return function (id) {
-        return new Layout(controlComponentBuilder, midiComponentBuilder, modifier, id + '.selectorBar');
+        return new Layout(controlComponentBuilder, midiComponentBuilder, modifier, id + ".selectorBar");
       };
     };
   };
@@ -20603,60 +20603,60 @@ var presets = {
 };
 
 var cycled = {
-  'grande': [].concat(toConsumableArray(presets.grande), toConsumableArray(presets.tall), toConsumableArray(presets.short)),
-  'tall': [].concat(toConsumableArray(presets.tall), toConsumableArray(presets.short)),
-  'short': presets.short
+  "grande": [].concat(toConsumableArray(presets.grande), toConsumableArray(presets.tall), toConsumableArray(presets.short)),
+  "tall": [].concat(toConsumableArray(presets.tall), toConsumableArray(presets.short)),
+  "short": presets.short
 };
 
 var reorganize = function reorganize(current, selectedChannels) {
   var next$$1 = selectedChannels.length <= 1 ? [{
     offset: offsets[0],
-    size: 'grande',
+    size: "grande",
     channel: selectedChannels[0],
     index: 0
   }] : selectedChannels.length <= 2 ? [{
     offset: offsets[0],
-    size: 'tall',
+    size: "tall",
     channel: selectedChannels[0],
     index: 0
   }, {
     offset: offsets[1],
-    size: 'tall',
+    size: "tall",
     channel: selectedChannels[1],
     index: 0
   }] : selectedChannels.length <= 3 ? [{
     offset: offsets[0],
-    size: 'tall',
+    size: "tall",
     channel: selectedChannels[0],
     index: 0
   }, {
     offset: offsets[1],
-    size: 'short',
+    size: "short",
     channel: selectedChannels[1],
     index: 0
   }, {
     offset: offsets[3],
-    size: 'short',
+    size: "short",
     channel: selectedChannels[2],
     index: 0
   }] : [{
     offset: offsets[0],
-    size: 'short',
+    size: "short",
     channel: selectedChannels[0],
     index: 0
   }, {
     offset: offsets[1],
-    size: 'short',
+    size: "short",
     channel: selectedChannels[1],
     index: 0
   }, {
     offset: offsets[2],
-    size: 'short',
+    size: "short",
     channel: selectedChannels[2],
     index: 0
   }, {
     offset: offsets[3],
-    size: 'short',
+    size: "short",
     channel: selectedChannels[3],
     index: 0
   }];
@@ -20700,19 +20700,19 @@ var Screen = function (_Component) {
 
     _this.modifier = makeModifierSidebar(midiComponentBuilder);
     _this.playListSidebar = makePlaylistSidebar(timerBuilder)(midiComponentBuilder);
-    _this.layout = makeLayout(controlComponentBuilder)(midiComponentBuilder)(_this.modifier)(id + '.layout');
+    _this.layout = makeLayout(controlComponentBuilder)(midiComponentBuilder)(_this.modifier)(id + ".layout");
     return _this;
   }
 
   createClass(Screen, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.modifier.mount();
       this.playListSidebar.mount();
       this.layout.mount();
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       this.playListSidebar.unmount();
       this.modifier.unmount();
@@ -20757,21 +20757,21 @@ var ControlComponent = function (_Component) {
   }
 
   createClass(ControlComponent, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       var _this2 = this;
 
       if (!this._handle) {
         this._handle = this.controlBus.connect(this.id, this.control.def, function (data) {
           _this2.value = data.value;
-          _this2.emit('update', data);
+          _this2.emit("update", data);
         });
         this.value = this.control.getValue();
-        this.emit('update', this);
+        this.emit("update", this);
       }
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       if (this._handle) {
         this.controlBus.disconnect(this._handle);
@@ -20779,18 +20779,18 @@ var ControlComponent = function (_Component) {
       }
     }
   }, {
-    key: 'setValue',
+    key: "setValue",
     value: function setValue(value) {
       this.control.setValue(value);
       this.value = this.control.getValue();
     }
   }, {
-    key: 'toggleValue',
+    key: "toggleValue",
     value: function toggleValue() {
       this.setValue(Number(!this.getValue()));
     }
   }, {
-    key: 'getValue',
+    key: "getValue",
     value: function getValue() {
       if (!this.handle) {
         this.value = this.control.getValue();
@@ -20819,22 +20819,22 @@ var MidiComponent = function (_Component) {
     _this.button = button;
     _this._cb = function (data) {
       if (data.value) {
-        _this.emit('attack', data);
+        _this.emit("attack", data);
       } else {
-        _this.emit('release', data);
+        _this.emit("release", data);
       }
-      _this.emit('midi', data);
+      _this.emit("midi", data);
     };
     return _this;
   }
 
   createClass(MidiComponent, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.midibus.on(this.button.def.name, this._cb);
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       this.midibus.removeListener(this.button.def.name, this._cb);
     }
@@ -20855,17 +20855,17 @@ var Global = function (_Component) {
 
     var _this = possibleConstructorReturn(this, (Global.__proto__ || Object.getPrototypeOf(Global)).call(this));
 
-    _this.screen = makeScreen(timerBuilder)(controlComponentBuilder)(midiComponentBuilder)('main');
+    _this.screen = makeScreen(timerBuilder)(controlComponentBuilder)(midiComponentBuilder)("main");
     return _this;
   }
 
   createClass(Global, [{
-    key: 'onMount',
+    key: "onMount",
     value: function onMount() {
       this.screen.mount();
     }
   }, {
-    key: 'onUnmount',
+    key: "onUnmount",
     value: function onUnmount() {
       this.screen.unmount();
     }

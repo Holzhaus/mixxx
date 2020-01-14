@@ -821,14 +821,14 @@ AutoCut.prototype.FaderCut = function(jogValue) {
         if (this.deckNum == 1) {
             direction = -direction;
         } // else direction is of the good sign
-        engine.setValue('[Master]', 'crossfader', direction);
+        engine.setValue("[Master]", "crossfader", direction);
     }
 };
 
 AutoCut.prototype.Off = function() {
     if (this.enabled) {
         this.enabled = false;
-        engine.setValue('[Master]', 'crossfader', 0);
+        engine.setValue("[Master]", "crossfader", 0);
         engine.softTakeover("[Master]", "crossfader", true);
     }
 };
@@ -1411,7 +1411,7 @@ ReloopBeatpad.control = function(key, control, midino, group) {
 
 ReloopBeatpad.control.prototype.onOff = function(value, light) {
     engine.setValue(this.group, this.key, value);
-    if ((typeof light !== "undefined") && (typeof this.led != "undefined")) {
+    if ((typeof light !== "undefined") && (typeof this.led !== "undefined")) {
         this.led.onOff(light);
     }
 };
@@ -1986,10 +1986,10 @@ ReloopBeatpad.OnLoadButton = function(channel, control, value, status, group, ev
     var deck = ReloopBeatpad.decks["D" + decknum];
 
     if (eventkind == LONG_PRESS) {
-        engine.setValue(group, 'eject', true);
+        engine.setValue(group, "eject", true);
         deck.leds.load.onOff(OFF);
     } else {
-        engine.setValue(group, 'LoadSelectedTrack', true);
+        engine.setValue(group, "LoadSelectedTrack", true);
         deck.leds.load.onOff(ON);
     }
 };
@@ -2008,22 +2008,22 @@ ReloopBeatpad.SyncBtn = function(channel, control, value, status, group) {
 // Callback for the SYNC Button
 ReloopBeatpad.OnSyncButton = function(channel, control, value, status, group, eventkind) {
     if (eventkind == LONG_PRESS) {
-        engine.setValue(group, 'sync_enabled', true);
+        engine.setValue(group, "sync_enabled", true);
     } else {
-        if (engine.getValue(group, 'sync_enabled')) {
+        if (engine.getValue(group, "sync_enabled")) {
             // If sync lock is enabled, simply disable sync lock
-            engine.setValue(group, 'sync_enabled', false);
+            engine.setValue(group, "sync_enabled", false);
         } else {
             if (eventkind == DOUBLE_PRESS) {
                 // Double press : Sync and play (if the track was paused
                 // the playback starts, synchronized to the other track
-                engine.setValue(group, 'play', true);
-                engine.setValue(group, 'beatsync', true);
+                engine.setValue(group, "play", true);
+                engine.setValue(group, "beatsync", true);
 
             } else {
                 // We pressed sync only once, we sync the track
                 // with the other track (eventkind == QUICK_PRESS
-                engine.setValue(group, 'beatsync', true);
+                engine.setValue(group, "beatsync", true);
             }
         }
     }
@@ -2680,12 +2680,12 @@ ReloopBeatpad.OnEffectLoaded = function(value, group, control, index) {
 };
 
 ReloopBeatpad.OnSampleLoaded = function(value, group, control) {
-    var samplenum = parseInt(group.replace(/[^0-9\.]/g, ''), 10);
+    var samplenum = parseInt(group.replace(/[^0-9\.]/g, ""), 10);
     ReloopBeatpad.samplers.SetLoaded(samplenum, (value !== 0));
 };
 
 ReloopBeatpad.OnSamplePlayStop = function(value, group, control) {
-    var samplenum = parseInt(group.replace(/[^0-9\.]/g, ''), 10);
+    var samplenum = parseInt(group.replace(/[^0-9\.]/g, ""), 10);
     ReloopBeatpad.samplers.LedUpdateSampler(samplenum);
 };
 

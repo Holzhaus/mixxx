@@ -240,7 +240,7 @@ LPD8RK.loops["b33"] = new Array("[Sampler2]", "8", 0xB3, 0x03);
 
 
 LPD8RK.init = function (id, debug) { // called when the device is opened & set up
-    if (LPD8RK.debug){print("###init##############")};
+    if (LPD8RK.debug){print("###init##############")}
     //soft takeovers
     engine.softTakeover("[Master]","crossfader",true);
     engine.softTakeover("[Channel1]","volume",true);
@@ -284,8 +284,8 @@ LPD8RK.setLeds = function () {
             //if (LPD8RK.debug){print("midi.sendShortMsg("+status+", "+ctrl+", "+state+")")};
             
             LPD8RK.lightLED(status, ctrl, state);
-            };
-        };
+            }
+        }
     
     //loops
     for (var id in LPD8RK.loops){
@@ -297,7 +297,7 @@ LPD8RK.setLeds = function () {
         //if (LPD8RK.debug){print("midi.sendShortMsg("+status+", "+ctrl+", "+state+")")};
     
         LPD8RK.lightLED(status, ctrl, state);
-        };
+        }
     
     //reloop buttons
     LPD8RK.lightLED(0xb0, 0x01, engine.getValue("[Channel1]", "loop_enabled"));    
@@ -319,7 +319,7 @@ LPD8RK.lightLED = function (status, ctrl, state){
     };    
     
 LPD8RK.clear = function (){//enables hotcue clearing
-    if (LPD8RK.debug){print("###hotcueclear##############")};
+    if (LPD8RK.debug){print("###hotcueclear##############")}
     LPD8RK.hotcueClear=true;
     };
 
@@ -329,28 +329,28 @@ LPD8RK.noclear = function (){//disables hotcue clearing
 
 LPD8RK.hotcueButton = function (channel, control, value, status, group) {
     //weird status bug workaround
-    if (channel==0 && status != 0x90){status = 0x90};
-    if (channel==1 && status != 0x91){status = 0x91};
-    if (channel==2 && status != 0x92){status = 0x92};
-    if (channel==3 && status != 0x93){status = 0x93};
+    if (channel==0 && status != 0x90){status = 0x90}
+    if (channel==1 && status != 0x91){status = 0x91}
+    if (channel==2 && status != 0x92){status = 0x92}
+    if (channel==3 && status != 0x93){status = 0x93}
 
-    if (LPD8RK.debug){print("###hotcueButton##############")};
-    if (LPD8RK.debug){print("status:"+status)};
-    if (LPD8RK.debug){print("channel:"+channel)};
-    if (LPD8RK.debug){print("control:"+control)};
-    if (LPD8RK.debug){print("hotcuebank:"+LPD8RK.hotcueBank)};
-    if (LPD8RK.debug){print("phrase:#"+status.toString(16).toLowerCase()+control.toString(16).toLowerCase()+"#")};
+    if (LPD8RK.debug){print("###hotcueButton##############")}
+    if (LPD8RK.debug){print("status:"+status)}
+    if (LPD8RK.debug){print("channel:"+channel)}
+    if (LPD8RK.debug){print("control:"+control)}
+    if (LPD8RK.debug){print("hotcuebank:"+LPD8RK.hotcueBank)}
+    if (LPD8RK.debug){print("phrase:#"+status.toString(16).toLowerCase()+control.toString(16).toLowerCase()+"#")}
     //activate or clear depending on whether clear button is pressed
     var thecue = LPD8RK.hotcues[status.toString(16).toLowerCase()+control.toString(16).toLowerCase()][LPD8RK.hotcueBank];
     if (LPD8RK.hotcueClear){
         engine.setValue(thecue[0], "hotcue_"+thecue[1]+"_clear", 1);
         engine.setValue(thecue[0], "hotcue_"+thecue[1]+"_clear", 0);
-        if (LPD8RK.debug){print("cleared")};
+        if (LPD8RK.debug){print("cleared")}
         } else {
         engine.setValue(thecue[0], "hotcue_"+thecue[1]+"_activate", 1);
         engine.setValue(thecue[0], "hotcue_"+thecue[1]+"_activate", 0);
-        if (LPD8RK.debug){print("###"+status.toString(16).toLowerCase()+control.toString(16).toLowerCase()+"--activated")};
-        };
+        if (LPD8RK.debug){print("###"+status.toString(16).toLowerCase()+control.toString(16).toLowerCase()+"--activated")}
+        }
 
     };
 
@@ -364,7 +364,7 @@ LPD8RK.loopButton = function (channel, control, value, status, group) {
         engine.setValue(group, LPD8RK.looptype+"_"+theloop[1]+"_activate", 1);
         } else {//button was released
         LPD8RK.loopbuttonDown=false;
-        };
+        }
 
     };
 
@@ -379,10 +379,10 @@ LPD8RK.reloopButton = function (channel, control, value, status, group) {
         LPD8RK.reloopTimer = engine.beginTimer(500, "LPD8RK.disablereloop()", true);
         } else {//button was released
         LPD8RK.loopbuttonDown=false;
-        if (LPD8RK.doreloop===true) {engine.setValue(group, "reloop_exit", 1);};
+        if (LPD8RK.doreloop===true) {engine.setValue(group, "reloop_exit", 1);}
         LPD8RK.doreloop=true;
         engine.stopTimer(LPD8RK.reloopTimer);
-        };
+        }
 
     };
 
@@ -410,11 +410,11 @@ LPD8RK.hotcueBankDial = function (channel, control, value, status, group) {
     engine.stopTimer(LPD8RK.ledTimer);
 
     //select hotcue bank
-    if (value>=0 && value <=12){LPD8RK.hotcueBank=1;};
-    if (value>12 && value <=46){LPD8RK.hotcueBank=2;};
-    if (value>46 && value <=80){LPD8RK.hotcueBank=3;};
-    if (value>80 && value <=114){LPD8RK.hotcueBank=4;};
-    if (value>114 && value <=128){LPD8RK.hotcueBank=5;};
+    if (value>=0 && value <=12){LPD8RK.hotcueBank=1;}
+    if (value>12 && value <=46){LPD8RK.hotcueBank=2;}
+    if (value>46 && value <=80){LPD8RK.hotcueBank=3;}
+    if (value>80 && value <=114){LPD8RK.hotcueBank=4;}
+    if (value>114 && value <=128){LPD8RK.hotcueBank=5;}
 
     //light up indicator light
     if (LPD8RK.oldHotcueBank != LPD8RK.hotcueBank){//check if the bank's changed.  If it has, change the LEDs - LPD8RK.oldHotcueBank != LPD8RK.hotcueBank
@@ -427,12 +427,12 @@ LPD8RK.hotcueBankDial = function (channel, control, value, status, group) {
                     var state = 1;
                     }else{
                     var state = 0;
-                    };
+                    }
 
                 LPD8RK.lightLED(status, ctrl, state);
-                };
-            };
-        };
+                }
+            }
+        }
     //record last hotcue bank
     LPD8RK.oldHotcueBank=LPD8RK.hotcueBank;
     //set timer to clear old bank number after 500 msec, so bank indicator light will light up
@@ -456,7 +456,7 @@ LPD8RK.looplenDial = function (channel, control, value, status, group) {
     if (LPD8RK.looplen<=0x5b){engine.setValue(group, LPD8RK.looptype+"_1_activate", 1);return true;} else 
     if (LPD8RK.looplen<=0x6d){engine.setValue(group, LPD8RK.looptype+"_2_activate", 2);return true;} else 
     if (LPD8RK.looplen<=0x70){engine.setValue(group, LPD8RK.looptype+"_4_activate", 4);return true;} else    
-    if (LPD8RK.looplen<=0x7f){engine.setValue(group, LPD8RK.looptype+"_8_activate", 8);return true;};    
+    if (LPD8RK.looplen<=0x7f){engine.setValue(group, LPD8RK.looptype+"_8_activate", 8);return true;}    
     };
 
 LPD8RK.loopminus = function (channel, control, value, status, group) {
@@ -470,7 +470,7 @@ LPD8RK.loopminus = function (channel, control, value, status, group) {
         engine.setValue(group, "loop_start_position", start-interval);
         engine.setValue(group, "loop_end_position", end-interval);
         return true;
-        };
+        }
     };
 
 LPD8RK.loopplus = function (channel, control, value, status, group) {
@@ -484,7 +484,7 @@ LPD8RK.loopplus = function (channel, control, value, status, group) {
         engine.setValue(group, "loop_start_position", start+interval);
         engine.setValue(group, "loop_end_position", end+interval);
         return true;
-        };
+        }
     };
 
 LPD8RK.beatjump = function (channel, control, value, status, group) {
@@ -512,8 +512,8 @@ LPD8RK.beatjumpDial = function (channel, control, value, status, group) {
         if (value<=63){LPD8RK.beatjumpstep=1; return true;} else     
         if (value<=94){LPD8RK.beatjumpstep=2; return true;} else     
         if (value<=125){LPD8RK.beatjumpstep=4; return true;} else     
-        if (value<=127){LPD8RK.beatjumpstep=8; return true;};
-        };    
+        if (value<=127){LPD8RK.beatjumpstep=8; return true;}
+        }    
     };
 
 LPD8RK.mute = function (group) {
@@ -526,7 +526,7 @@ LPD8RK.mute = function (group) {
         }else{//is not muted.  mute.
         engine.setValue(group, "volume", 0);
         LPD8RK.vol[group]=curvol;
-        };
+        }
     engine.softTakeover(group,"volume",true);
     
     if (LPD8RK.debug){print("MUTE");}
@@ -546,23 +546,23 @@ LPD8RK.progChng = function (channel, control, value, status, group) {
     };
 
 LPD8RK.toggleplay = function (group, state) {
-    if (state==true){engine.setValue(group, "reverse",0);engine.setValue(group, "play", false);} else {engine.setValue(group, "reverse",0);engine.setValue(group, "play", true);};
+    if (state==true){engine.setValue(group, "reverse",0);engine.setValue(group, "play", false);} else {engine.setValue(group, "reverse",0);engine.setValue(group, "play", true);}
     };
 
 LPD8RK.togglepfl = function (group, state) {
-    if (state==true){engine.setValue(group, "pfl", false);} else {engine.setValue(group, "pfl", true);};
+    if (state==true){engine.setValue(group, "pfl", false);} else {engine.setValue(group, "pfl", true);}
     };
 
 LPD8RK.togglereverse = function (group, state) {
-    if (state==true){engine.setValue(group, "reverse", false);} else {engine.setValue(group, "reverse", true);};    
+    if (state==true){engine.setValue(group, "reverse", false);} else {engine.setValue(group, "reverse", true);}    
     };
 
 LPD8RK.toggleback = function (group, state) {
-    if (state==true){engine.setValue(group, "back", false);} else {engine.setValue(group, "back", true);};    
+    if (state==true){engine.setValue(group, "back", false);} else {engine.setValue(group, "back", true);}    
     };
 
 LPD8RK.togglefwd = function (group, state) {
-    if (state==true){engine.setValue(group, "fwd", false);} else {engine.setValue(group, "fwd", true);};    
+    if (state==true){engine.setValue(group, "fwd", false);} else {engine.setValue(group, "fwd", true);}    
     };
 
 LPD8RK.softXfade = function (channel, control, value, status, group) {

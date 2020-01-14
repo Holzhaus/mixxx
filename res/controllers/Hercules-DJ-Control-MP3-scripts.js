@@ -159,7 +159,7 @@ HerculesMp3.ledhelper = function () {
 
 //  What does this function do? It is just an apostrophe between the words "I'll-do".
 
-    if(typeof led_array == "undefined"){
+    if(typeof led_array === "undefined"){
         led_array = [];
     }
     if (led_array.length > 0){
@@ -183,7 +183,7 @@ HerculesMp3.ledhelper = function () {
 
 HerculesMp3.leds = function (onoff) {
     for (control in HerculesMp3.controls.outputs) {
-        if (HerculesMp3.controls.outputs[control].type == 'led') {
+        if (HerculesMp3.controls.outputs[control].type == "led") {
             HerculesMp3.led(control,onoff);
         }
     }

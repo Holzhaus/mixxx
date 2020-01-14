@@ -78,7 +78,7 @@ HerculesMk2.init = function (id) { // called when the device is opened & set up
     
 HerculesMk2.initializeControls = function () {
     for (control in HerculesMk2.controls.outputs) {
-    if (HerculesMk2.controls.outputs[control].type == 'led') {
+    if (HerculesMk2.controls.outputs[control].type == "led") {
         key = "[Channel" + HerculesMk2.controls.outputs[control].channel + "] " + HerculesMk2.controls.outputs[control].name;
         HerculesMk2.leds[key] = control;
     }

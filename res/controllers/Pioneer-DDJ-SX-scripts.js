@@ -119,14 +119,14 @@ PioneerDDJSX.setUpSpeedSliderRange = [0.08, 0.08, 0.08, 0.08];
 
 // PAD mode storage:
 PioneerDDJSX.padModes = {
-    'hotCue': 0,
-    'loopRoll': 1,
-    'slicer': 2,
-    'sampler': 3,
-    'group1': 4,
-    'beatloop': 5,
-    'group3': 6,
-    'group4': 7
+    "hotCue": 0,
+    "loopRoll": 1,
+    "slicer": 2,
+    "sampler": 3,
+    "group1": 4,
+    "beatloop": 5,
+    "group3": 6,
+    "group4": 7
 };
 PioneerDDJSX.activePadMode = [
     PioneerDDJSX.padModes.hotCue,
@@ -182,8 +182,8 @@ PioneerDDJSX.slicerActive = [false, false, false, false];
 PioneerDDJSX.slicerAlreadyJumped = [false, false, false, false];
 PioneerDDJSX.slicerButton = [0, 0, 0, 0];
 PioneerDDJSX.slicerModes = {
-    'contSlice': 0,
-    'loopSlice': 1
+    "contSlice": 0,
+    "loopSlice": 1
 };
 PioneerDDJSX.activeSlicerMode = [
     PioneerDDJSX.slicerModes.contSlice,
@@ -195,200 +195,200 @@ PioneerDDJSX.activeSlicerMode = [
 
 PioneerDDJSX.init = function(id) {
     PioneerDDJSX.scratchSettings = {
-        'alpha': 1.0 / 8,
-        'beta': 1.0 / 8 / 32,
-        'jogResolution': 2048,
-        'vinylSpeed': 33 + 1 / 3,
+        "alpha": 1.0 / 8,
+        "beta": 1.0 / 8 / 32,
+        "jogResolution": 2048,
+        "vinylSpeed": 33 + 1 / 3,
     };
 
     PioneerDDJSX.channelGroups = {
-        '[Channel1]': 0x00,
-        '[Channel2]': 0x01,
-        '[Channel3]': 0x02,
-        '[Channel4]': 0x03
+        "[Channel1]": 0x00,
+        "[Channel2]": 0x01,
+        "[Channel3]": 0x02,
+        "[Channel4]": 0x03
     };
 
     PioneerDDJSX.samplerGroups = {
-        '[Sampler1]': 0x00,
-        '[Sampler2]': 0x01,
-        '[Sampler3]': 0x02,
-        '[Sampler4]': 0x03,
-        '[Sampler5]': 0x04,
-        '[Sampler6]': 0x05,
-        '[Sampler7]': 0x06,
-        '[Sampler8]': 0x07
+        "[Sampler1]": 0x00,
+        "[Sampler2]": 0x01,
+        "[Sampler3]": 0x02,
+        "[Sampler4]": 0x03,
+        "[Sampler5]": 0x04,
+        "[Sampler6]": 0x05,
+        "[Sampler7]": 0x06,
+        "[Sampler8]": 0x07
     };
 
     PioneerDDJSX.fxUnitGroups = {
-        '[EffectRack1_EffectUnit1]': 0x00,
-        '[EffectRack1_EffectUnit2]': 0x01,
-        '[EffectRack1_EffectUnit3]': 0x02,
-        '[EffectRack1_EffectUnit4]': 0x03
+        "[EffectRack1_EffectUnit1]": 0x00,
+        "[EffectRack1_EffectUnit2]": 0x01,
+        "[EffectRack1_EffectUnit3]": 0x02,
+        "[EffectRack1_EffectUnit4]": 0x03
     };
 
     PioneerDDJSX.fxEffectGroups = {
-        '[EffectRack1_EffectUnit1_Effect1]': 0x00,
-        '[EffectRack1_EffectUnit1_Effect2]': 0x01,
-        '[EffectRack1_EffectUnit1_Effect3]': 0x02,
-        '[EffectRack1_EffectUnit2_Effect1]': 0x00,
-        '[EffectRack1_EffectUnit2_Effect2]': 0x01,
-        '[EffectRack1_EffectUnit2_Effect3]': 0x02
+        "[EffectRack1_EffectUnit1_Effect1]": 0x00,
+        "[EffectRack1_EffectUnit1_Effect2]": 0x01,
+        "[EffectRack1_EffectUnit1_Effect3]": 0x02,
+        "[EffectRack1_EffectUnit2_Effect1]": 0x00,
+        "[EffectRack1_EffectUnit2_Effect2]": 0x01,
+        "[EffectRack1_EffectUnit2_Effect3]": 0x02
     };
 
     PioneerDDJSX.ledGroups = {
-        'hotCue': 0x00,
-        'loopRoll': 0x10,
-        'slicer': 0x20,
-        'sampler': 0x30,
-        'group1': 0x40,
-        'group2': 0x50,
-        'group3': 0x60,
-        'group4': 0x70
+        "hotCue": 0x00,
+        "loopRoll": 0x10,
+        "slicer": 0x20,
+        "sampler": 0x30,
+        "group1": 0x40,
+        "group2": 0x50,
+        "group3": 0x60,
+        "group4": 0x70
     };
 
     PioneerDDJSX.nonPadLeds = {
-        'headphoneCue': 0x54,
-        'shiftHeadphoneCue': 0x68,
-        'cue': 0x0C,
-        'shiftCue': 0x48,
-        'keyLock': 0x1A,
-        'shiftKeyLock': 0x60,
-        'play': 0x0B,
-        'shiftPlay': 0x47,
-        'vinyl': 0x0D,
-        'sync': 0x58,
-        'shiftSync': 0x5C,
-        'autoLoop': 0x14,
-        'shiftAutoLoop': 0x50,
-        'loopHalve': 0x12,
-        'shiftLoopHalve': 0x61,
-        'loopDouble': 0x13,
-        'shiftLoopDouble': 0x62,
-        'loopIn': 0x10,
-        'shiftLoopIn': 0x4C,
-        'loopOut': 0x11,
-        'shiftLoopOut': 0x4D,
-        'censor': 0x15,
-        'shiftCensor': 0x38,
-        'slip': 0x40,
-        'shiftSlip': 0x63,
-        'gridAdjust': 0x79,
-        'shiftGridAdjust': 0x64,
-        'gridSlide': 0x0A,
-        'shiftGridSlide': 0x65,
-        'takeoverPlus': 0x34,
-        'takeoverMinus': 0x37,
-        'fx1on': 0x47,
-        'shiftFx1on': 0x63,
-        'fx2on': 0x48,
-        'shiftFx2on': 0x64,
-        'fx3on': 0x49,
-        'shiftFx3on': 0x65,
-        'fxTab': 0x4A,
-        'shiftFxTab': 0x66,
-        'fx1assignDeck1': 0x4C,
-        'shiftFx1assignDeck1': 0x70,
-        'fx1assignDeck2': 0x4D,
-        'shiftFx1assignDeck2': 0x71,
-        'fx1assignDeck3': 0x4E,
-        'shiftFx1assignDeck3': 0x72,
-        'fx1assignDeck4': 0x4F,
-        'shiftFx1assignDeck4': 0x73,
-        'fx2assignDeck1': 0x50,
-        'shiftFx2assignDeck1': 0x54,
-        'fx2assignDeck2': 0x51,
-        'shiftFx2assignDeck2': 0x55,
-        'fx2assignDeck3': 0x52,
-        'shiftFx2assignDeck3': 0x56,
-        'fx2assignDeck4': 0x53,
-        'shiftFx2assignDeck4': 0x57,
-        'masterCue': 0x63,
-        'shiftMasterCue': 0x62,
-        'loadDeck1': 0x46,
-        'shiftLoadDeck1': 0x58,
-        'loadDeck2': 0x47,
-        'shiftLoadDeck2': 0x59,
-        'loadDeck3': 0x48,
-        'shiftLoadDeck3': 0x60,
-        'loadDeck4': 0x49,
-        'shiftLoadDeck4': 0x61,
-        'hotCueMode': 0x1B,
-        'shiftHotCueMode': 0x69,
-        'rollMode': 0x1E,
-        'shiftRollMode': 0x6B,
-        'slicerMode': 0x20,
-        'shiftSlicerMode': 0x6D,
-        'samplerMode': 0x22,
-        'shiftSamplerMode': 0x6F,
-        'longPressSamplerMode': 0x41,
-        'parameterLeftHotCueMode': 0x24,
-        'shiftParameterLeftHotCueMode': 0x01,
-        'parameterLeftRollMode': 0x25,
-        'shiftParameterLeftRollMode': 0x02,
-        'parameterLeftSlicerMode': 0x26,
-        'shiftParameterLeftSlicerMode': 0x03,
-        'parameterLeftSamplerMode': 0x27,
-        'shiftParameterLeftSamplerMode': 0x04,
-        'parameterLeftGroup1Mode': 0x28,
-        'shiftParameterLeftGroup1Mode': 0x05,
-        'parameterLeftGroup2Mode': 0x29,
-        'shiftParameterLeftGroup2Mode': 0x06,
-        'parameterLeftGroup3Mode': 0x2A,
-        'shiftParameterLeftGroup3Mode': 0x07,
-        'parameterLeftGroup4Mode': 0x2B,
-        'shiftParameterLeftGroup4Mode': 0x08,
-        'parameterRightHotCueMode': 0x2C,
-        'shiftParameterRightHotCueMode': 0x09,
-        'parameterRightRollMode': 0x2D,
-        'shiftParameterRightRollMode': 0x7A,
-        'parameterRightSlicerMode': 0x2E,
-        'shiftParameterRightSlicerMode': 0x7B,
-        'parameterRightSamplerMode': 0x2F,
-        'shiftParameterRightSamplerMode': 0x7C,
-        'parameterRightGroup1Mode': 0x30,
-        'shiftParameterRightGroup1Mode': 0x7D,
-        'parameterRightGroup2Mode': 0x31,
-        'shiftParameterRightGroup2Mode': 0x7E,
-        'parameterRightGroup3Mode': 0x32,
-        'shiftParameterRightGroup3Mode': 0x7F,
-        'parameterRightGroup4Mode': 0x33,
-        'shiftParameterRightGroup4Mode': 0x00
+        "headphoneCue": 0x54,
+        "shiftHeadphoneCue": 0x68,
+        "cue": 0x0C,
+        "shiftCue": 0x48,
+        "keyLock": 0x1A,
+        "shiftKeyLock": 0x60,
+        "play": 0x0B,
+        "shiftPlay": 0x47,
+        "vinyl": 0x0D,
+        "sync": 0x58,
+        "shiftSync": 0x5C,
+        "autoLoop": 0x14,
+        "shiftAutoLoop": 0x50,
+        "loopHalve": 0x12,
+        "shiftLoopHalve": 0x61,
+        "loopDouble": 0x13,
+        "shiftLoopDouble": 0x62,
+        "loopIn": 0x10,
+        "shiftLoopIn": 0x4C,
+        "loopOut": 0x11,
+        "shiftLoopOut": 0x4D,
+        "censor": 0x15,
+        "shiftCensor": 0x38,
+        "slip": 0x40,
+        "shiftSlip": 0x63,
+        "gridAdjust": 0x79,
+        "shiftGridAdjust": 0x64,
+        "gridSlide": 0x0A,
+        "shiftGridSlide": 0x65,
+        "takeoverPlus": 0x34,
+        "takeoverMinus": 0x37,
+        "fx1on": 0x47,
+        "shiftFx1on": 0x63,
+        "fx2on": 0x48,
+        "shiftFx2on": 0x64,
+        "fx3on": 0x49,
+        "shiftFx3on": 0x65,
+        "fxTab": 0x4A,
+        "shiftFxTab": 0x66,
+        "fx1assignDeck1": 0x4C,
+        "shiftFx1assignDeck1": 0x70,
+        "fx1assignDeck2": 0x4D,
+        "shiftFx1assignDeck2": 0x71,
+        "fx1assignDeck3": 0x4E,
+        "shiftFx1assignDeck3": 0x72,
+        "fx1assignDeck4": 0x4F,
+        "shiftFx1assignDeck4": 0x73,
+        "fx2assignDeck1": 0x50,
+        "shiftFx2assignDeck1": 0x54,
+        "fx2assignDeck2": 0x51,
+        "shiftFx2assignDeck2": 0x55,
+        "fx2assignDeck3": 0x52,
+        "shiftFx2assignDeck3": 0x56,
+        "fx2assignDeck4": 0x53,
+        "shiftFx2assignDeck4": 0x57,
+        "masterCue": 0x63,
+        "shiftMasterCue": 0x62,
+        "loadDeck1": 0x46,
+        "shiftLoadDeck1": 0x58,
+        "loadDeck2": 0x47,
+        "shiftLoadDeck2": 0x59,
+        "loadDeck3": 0x48,
+        "shiftLoadDeck3": 0x60,
+        "loadDeck4": 0x49,
+        "shiftLoadDeck4": 0x61,
+        "hotCueMode": 0x1B,
+        "shiftHotCueMode": 0x69,
+        "rollMode": 0x1E,
+        "shiftRollMode": 0x6B,
+        "slicerMode": 0x20,
+        "shiftSlicerMode": 0x6D,
+        "samplerMode": 0x22,
+        "shiftSamplerMode": 0x6F,
+        "longPressSamplerMode": 0x41,
+        "parameterLeftHotCueMode": 0x24,
+        "shiftParameterLeftHotCueMode": 0x01,
+        "parameterLeftRollMode": 0x25,
+        "shiftParameterLeftRollMode": 0x02,
+        "parameterLeftSlicerMode": 0x26,
+        "shiftParameterLeftSlicerMode": 0x03,
+        "parameterLeftSamplerMode": 0x27,
+        "shiftParameterLeftSamplerMode": 0x04,
+        "parameterLeftGroup1Mode": 0x28,
+        "shiftParameterLeftGroup1Mode": 0x05,
+        "parameterLeftGroup2Mode": 0x29,
+        "shiftParameterLeftGroup2Mode": 0x06,
+        "parameterLeftGroup3Mode": 0x2A,
+        "shiftParameterLeftGroup3Mode": 0x07,
+        "parameterLeftGroup4Mode": 0x2B,
+        "shiftParameterLeftGroup4Mode": 0x08,
+        "parameterRightHotCueMode": 0x2C,
+        "shiftParameterRightHotCueMode": 0x09,
+        "parameterRightRollMode": 0x2D,
+        "shiftParameterRightRollMode": 0x7A,
+        "parameterRightSlicerMode": 0x2E,
+        "shiftParameterRightSlicerMode": 0x7B,
+        "parameterRightSamplerMode": 0x2F,
+        "shiftParameterRightSamplerMode": 0x7C,
+        "parameterRightGroup1Mode": 0x30,
+        "shiftParameterRightGroup1Mode": 0x7D,
+        "parameterRightGroup2Mode": 0x31,
+        "shiftParameterRightGroup2Mode": 0x7E,
+        "parameterRightGroup3Mode": 0x32,
+        "shiftParameterRightGroup3Mode": 0x7F,
+        "parameterRightGroup4Mode": 0x33,
+        "shiftParameterRightGroup4Mode": 0x00
     };
 
     PioneerDDJSX.illuminationControl = {
-        'loadedDeck1': 0x00,
-        'loadedDeck2': 0x01,
-        'loadedDeck3': 0x02,
-        'loadedDeck4': 0x03,
-        'unknownDeck1': 0x04,
-        'unknownDeck2': 0x05,
-        'unknownDeck3': 0x06,
-        'unknownDeck4': 0x07,
-        'playPauseDeck1': 0x0C,
-        'playPauseDeck2': 0x0D,
-        'playPauseDeck3': 0x0E,
-        'playPauseDeck4': 0x0F,
-        'cueDeck1': 0x10,
-        'cueDeck2': 0x11,
-        'cueDeck3': 0x12,
-        'cueDeck4': 0x13,
-        'djAppConnect': 0x09
+        "loadedDeck1": 0x00,
+        "loadedDeck2": 0x01,
+        "loadedDeck3": 0x02,
+        "loadedDeck4": 0x03,
+        "unknownDeck1": 0x04,
+        "unknownDeck2": 0x05,
+        "unknownDeck3": 0x06,
+        "unknownDeck4": 0x07,
+        "playPauseDeck1": 0x0C,
+        "playPauseDeck2": 0x0D,
+        "playPauseDeck3": 0x0E,
+        "playPauseDeck4": 0x0F,
+        "cueDeck1": 0x10,
+        "cueDeck2": 0x11,
+        "cueDeck3": 0x12,
+        "cueDeck4": 0x13,
+        "djAppConnect": 0x09
     };
 
     PioneerDDJSX.wheelLedCircle = {
-        'minVal': 0x00,
-        'maxVal': 0x48
+        "minVal": 0x00,
+        "maxVal": 0x48
     };
 
     PioneerDDJSX.valueVuMeter = {
-        '[Channel1]_current': 0,
-        '[Channel2]_current': 0,
-        '[Channel3]_current': 0,
-        '[Channel4]_current': 0,
-        '[Channel1]_enabled': 1,
-        '[Channel2]_enabled': 1,
-        '[Channel3]_enabled': 1,
-        '[Channel4]_enabled': 1
+        "[Channel1]_current": 0,
+        "[Channel2]_current": 0,
+        "[Channel3]_current": 0,
+        "[Channel4]_current": 0,
+        "[Channel1]_enabled": 1,
+        "[Channel2]_enabled": 1,
+        "[Channel3]_enabled": 1,
+        "[Channel4]_enabled": 1
     };
 
     // set 32 Samplers as default:
@@ -612,29 +612,29 @@ PioneerDDJSX.bindDeckControlConnections = function(channelGroup, bind) {
         index,
         deck = PioneerDDJSX.channelGroups[channelGroup],
         controlsToFunctions = {
-            'play_indicator': 'PioneerDDJSX.playLed',
-            'cue_indicator': 'PioneerDDJSX.cueLed',
-            'playposition': 'PioneerDDJSX.wheelLeds',
-            'pfl': 'PioneerDDJSX.headphoneCueLed',
-            'bpm_tap': 'PioneerDDJSX.shiftHeadphoneCueLed',
-            'VuMeter': 'PioneerDDJSX.VuMeterLeds',
-            'keylock': 'PioneerDDJSX.keyLockLed',
-            'slip_enabled': 'PioneerDDJSX.slipLed',
-            'quantize': 'PioneerDDJSX.quantizeLed',
-            'loop_in': 'PioneerDDJSX.loopInLed',
-            'loop_out': 'PioneerDDJSX.loopOutLed',
-            'loop_enabled': 'PioneerDDJSX.autoLoopLed',
-            'loop_double': 'PioneerDDJSX.loopDoubleLed',
-            'loop_halve': 'PioneerDDJSX.loopHalveLed',
-            'reloop_andstop': 'PioneerDDJSX.shiftLoopInLed',
-            'beatjump_1_forward': 'PioneerDDJSX.loopShiftFWLed',
-            'beatjump_1_backward': 'PioneerDDJSX.loopShiftBKWLed',
-            'beatjump_forward': 'PioneerDDJSX.hotCueParameterRightLed',
-            'beatjump_backward': 'PioneerDDJSX.hotCueParameterLeftLed',
-            'reverse': 'PioneerDDJSX.reverseLed',
-            'duration': 'PioneerDDJSX.loadLed',
-            'sync_enabled': 'PioneerDDJSX.syncLed',
-            'beat_active': 'PioneerDDJSX.slicerBeatActive'
+            "play_indicator": "PioneerDDJSX.playLed",
+            "cue_indicator": "PioneerDDJSX.cueLed",
+            "playposition": "PioneerDDJSX.wheelLeds",
+            "pfl": "PioneerDDJSX.headphoneCueLed",
+            "bpm_tap": "PioneerDDJSX.shiftHeadphoneCueLed",
+            "VuMeter": "PioneerDDJSX.VuMeterLeds",
+            "keylock": "PioneerDDJSX.keyLockLed",
+            "slip_enabled": "PioneerDDJSX.slipLed",
+            "quantize": "PioneerDDJSX.quantizeLed",
+            "loop_in": "PioneerDDJSX.loopInLed",
+            "loop_out": "PioneerDDJSX.loopOutLed",
+            "loop_enabled": "PioneerDDJSX.autoLoopLed",
+            "loop_double": "PioneerDDJSX.loopDoubleLed",
+            "loop_halve": "PioneerDDJSX.loopHalveLed",
+            "reloop_andstop": "PioneerDDJSX.shiftLoopInLed",
+            "beatjump_1_forward": "PioneerDDJSX.loopShiftFWLed",
+            "beatjump_1_backward": "PioneerDDJSX.loopShiftBKWLed",
+            "beatjump_forward": "PioneerDDJSX.hotCueParameterRightLed",
+            "beatjump_backward": "PioneerDDJSX.hotCueParameterLeftLed",
+            "reverse": "PioneerDDJSX.reverseLed",
+            "duration": "PioneerDDJSX.loadLed",
+            "sync_enabled": "PioneerDDJSX.syncLed",
+            "beat_active": "PioneerDDJSX.slicerBeatActive"
         };
 
     for (i = 1; i <= 8; i++) {
@@ -790,12 +790,12 @@ PioneerDDJSX.resetDeck = function(group) {
 ///////////////////////////////////////////////////////////////
 
 PioneerDDJSX.highResMSB = {
-    '[Channel1]': {},
-    '[Channel2]': {},
-    '[Channel3]': {},
-    '[Channel4]': {},
-    '[Master]': {},
-    '[Samplers]': {}
+    "[Channel1]": {},
+    "[Channel2]": {},
+    "[Channel3]": {},
+    "[Channel4]": {},
+    "[Master]": {},
+    "[Samplers]": {}
 };
 
 PioneerDDJSX.tempoSliderMSB = function(channel, control, value, status, group) {
@@ -1794,7 +1794,7 @@ PioneerDDJSX.updateParameterStatusLeds = function(group, statusRoll, statusLoop,
 ///////////////////////////////////////////////////////////////
 
 PioneerDDJSX.fxAssignLeds = function(value, group, control) {
-    var channelGroup = control.replace("group_", '').replace("_enable", '');
+    var channelGroup = control.replace("group_", "").replace("_enable", "");
     PioneerDDJSX.fxAssignLedControl(group, PioneerDDJSX.channelGroups[channelGroup], value);
 };
 
@@ -1952,7 +1952,7 @@ PioneerDDJSX.hotCueParameterLeftLed = function(value, group, control) {
 };
 
 PioneerDDJSX.samplerLeds = function(value, group, control) {
-    var samplerIndex = (group.replace("[Sampler", '').replace(']', '') - 1) % 8,
+    var samplerIndex = (group.replace("[Sampler", "").replace("]", "") - 1) % 8,
         sampleDeck = "[Sampler" + (samplerIndex + 1) + "]",
         padNum = PioneerDDJSX.samplerGroups[sampleDeck];
 
@@ -1970,7 +1970,7 @@ PioneerDDJSX.samplerLeds = function(value, group, control) {
 };
 
 PioneerDDJSX.samplerLedsPlay = function(value, group, control) {
-    var samplerIndex = (group.replace("[Sampler", '').replace(']', '') - 1) % 8,
+    var samplerIndex = (group.replace("[Sampler", "").replace("]", "") - 1) % 8,
         sampleDeck = "[Sampler" + (samplerIndex + 1) + "]",
         padNum = PioneerDDJSX.samplerGroups[sampleDeck];
 

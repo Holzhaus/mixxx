@@ -228,7 +228,7 @@ RMX.scroll_tracks = function(g, e, v) {
     engine.setValue("[Playlist]", direction, 1);
 
     if (!RMX.scroll_timer) {
-      var callback = 'RMX.scroll_tracks("[Playlist]","' + e + '",' + v + ')';
+      var callback = "RMX.scroll_tracks(\"[Playlist]\",\"" + e + "\"," + v + ")";
       RMX.scroll_timer = engine.beginTimer(150, callback);
     }
   }
@@ -283,7 +283,7 @@ RMX.jog = function(g, e, v, ctrl) {
     }
     engine.scratchTick(deck, ctrl.relative);
 
-    var callback = 'RMX.stopScratching(\"' + g + '\")';
+    var callback = "RMX.stopScratching(\"" + g + "\")";
     RMX.scratchTimer = engine.beginTimer(20, callback, true);
   }
 
@@ -488,7 +488,7 @@ RMX.send = function(g, e, v) {
 RMX.feedbackData = function(v, g, e) {
   if (RMX.feedbacks[g + e] !== undefined) {
     for (var func in RMX.feedbacks[g + e]) {
-      if (typeof(RMX.feedbacks[g + e][func]) == "function") {
+      if (typeof(RMX.feedbacks[g + e][func]) === "function") {
         RMX.feedbacks[g + e][func](g, e, v);
       }
     }
@@ -517,7 +517,7 @@ RMX.control = function(packetid, name, group, type, offset, mask) {
     }
     else {
       // map to a relative value if it's an encoder, usually +1 or -1
-      if (this.type == 'encoder') {
+      if (this.type == "encoder") {
         this.relative = value - this.value;
         if (this.relative > 100) {
           this.relative -= this.maxval;
@@ -556,7 +556,7 @@ RMX.incomingData = function (data, length) {
 
       for (var key in c.controls[i]) {
         var control = c.controls[i][key];
-        if (typeof(control) == 'object' &&
+        if (typeof(control) === "object" &&
             control.packetid == data[0] &&
             control.changed(data[i]) ) {
 
@@ -569,7 +569,7 @@ RMX.incomingData = function (data, length) {
 
               var cb = callbacks[j][1];
 
-              if (typeof(cb) == 'function') {
+              if (typeof(cb) === "function") {
 
                 // check we need to call for this value change:
                 // all, press, release

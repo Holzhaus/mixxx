@@ -16,6 +16,6 @@ console = {
         for( ; i<arguments.length; i++ ){
             out.push( JSON.stringify(arguments[i]) );
         }
-        print(out.join(' '));
+        print(out.join(" "));
     }
 }

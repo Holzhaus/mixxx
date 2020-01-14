@@ -103,7 +103,7 @@ HerculesMP3e2.switchDeck = function(group) {
 
 // This function connect a control or remove the connection if the remove parameter is set to true.
 HerculesMP3e2.connectControl = function(deck, remove) {
-    remove = (typeof remove !== 'undefined') ? remove : false; // default value for remove is false
+    remove = (typeof remove !== "undefined") ? remove : false; // default value for remove is false
 
     engine.connectControl("[Channel" + deck + "]", "cue_indicator", "HerculesMP3e2.cueLed", remove);
     engine.connectControl("[Channel" + deck + "]", "play_indicator", "HerculesMP3e2.playLed", remove);

@@ -1,4 +1,4 @@
-'use strict'
+"use strict"
 module.exports = {
   black: 4,
   lo_red: 1 + 4,
