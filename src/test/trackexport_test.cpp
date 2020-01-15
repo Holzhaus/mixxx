@@ -49,7 +49,7 @@ TEST_F(TrackExporterTest, SimpleListExport) {
     tracks.append(track1);
     tracks.append(track2);
     tracks.append(track3);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
 
     worker.run();
@@ -86,7 +86,7 @@ TEST_F(TrackExporterTest, OverwriteSkip) {
     QList<TrackPointer> tracks;
     tracks.append(track1);
     tracks.append(track2);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
     m_answerer->setAnswer(QFileInfo(file1).canonicalFilePath(),
                            TrackExportWorker::OverwriteAnswer::OVERWRITE);
@@ -132,7 +132,7 @@ TEST_F(TrackExporterTest, OverwriteAll) {
     QList<TrackPointer> tracks;
     tracks.append(track1);
     tracks.append(track2);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
     m_answerer->setAnswer(QFileInfo(file2).canonicalFilePath(),
                            TrackExportWorker::OverwriteAnswer::OVERWRITE_ALL);
@@ -173,7 +173,7 @@ TEST_F(TrackExporterTest, SkipAll) {
     QList<TrackPointer> tracks;
     tracks.append(track1);
     tracks.append(track2);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
     m_answerer->setAnswer(QFileInfo(file2).canonicalFilePath(),
                            TrackExportWorker::OverwriteAnswer::SKIP_ALL);
@@ -212,7 +212,7 @@ TEST_F(TrackExporterTest, Cancel) {
     QList<TrackPointer> tracks;
     tracks.append(track1);
     tracks.append(track2);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
     m_answerer->setAnswer(QFileInfo(file2).canonicalFilePath(),
                            TrackExportWorker::OverwriteAnswer::CANCEL);
@@ -243,7 +243,7 @@ TEST_F(TrackExporterTest, DedupeList) {
     QList<TrackPointer> tracks;
     tracks.append(track1);
     tracks.append(track2);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
 
     worker.run();
@@ -256,8 +256,8 @@ TEST_F(TrackExporterTest, DedupeList) {
     QFileInfo newfile1(m_exportDir.filePath("cover-test.ogg"));
     EXPECT_TRUE(newfile1.exists());
     // Should only be one file
-    QFileInfoList files =
-                m_exportDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
+    QFileInfoList files = QDir(m_exportDir.path()).entryInfoList(
+            QDir::NoDotAndDotDot | QDir::Files);
     EXPECT_EQ(1, files.size());
 }
 
@@ -280,7 +280,7 @@ TEST_F(TrackExporterTest, MungeFilename) {
     QList<TrackPointer> tracks;
     tracks.append(track1);
     tracks.append(track2);
-    TrackExportWorker worker(m_exportDir.canonicalPath(), tracks);
+    TrackExportWorker worker(m_exportDir.path(), tracks);
     m_answerer.reset(new FakeOverwriteAnswerer(&worker));
 
     worker.run();
