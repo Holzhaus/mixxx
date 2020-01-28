@@ -19,13 +19,22 @@ jobs:
     - name: pre-commit
       os: linux
       dist: xenial
+      env: >-
+        SKIP_ON_PUSH=clang-format,eslint
+        SKIP_ON_PR=
       cache:
         directories:
           - $HOME/.cache/pre-commit
       before_install:
         - pip3 install pre-commit
       script:
-        - pre-commit run --origin HEAD --source origin/HEAD --show-diff-on-failure
+        - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+            export SKIP="${SKIP_ON_PUSH}";
+            pre-commit run --all-files;
+          else
+            export SKIP="${SKIP_ON_PR}";
+            pre-commit run --origin HEAD --source origin/HEAD --show-diff-on-failure;
+          fi
       addons:
         apt:
           packages:
