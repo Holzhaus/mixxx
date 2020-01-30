@@ -350,6 +350,7 @@ class EngineBuffer : public EngineObject {
     // the Qt object tree. This helps that they are deleted by the creating
     // thread, which is required to avoid segfaults.
     ControlProxy* m_pPassthroughEnabled;
+    ControlProxy* m_pInputConfigured;
 
     ControlPushButton* m_pEject;
     ControlObject* m_pTrackLoaded;

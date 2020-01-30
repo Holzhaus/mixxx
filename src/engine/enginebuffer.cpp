@@ -261,6 +261,7 @@ EngineBuffer::EngineBuffer(QString group, UserSettingsPointer pConfig,
     m_pPassthroughEnabled = new ControlProxy(group, "passthrough", this);
     m_pPassthroughEnabled->connectValueChanged(SLOT(slotPassthroughChanged(double)),
                                                Qt::DirectConnection);
+    m_pInputConfigured = new ControlProxy(group, "input_configured", this);
 
 #ifdef __SCALER_DEBUG__
     df.setFileName("mixxx-debug.csv");
@@ -575,6 +576,12 @@ void EngineBuffer::ejectTrack() {
 
 void EngineBuffer::slotPassthroughChanged(double enabled) {
     if (enabled) {
+        // If no vinyl input is configured, do nothing
+        bool configured = m_pInputConfigured->get() > 0;
+        if (!configured) {
+            return;
+        }
+
         // If passthrough was enabled, stop playing the current track.
         slotControlStop(1.0);
     }
