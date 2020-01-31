@@ -416,7 +416,7 @@ void EngineBuffer::requestSyncMode(SyncMode mode) {
 }
 
 void EngineBuffer::requestClonePosition(EngineChannel* pChannel) {
-    atomicStoreRelaxed(m_pChannelToCloneFrom, pChannel);
+    atomicStoreRelaxed(&m_pChannelToCloneFrom, pChannel);
 }
 
 void EngineBuffer::readToCrossfadeBuffer(const int iBufferSize) {

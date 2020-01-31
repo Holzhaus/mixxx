@@ -101,7 +101,7 @@ inline QScreen* getPrimaryScreen() {
 }
 
 template <typename T>
-inline T atomicLoadAcquire(QAtomicInteger<T> atomicInt) {
+inline T atomicLoadAcquire(const QAtomicInteger<T>& atomicInt) {
     // TODO: QBasicAtomicInteger<T>::load() is deprecated and should be
     // replaced with QBasicAtomicInteger<T>::loadRelaxed() However, the
     // proposed alternative has just been introduced in Qt 5.14. Until the
@@ -115,7 +115,7 @@ inline T atomicLoadAcquire(QAtomicInteger<T> atomicInt) {
 }
 
 template <typename T>
-inline T* atomicLoadAcquire(QAtomicPointer<T> atomicPtr) {
+inline T* atomicLoadAcquire(const QAtomicPointer<T>& atomicPtr) {
     // TODO: QBasicAtomicPointer<T>::load() is deprecated and should be
     // replaced with QBasicAtomicPointer<T>::loadRelaxed() However, the
     // proposed alternative has just been introduced in Qt 5.14. Until the
@@ -129,7 +129,7 @@ inline T* atomicLoadAcquire(QAtomicPointer<T> atomicPtr) {
 }
 
 template <typename T>
-inline T atomicLoadRelaxed(QAtomicInteger<T> atomicInt) {
+inline T atomicLoadRelaxed(const QAtomicInteger<T>& atomicInt) {
     // TODO: QBasicAtomicInteger<T>::load() is deprecated and should be
     // replaced with QBasicAtomicInteger<T>::loadRelaxed() However, the
     // proposed alternative has just been introduced in Qt 5.14. Until the
@@ -143,7 +143,7 @@ inline T atomicLoadRelaxed(QAtomicInteger<T> atomicInt) {
 }
 
 template <typename T>
-inline T* atomicLoadRelaxed(QAtomicPointer<T> atomicPtr) {
+inline T* atomicLoadRelaxed(const QAtomicPointer<T>& atomicPtr) {
     // TODO: QBasicAtomicPointer<T>::load() is deprecated and should be
     // replaced with QBasicAtomicPointer<T>::loadRelaxed() However, the
     // proposed alternative has just been introduced in Qt 5.14. Until the
@@ -157,30 +157,30 @@ inline T* atomicLoadRelaxed(QAtomicPointer<T> atomicPtr) {
 }
 
 template <typename T>
-inline void atomicStoreRelaxed(QAtomicInteger<T> atomicInt, T newValue) {
+inline void atomicStoreRelaxed(QAtomicInteger<T>* atomicInt, T newValue) {
     // TODO: QBasicAtomicInteger<T>::store(T newValue) is deprecated and should
     // be replaced with QBasicAtomicInteger<T>::storeRelaxed(T newValue)
     // However, the proposed alternative has just been introduced in Qt 5.14.
     // Until the minimum required Qt version of Mixx is increased, we need a
     // version check here
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    atomicInt.storeRelaxed(newValue);
+    atomicInt->storeRelaxed(newValue);
 #else
-    atomicInt.store(newValue);
+    atomicInt->store(newValue);
 #endif
 }
 
 template <typename T>
-inline void atomicStoreRelaxed(QAtomicPointer<T> atomicPtr, T* newValue) {
+inline void atomicStoreRelaxed(QAtomicPointer<T>* atomicPtr, T* newValue) {
     // TODO: QBasicAtomicPointer<T>::store(T* newValue) is deprecated and
     // should be replaced with QBasicAtomicPointer<T>::storeRelaxed(T*
     // newValue) However, the proposed alternative has just been introduced in
     // Qt 5.14. Until the minimum required Qt version of Mixx is increased, we
     // need a version check here
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    atomicPtr.storeRelaxed(newValue);
+    atomicPtr->storeRelaxed(newValue);
 #else
-    atomicPtr.store(newValue);
+    atomicPtr->store(newValue);
 #endif
 }
 
