@@ -95,3 +95,17 @@ repos:
     - commit
     - push
     - manual
+  - id: compile-and-test
+    name: Compile and Test
+    description: Compile Mixxx and run testcases
+    entry: ./scripts/compile_and_test.sh
+    pass_filenames: false
+    language: system
+    additional_dependencies:
+    - cmake==3.15.3
+    types: [text]
+    files: '^(src/.*|res/.*\..*|cmake/.*|CMakeLists\.txt)$'
+    verbose: true
+    stages:
+    - push
+    - manual
