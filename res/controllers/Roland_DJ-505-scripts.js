@@ -1603,7 +1603,7 @@ DJ505.PitchPlayMode = function(deck, offset) {
         this.number = n + 1;
         this.on = this.color + DJ505.PadColor.DIM_MODIFIER;
         this.colors = pitchplayColors;
-        this.colorKey = 'hotcue_' + this.number + '_color';
+        this.colorKey = "hotcue_" + this.number + "_color";
         components.Button.call(this);
     };
     this.PerformancePad.prototype = new components.Button({
@@ -1675,14 +1675,14 @@ DJ505.PitchPlayMode = function(deck, offset) {
                 if (value > 0 && this.mode.cuepoint !== this.number && engine.getValue(this.group, "hotcue_" + this.number + "_enabled")) {
                     var previousCuepoint = this.mode.cuepoint;
                     this.mode.cuepoint = this.number;
-                    this.mode.pads[previous_cuepoint - 1].trigger();
+                    this.mode.pads[previousCuepoint - 1].trigger();
                     this.outputColor(engine.getValue(this.group, this.colorKey));
                 }
             };
             this.connect = function() {
                 components.Button.prototype.connect.call(this); // call parent connect
                 if (undefined !== this.group && this.colorKey !== undefined) {
-                    this.connections[1] = engine.makeConnection(this.group, this.colorKey, function (id) {
+                    this.connections[1] = engine.makeConnection(this.group, this.colorKey, function(id) {
                         if (engine.getValue(this.group, this.outKey)) {
                             this.outputColor(id);
                         }
