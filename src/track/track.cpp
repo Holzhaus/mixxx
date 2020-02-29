@@ -155,6 +155,10 @@ void Track::importMetadata(
         }
 
 #ifdef __EXTRA_METADATA__
+        // FIXME: Move the Track::setCuePoints call to another location,
+        // because we need the sample rate to calculate sample
+        // positions for cues (and *correct* sample rate isn't known here).
+        setCuePoints(newSeratoTags.getCues());
         setColor(newSeratoTags.getTrackColor());
         setBpmLocked(newSeratoTags.isBpmLocked());
 #endif // __EXTRA_METADATA__
