@@ -257,6 +257,8 @@ class Track : public QObject {
     QList<CuePointer> getCuePoints() const;
     void setCuePoints(const QList<CuePointer>& cuePoints);
     void importCuePoints(const QList<mixxx::CueInfo>& cueInfos);
+    void importCuePointsLater(const QList<mixxx::CueInfo>& cueInfos);
+    void importQueuedCuePoints();
 
     bool isDirty();
 
@@ -380,6 +382,9 @@ class Track : public QObject {
 
     // The list of cue points for the track
     QList<CuePointer> m_cuePoints;
+
+    // List of cue infos that will be imported on importQueuedCuePoints()
+    QList<mixxx::CueInfo> m_queuedCueInfos;
 
     // Storage for the track's beats
     BeatsPointer m_pBeats;

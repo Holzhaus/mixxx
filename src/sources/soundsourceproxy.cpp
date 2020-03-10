@@ -524,6 +524,9 @@ mixxx::AudioSourcePointer SoundSourceProxy::openAudioSource(const mixxx::AudioSo
                     // optional property
                     m_pTrack->setBitrate(m_pAudioSource->bitrate());
                 }
+
+                // Cue import requires a valid sample rate, so do this here
+                m_pTrack->importQueuedCuePoints();
             }
         } else {
             kLogger.warning() << "Failed to open file"

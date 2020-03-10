@@ -155,10 +155,10 @@ void Track::importMetadata(
         }
 
 #ifdef __EXTRA_METADATA__
-        // FIXME: Move the Track::setCuePoints call to another location,
-        // because we need the sample rate to calculate sample
-        // positions for cues (and *correct* sample rate isn't known here).
-        setCuePoints(newSeratoTags.getCues(getLocation()));
+        // We import the cue points later because we need the sample rate to
+        // calculate sample positions for cues (and *correct* sample rate isn't
+        // known here).
+        importCuePointsLater(newSeratoTags.getCues(getLocation()));
         setColor(newSeratoTags.getTrackColor());
         setBpmLocked(newSeratoTags.isBpmLocked());
 #endif // __EXTRA_METADATA__
@@ -812,13 +812,39 @@ void Track::importCuePoints(const QList<mixxx::CueInfo>& cueInfos) {
         trackId = m_record.getId();
         sampleRate = m_record.getMetadata().getSampleRate();
     } // implicitly unlocked when leaving scope
+    DEBUG_ASSERT(sampleRate.valid());
 
     QList<CuePointer> cuePoints;
     for (const mixxx::CueInfo& cueInfo : cueInfos) {
         CuePointer pCue(new Cue(trackId, sampleRate, cueInfo));
         cuePoints.append(pCue);
     }
+
     setCuePoints(cuePoints);
+    kLogger.debug()
+            << "Imported"
+            << cuePoints.size()
+            << "cues for this track.";
+}
+
+void Track::importCuePointsLater(const QList<mixxx::CueInfo>& cueInfos) {
+    {
+        QMutexLocker lock(&m_qMutex);
+        m_queuedCueInfos.clear();
+        m_queuedCueInfos.append(cueInfos);
+    } // implicitly unlocked when leaving scope
+    kLogger.debug()
+            << m_queuedCueInfos.size()
+            << "cues for this track are queued for import.";
+}
+
+void Track::importQueuedCuePoints() {
+    QList<mixxx::CueInfo> cueInfos;
+    {
+        QMutexLocker lock(&m_qMutex);
+        cueInfos.append(m_queuedCueInfos);
+    } // implicitly unlocked when leaving scope
+    importCuePoints(cueInfos);
 }
 
 void Track::markDirty() {
