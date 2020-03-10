@@ -844,7 +844,10 @@ void Track::importQueuedCuePoints() {
         QMutexLocker lock(&m_qMutex);
         cueInfos.append(m_queuedCueInfos);
     } // implicitly unlocked when leaving scope
-    importCuePoints(cueInfos);
+
+    if (!cueInfos.isEmpty()) {
+        importCuePoints(cueInfos);
+    }
 }
 
 void Track::markDirty() {
