@@ -410,6 +410,9 @@ class Track : public QObject {
     // The list of cue points for the track
     QList<CuePointer> m_cuePoints;
 
+    // List of cue infos that will be imported on importQueuedCuePoints()
+    QList<mixxx::CueInfo> m_queuedCueInfos;
+
     // Storage for the track's beats
     BeatsPointer m_pBeats;
 

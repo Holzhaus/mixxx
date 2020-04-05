@@ -166,6 +166,10 @@ void Track::importMetadata(
         }
 
 #ifdef __EXTRA_METADATA__
+        // We import the cue points later because we need the sample rate to
+        // calculate sample positions for cues (and *correct* sample rate isn't
+        // known here).
+        importCues(newSeratoTags.getCues(getLocation()));
         setColor(newSeratoTags.getTrackColor());
         setBpmLocked(newSeratoTags.isBpmLocked());
 #endif // __EXTRA_METADATA__
