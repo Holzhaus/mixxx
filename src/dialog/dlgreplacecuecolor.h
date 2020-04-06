@@ -36,6 +36,8 @@ class DlgReplaceCueColor : public QDialog, public Ui::DlgReplaceCueColor {
             TrackCollectionManager* pTrackCollectionManager,
             QWidget* pParent);
     ~DlgReplaceCueColor();
+    void setNewButtonColor(mixxx::RgbColor color);
+    void setCurrentButtonColor(mixxx::RgbColor color);
 
   signals:
     void databaseTracksChanged(QSet<TrackId> Trackids);

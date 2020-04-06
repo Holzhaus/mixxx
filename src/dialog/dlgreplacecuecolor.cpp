@@ -76,7 +76,7 @@ DlgReplaceCueColor::DlgReplaceCueColor(
     if (hotcuePalette.size() > 0) { // Should always be true
         firstColor = hotcuePalette.at(0);
     }
-    setButtonColor(pushButtonNewColor, mixxx::RgbColor::toQColor(firstColor));
+    setNewButtonColor(firstColor);
 
     // Add menu for new color button
     m_pNewColorPickerAction = make_parented<WColorPickerAction>(
@@ -89,8 +89,7 @@ DlgReplaceCueColor::DlgReplaceCueColor(
             &WColorPickerAction::colorPicked,
             [this](mixxx::RgbColor::optional_t color) {
                 if (color) {
-                    setButtonColor(pushButtonNewColor, mixxx::RgbColor::toQColor(*color));
-                    slotUpdateApplyButton();
+                    setNewButtonColor(*color);
                 }
                 m_pNewColorMenu->hide();
             });
@@ -98,7 +97,7 @@ DlgReplaceCueColor::DlgReplaceCueColor(
     pushButtonNewColor->setMenu(m_pNewColorMenu);
 
     // Set up current color button
-    setButtonColor(pushButtonCurrentColor, mixxx::RgbColor::toQColor(mixxx::PredefinedColorPalettes::kDefaultCueColor));
+    setCurrentButtonColor(mixxx::PredefinedColorPalettes::kDefaultCueColor);
     connect(checkBoxCurrentColorCondition,
             &QCheckBox::stateChanged,
             this,
@@ -119,8 +118,7 @@ DlgReplaceCueColor::DlgReplaceCueColor(
             &WColorPickerAction::colorPicked,
             [this](mixxx::RgbColor::optional_t color) {
                 if (color) {
-                    setButtonColor(pushButtonCurrentColor, mixxx::RgbColor::toQColor(*color));
-                    slotUpdateApplyButton();
+                    setCurrentButtonColor(*color);
                 }
                 m_pCurrentColorMenu->hide();
             });
@@ -146,6 +144,16 @@ DlgReplaceCueColor::DlgReplaceCueColor(
 }
 
 DlgReplaceCueColor::~DlgReplaceCueColor() {
+}
+
+void DlgReplaceCueColor::setNewButtonColor(mixxx::RgbColor color) {
+    setButtonColor(pushButtonNewColor, mixxx::RgbColor::toQColor(color));
+    slotUpdateApplyButton();
+}
+
+void DlgReplaceCueColor::setCurrentButtonColor(mixxx::RgbColor color) {
+    setButtonColor(pushButtonCurrentColor, mixxx::RgbColor::toQColor(color));
+    slotUpdateApplyButton();
 }
 
 void DlgReplaceCueColor::slotApply() {
