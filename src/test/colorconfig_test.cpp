@@ -98,6 +98,11 @@ TEST_F(ColorConfigTest, LoadSavePalettes) {
     ASSERT_EQ(expectedNames, colorPaletteSettings.getColorPaletteNames());
 }
 
+TEST_F(ColorConfigTest, GetNonExistingPalette) {
+    ColorPaletteSettings colorPaletteSettings(config());
+    ASSERT_EQ(colorPaletteSettings.getColorPalette("does not exist"), std::nullopt);
+}
+
 TEST_F(ColorConfigTest, DefaultColorPalette) {
     ColorPaletteSettings colorPaletteSettings(config());
     ASSERT_EQ(mixxx::PredefinedColorPalettes::kDefaultHotcueColorPalette,

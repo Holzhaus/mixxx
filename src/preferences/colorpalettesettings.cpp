@@ -28,10 +28,9 @@ ConfigKey keyForIndex(const QString& group, int index, int numDigits) {
 
 } // anonymous namespace
 
-ColorPalette ColorPaletteSettings::getColorPalette(
-        const QString& name, const ColorPalette& defaultPalette) const {
+std::optional<ColorPalette> ColorPaletteSettings::getColorPalette(const QString& name) const {
     if (name.isEmpty()) {
-        return defaultPalette;
+        return std::nullopt;
     }
 
     // If we find a predefined palette with this name, return it
@@ -63,10 +62,19 @@ ColorPalette ColorPaletteSettings::getColorPalette(
 
     // If no palette is defined in the settings, we use the default one.
     if (colorList.isEmpty()) {
-        return defaultPalette;
+        return std::nullopt;
     }
 
     return ColorPalette(name, colorList, hotcueIndices);
+}
+
+ColorPalette ColorPaletteSettings::getColorPalette(
+        const QString& name, const ColorPalette& defaultPalette) const {
+    std::optional<ColorPalette> palette = getColorPalette(name);
+    if (palette) {
+        return *palette;
+    }
+    return defaultPalette;
 }
 
 void ColorPaletteSettings::setColorPalette(const QString& name, const ColorPalette& colorPalette) {

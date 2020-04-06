@@ -2,6 +2,7 @@
 
 #include "preferences/usersettings.h"
 #include "util/color/colorpalette.h"
+#include "util/optional.h"
 
 // Saves ColorPalettes to and loads ColorPalettes from the mixxx.cfg file
 class ColorPaletteSettings {
@@ -18,6 +19,7 @@ class ColorPaletteSettings {
     ColorPalette getTrackColorPalette() const;
     void setTrackColorPalette(const ColorPalette& colorPalette);
 
+    std::optional<ColorPalette> getColorPalette(const QString& name) const;
     ColorPalette getColorPalette(
             const QString& name,
             const ColorPalette& defaultPalette) const;
