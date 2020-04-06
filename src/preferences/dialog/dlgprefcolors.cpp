@@ -71,6 +71,8 @@ DlgPrefColors::~DlgPrefColors() {
 void DlgPrefColors::loadSettings() {
     comboBoxHotcueColors->clear();
     comboBoxTrackColors->clear();
+
+    // Add predefined palettes
     for (const auto& palette : qAsConst(mixxx::PredefinedColorPalettes::kPalettes)) {
         QString paletteName = palette.getName();
         QIcon paletteIcon = drawPalettePreview(paletteName);
@@ -85,6 +87,7 @@ void DlgPrefColors::loadSettings() {
                 paletteIcon);
     }
 
+    // Add custom palettes
     for (const auto& paletteName : m_colorPaletteSettings.getColorPaletteNames()) {
         QIcon paletteIcon = drawPalettePreview(paletteName);
         comboBoxHotcueColors->addItem(paletteName);
@@ -134,36 +137,20 @@ void DlgPrefColors::slotResetToDefaults() {
 
 // Apply and save any changes made in the dialog
 void DlgPrefColors::slotApply() {
+    // Set Hotcue Color Palette
     QString hotcueColorPaletteName = comboBoxHotcueColors->currentText();
+    m_colorPaletteSettings.setHotcueColorPalette(
+            m_colorPaletteSettings.getColorPalette(hotcueColorPaletteName,
+                    m_colorPaletteSettings.getHotcueColorPalette()));
+
+    // Set Track Color Palette
     QString trackColorPaletteName = comboBoxTrackColors->currentText();
-    bool bHotcueColorPaletteFound = false;
-    bool bTrackColorPaletteFound = false;
+    m_colorPaletteSettings.setTrackColorPalette(
+            m_colorPaletteSettings.getColorPalette(trackColorPaletteName,
+                    m_colorPaletteSettings.getTrackColorPalette()));
 
-    for (const auto& palette : qAsConst(mixxx::PredefinedColorPalettes::kPalettes)) {
-        if (!bHotcueColorPaletteFound && hotcueColorPaletteName == palette.getName()) {
-            m_colorPaletteSettings.setHotcueColorPalette(palette);
-            bHotcueColorPaletteFound = true;
-        }
-        if (!bTrackColorPaletteFound && trackColorPaletteName == palette.getName()) {
-            m_colorPaletteSettings.setTrackColorPalette(palette);
-            bTrackColorPaletteFound = true;
-        }
-    }
-
-    if (!bHotcueColorPaletteFound) {
-        m_colorPaletteSettings.setHotcueColorPalette(
-                m_colorPaletteSettings.getColorPalette(hotcueColorPaletteName,
-                        m_colorPaletteSettings.getHotcueColorPalette()));
-    }
-
-    if (!bTrackColorPaletteFound) {
-        m_colorPaletteSettings.setTrackColorPalette(
-                m_colorPaletteSettings.getColorPalette(trackColorPaletteName,
-                        m_colorPaletteSettings.getTrackColorPalette()));
-    }
-
+    // Set Default Hotcue Color
     int index = comboBoxHotcueDefaultColor->currentIndex();
-
     if (index > 0) {
         m_pConfig->setValue(ConfigKey("[Controls]", "auto_hotcue_colors"), false);
         m_pConfig->setValue(ConfigKey("[Controls]", "HotcueDefaultColorIndex"), index - 1);
