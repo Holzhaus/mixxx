@@ -302,6 +302,9 @@ TEST_F(SeratoMarkers2Test, ParseAndDumpBase64Encoded) {
     mixxx::SeratoMarkers2 seratoMarkers2;
     EXPECT_TRUE(mixxx::SeratoMarkers2::parseBase64Encoded(&seratoMarkers2, inputData));
     const auto outputData = seratoMarkers2.dumpBase64Encoded();
+    std::cout << inputData.constData() << std::endl;
+    std::cout << std::endl;
+    std::cout << outputData.constData() << std::endl;
     EXPECT_EQ(inputData.size(), outputData.size());
     EXPECT_EQ(inputData, outputData);
 }
