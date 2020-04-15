@@ -159,6 +159,7 @@ jobs:
         # Run tests and benchmarks
         - ctest
         - cmake --build . --target benchmark
+        - cpack -G DragNDrop .
       before_cache:
         # Avoid indefinite cache growth
         - brew cleanup
