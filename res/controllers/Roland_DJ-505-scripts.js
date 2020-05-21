@@ -797,7 +797,6 @@ DJ505.Sampler = function() {
      *   sendShortMsg(0xEA, Math.round(bpm*10) & 0x7f, (Math.round(bpm*10) >> 7) & 0x7f);
      *
      */
-    components.ComponentContainer.call(this);
     this.syncDeck = -1;
 
     var getActiveDeck = function() {
@@ -1100,7 +1099,6 @@ DJ505.PadSection = function(deck, offset) {
      *       17              #CC0088 / #DC1D49  0x06       Magenta
      *       18              #CC0044 / #C71136  0x01       Red
      */
-    components.ComponentContainer.call(this);
     this.modes = {
         // This need to be an object so that a recursive reconnectComponents
         // call won't influence all modes at once
@@ -1266,7 +1264,6 @@ DJ505.PadSection.prototype.padPressed = function(channel, control, value, status
 };
 
 DJ505.HotcueMode = function(deck, offset) {
-    components.ComponentContainer.call(this);
     this.ledControl = DJ505.PadMode.HOTCUE;
     this.color = DJ505.PadColor.WHITE;
 
@@ -1313,7 +1310,6 @@ DJ505.HotcueMode = function(deck, offset) {
 DJ505.HotcueMode.prototype = Object.create(components.ComponentContainer.prototype);
 
 DJ505.CueLoopMode = function(deck, offset) {
-    components.ComponentContainer.call(this);
     this.ledControl = DJ505.PadMode.HOTCUE;
     this.color = DJ505.PadColor.BLUE;
 
@@ -1403,7 +1399,6 @@ DJ505.CueLoopMode = function(deck, offset) {
 DJ505.CueLoopMode.prototype = Object.create(components.ComponentContainer.prototype);
 
 DJ505.RollMode = function(deck, offset) {
-    components.ComponentContainer.call(this);
     this.ledControl = DJ505.PadMode.ROLL;
     this.color = DJ505.PadColor.CELESTE;
     this.pads = new components.ComponentContainer();
@@ -1537,7 +1532,6 @@ DJ505.RollMode.prototype.setLoopSize = function(loopSize) {
 };
 
 DJ505.SamplerMode = function(deck, offset) {
-    components.ComponentContainer.call(this);
     this.ledControl = DJ505.PadMode.SAMPLER;
     this.color = DJ505.PadColor.MAGENTA;
     this.pads = new components.ComponentContainer();
@@ -1557,7 +1551,6 @@ DJ505.SamplerMode = function(deck, offset) {
 DJ505.SamplerMode.prototype = Object.create(components.ComponentContainer.prototype);
 
 DJ505.VelocitySamplerMode = function(deck, offset) {
-    components.ComponentContainer.call(this);
     this.ledControl = DJ505.PadMode.SAMPLER;
     this.color = DJ505.PadColor.PURPLE;
     this.pads = new components.ComponentContainer();
@@ -1578,8 +1571,6 @@ DJ505.VelocitySamplerMode = function(deck, offset) {
 DJ505.VelocitySamplerMode.prototype = Object.create(components.ComponentContainer.prototype);
 
 DJ505.PitchPlayMode = function(deck, offset) {
-    components.ComponentContainer.call(this);
-
     var PitchPlayRange = {
         UP: 0,
         MID: 1,
