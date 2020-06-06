@@ -1,0 +1,59 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get latest CMake
+      uses: lukka/get-cmake@latest
+    - name: Get build dependencies
+      run: sudo apt-get update && sudo apt-get -y install \
+        libavformat-dev \
+        libchromaprint-dev \
+        libfaad-dev \
+        libflac-dev \
+        libid3tag0-dev \
+        liblilv-dev \
+        libmad0-dev \
+        libmodplug-dev \
+        libmp3lame-dev \
+        libmp4v2-dev \
+        libopus-dev \
+        libopusfile-dev \
+        libportmidi-dev \
+        libprotobuf-dev \
+        libqt5opengl5-dev \
+        libqt5sql5-sqlite \
+        libqt5svg5-dev \
+        libqt5x11extras5-dev \
+        librubberband-dev \
+        libshout3-dev \
+        libsndfile1-dev \
+        libsoundtouch-dev \
+        libsqlite3-dev \
+        libtag1-dev \
+        libupower-glib-dev \
+        libusb-1.0-0-dev \
+        libwavpack-dev \
+        portaudio19-dev \
+        protobuf-compiler \
+        qt5-default \
+        qtscript5-dev \
+        qt5keychain-dev
+    - name: Configure build with CMake
+      run: cmake -L -B cmake_build -S .
+    - name: Build Mixxx
+      run: cmake --build cmake_build -j $(nproc)
+    - name: Run Tests
+      run: ctest -j $(nproc)
+    - name: Build Package
+      run: cpack -G DEB
