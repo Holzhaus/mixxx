@@ -182,6 +182,43 @@ jobs:
         # Source: https://discourse.brew.sh/t/best-practice-for-homebrew-on-travis-brew-update-is-5min-to-build-time/5215/12
         - find /usr/local/Homebrew \! -regex ".+\.git.+" -delete
 
+    - name: Windows/MSVC/CMake build
+      os: windows
+      env: >-
+        MIXXX_ENVPATH="${HOME}/buildenv"
+        CMAKEFLAGS_EXTRA="-DLOCALECOMPARE=OFF -DFAAD=OFF -DWAVPACK=OFF -DWAVPACK=OFF -DMAD=OFF -DMODPLUG=OFF"
+        PATH="/usr/local/opt/ccache/bin:$PATH"
+        DISPLAY=:99.0
+        CMAKE_BUILD_PARALLEL_LEVEL=4
+        CTEST_PARALLEL_LEVEL=1
+      before_install:
+        # Print some information about CMake
+        - cmake --version
+        # Download and prepare our build environment
+        - mkdir "${MIXXX_ENVPATH}"
+        - read -r MIXXX_ENVNAME < build/windows/golden_environment
+        - export "MIXXX_ENVNAME=${MIXXX_ENVNAME/PLATFORM/x86}"
+        - export "MIXXX_ENVNAME=${MIXXX_ENVNAME/CONFIGURATION/release}"
+        - export "MIXXX_ENVFILE=https://downloads.mixxx.org/builds/buildserver/2.3.x-windows/$MIXXX_ENVNAME.zip"
+        - echo "$MIXXX_ENVNAME"
+        - curl -I "${MIXXX_ENVFILE}"
+        # FIXME: This fixes some wrong hardcoded paths inside pkg-config files of the build environment (e.g. in "lib/pkgconfig/taglib.pc")
+        # This will only work if neither MIXXX_ENVNAME nor MIXXX_ENVPATH contain special regex characters!
+        - export QT_DIR="$(find "${MIXXX_ENVPATH}" -type d -path "*/cmake/Qt5")"
+        - export QT_QPA_PLATFORM_PLUGIN_PATH="$(find "${MIXXX_ENVPATH}" -type d -path "*/plugins")"
+      install:
+        - pip install cmake
+        - choco install ninja
+        - mkdir cmake_build
+        - cd cmake_build
+        - cmake -G Ninja -L $CMAKEFLAGS $CMAKEFLAGS_EXTRA -DCMAKE_PREFIX_PATH=${MIXXX_ENVPATH} -DQt5_DIR=${QT_DIR} ..
+        - cmake --build .
+        - cpack -G WIX
+      script:
+        # Run tests and benchmarks
+        - ctest
+        - cmake --build . --target benchmark
+
 git:
   depth: 1
 
