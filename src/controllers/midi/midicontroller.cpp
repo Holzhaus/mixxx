@@ -20,6 +20,7 @@
 MidiController::MidiController()
         : Controller() {
     setDeviceCategory(tr("MIDI Controller"));
+    connect(this, &MidiController::openChanged, this, &MidiController::slotOpenChanged);
 }
 
 MidiController::~MidiController() {
@@ -39,6 +40,14 @@ QString MidiController::presetExtension() {
 void MidiController::visit(const MidiControllerPreset* preset) {
     m_preset = *preset;
     emit presetLoaded(getPreset());
+}
+
+void MidiController::slotOpenChanged(bool bIsOpen) {
+    if (bIsOpen) {
+        m_activeSensingTimer.start();
+    } else {
+        m_activeSensingTimer.invalidate();
+    }
 }
 
 int MidiController::open() {
@@ -174,7 +183,20 @@ void MidiController::createOutputHandlers() {
 }
 
 bool MidiController::poll() {
-    return pollDevice();
+    VERIFY_OR_DEBUG_ASSERT(m_activeSensingTimer.isValid()) {
+        return pollDevice();
+    }
+
+    if (pollDevice()) {
+        m_activeSensingTimer.restart();
+        return true;
+    }
+
+    if (m_activeSensingTimer.hasExpired(250)) {
+        sendShortMsg(0xFE, 0, 0);
+        m_activeSensingTimer.restart();
+    }
+    return false;
 }
 
 void MidiController::updateAllOutputs() {

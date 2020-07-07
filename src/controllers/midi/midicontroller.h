@@ -68,6 +68,7 @@ class MidiController : public Controller {
     }
 
   protected slots:
+    void slotOpenChanged(bool bIsOpen);
     virtual void receive(unsigned char status, unsigned char control,
                          unsigned char value, mixxx::Duration timestamp);
     // For receiving System Exclusive messages
@@ -106,6 +107,8 @@ class MidiController : public Controller {
     ControllerPreset* preset() override {
         return &m_preset;
     }
+
+    QElapsedTimer m_activeSensingTimer;
 
     QHash<uint16_t, MidiInputMapping> m_temporaryInputMappings;
     QList<MidiOutputHandler*> m_outputs;
