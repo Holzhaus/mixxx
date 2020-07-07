@@ -66,9 +66,9 @@ class PortMidiController : public MidiController {
     ~PortMidiController() override;
 
   private slots:
-    int open() override;
-    int close() override;
-    bool poll() override;
+    int openDevice() override;
+    int closeDevice() override;
+    bool pollDevice() override;
 
   protected:
     // MockPortMidiController needs this to not be private.

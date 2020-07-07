@@ -17,6 +17,9 @@ class MockMidiController : public MidiController {
 
     MOCK_METHOD0(open, int());
     MOCK_METHOD0(close, int());
+    MOCK_METHOD0(openDevice, int());
+    MOCK_METHOD0(closeDevice, int());
+    MOCK_METHOD0(pollDevice, bool());
     MOCK_METHOD3(sendShortMsg, void(unsigned char status,
                                     unsigned char byte1,
                                     unsigned char byte2));

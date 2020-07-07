@@ -1,17 +1,4 @@
-/**
-* @file midicontroller.h
-* @author Sean Pappalardo spappalardo@mixxx.org
-* @date Tue 7 Feb 2012
-* @brief MIDI Controller base class
-*
-* This is a base class representing a MIDI controller.
-*   It must be inherited by a class that implements it on some API.
-*
-*   Note that the subclass' destructor should call close() at a minimum.
-*/
-
-#ifndef MIDICONTROLLER_H
-#define MIDICONTROLLER_H
+#pragma once
 
 #include "controllers/controller.h"
 #include "controllers/midi/midicontrollerpreset.h"
@@ -20,6 +7,12 @@
 #include "controllers/midi/midioutputhandler.h"
 #include "controllers/softtakeover.h"
 
+/// MIDI Controller base class
+///
+/// This is a base class representing a MIDI controller.
+/// It must be inherited by a class that implements it on some API.
+///
+/// Note that the subclass' destructor should call close() at a minimum.
 class MidiController : public Controller {
     Q_OBJECT
   public:
@@ -49,6 +42,9 @@ class MidiController : public Controller {
         return m_preset.isMappable();
     }
 
+    int open() override;
+    int close() override;
+    bool poll() override;
     bool matchPreset(const PresetInfo& preset)  override;
 
   signals:
@@ -56,6 +52,9 @@ class MidiController : public Controller {
                          unsigned char value);
 
   protected:
+    virtual int openDevice() = 0;
+    virtual int closeDevice() = 0;
+    virtual bool pollDevice() = 0;
     virtual void sendShortMsg(unsigned char status,
             unsigned char byte1,
             unsigned char byte2) = 0;
@@ -73,7 +72,6 @@ class MidiController : public Controller {
                          unsigned char value, mixxx::Duration timestamp);
     // For receiving System Exclusive messages
     void receive(const QByteArray data, mixxx::Duration timestamp) override;
-    int close() override;
 
   private slots:
     /// Apply the preset to the controller.
@@ -142,5 +140,3 @@ class MidiControllerJSProxy : public ControllerJSProxy {
   private:
     MidiController* m_pMidiController;
 };
-
-#endif

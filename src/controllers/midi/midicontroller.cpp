@@ -41,9 +41,34 @@ void MidiController::visit(const MidiControllerPreset* preset) {
     emit presetLoaded(getPreset());
 }
 
-int MidiController::close() {
-    destroyOutputHandlers();
+int MidiController::open() {
+    if (isOpen()) {
+        qDebug() << "MIDI device" << getName() << "already open";
+        return -1;
+    }
+
+    int result = openDevice();
+    if (result != 0) {
+        return result;
+    }
+
+    setOpen(true);
+    startEngine();
     return 0;
+}
+
+int MidiController::close() {
+    if (!isOpen()) {
+        qDebug() << "MIDI device" << getName() << "already closed";
+        return -1;
+    }
+
+    stopEngine();
+    destroyOutputHandlers();
+
+    int result = closeDevice();
+    setOpen(false);
+    return result;
 }
 
 void MidiController::visit(const HidControllerPreset* preset) {
@@ -146,6 +171,10 @@ void MidiController::createOutputHandlers() {
         props->setDetails(detailsText);
         ErrorDialogHandler::instance()->requestErrorDialog(props);
     }
+}
+
+bool MidiController::poll() {
+    return pollDevice();
 }
 
 void MidiController::updateAllOutputs() {

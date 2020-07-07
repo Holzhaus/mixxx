@@ -47,12 +47,7 @@ PortMidiController::~PortMidiController() {
     }
 }
 
-int PortMidiController::open() {
-    if (isOpen()) {
-        qDebug() << "PortMIDI device" << getName() << "already open";
-        return -1;
-    }
-
+int PortMidiController::openDevice() {
     if (getName() == MIXXX_PORTMIDI_NO_DEVICE_STRING)
         return -1;
 
@@ -81,28 +76,15 @@ int PortMidiController::open() {
             return -2;
         }
     }
-
-    setOpen(true);
-    startEngine();
     return 0;
 }
 
-int PortMidiController::close() {
-    if (!isOpen()) {
-        qDebug() << "PortMIDI device" << getName() << "already closed";
-        return -1;
-    }
-
-    stopEngine();
-    MidiController::close();
-
-    int result = 0;
-
+int PortMidiController::closeDevice() {
     if (m_pInputDevice && m_pInputDevice->isOpen()) {
         PmError err = m_pInputDevice->close();
         if (err != pmNoError) {
             qWarning() << "PortMidi error:" << Pm_GetErrorText(err);
-            result = -1;
+            return -1;
         }
     }
 
@@ -110,15 +92,13 @@ int PortMidiController::close() {
         PmError err = m_pOutputDevice->close();
         if (err != pmNoError) {
             qWarning() << "PortMidi error:" << Pm_GetErrorText(err);
-            result = -1;
+            return -1;
         }
     }
-
-    setOpen(false);
-    return result;
+    return 0;
 }
 
-bool PortMidiController::poll() {
+bool PortMidiController::pollDevice() {
     // Poll the controller for new data if it's an input device
     if (m_pInputDevice.isNull() || !m_pInputDevice->isOpen()) {
         return false;
@@ -225,6 +205,11 @@ void PortMidiController::sendShortMsg(unsigned char status, unsigned char byte1,
                                                       MidiUtils::channelFromStatus(status),
                                                       MidiUtils::opCodeFromStatus(status));
         qWarning()    << "PortMidi error:" << Pm_GetErrorText(err);
+        if (err == pmHostError) {
+            qWarning() << "Attempting to reset MIDI device from HostError...";
+            closeDevice();
+            openDevice();
+        }
     }
 }
 
