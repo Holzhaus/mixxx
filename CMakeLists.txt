@@ -1417,20 +1417,33 @@ else ()
 endif ()
 message(STATUS "VENV PATH ${VENV_PYTHON}")
 add_custom_command(
-  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc"
-  BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/manual"
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/manual"
+  BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/venv"
   COMMENT "Build manual help file"
-  COMMAND "${CMAKE_COMMAND}" -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/manual"
+  DEPENDS mixxx-res
   COMMAND git clone --depth=1 -b manual-2.3.x "https://github.com/mixxxdj/manual.git" "${CMAKE_CURRENT_BINARY_DIR}/manual"
   COMMAND ${Python3_EXECUTABLE} -m venv "${CMAKE_CURRENT_BINARY_DIR}/venv"
   COMMAND "${VENV_PYTHON}" -m pip install -r "${CMAKE_CURRENT_BINARY_DIR}/manual/requirements.txt"
-  COMMAND "${VENV_PYTHON}" -m sphinx -q -b qthelp "${CMAKE_CURRENT_BINARY_DIR}/manual/source" "${CMAKE_CURRENT_BINARY_DIR}/manual/build"
   COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/res/help"
-  COMMAND ${QHELPGENERATOR_EXECUTABLE} -o "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/Mixxx.qhcp"
-  COMMAND echo "VENV ${VENV_PYTHON} ${CMAKE_CURRENT_BINARY_DIR}/venv"
+  COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/manual/build"
 )
-add_custom_target(mixxx-help SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc")
-add_dependencies(mixxx-res mixxx-help)
+add_custom_target(mixxx-help-git SOURCES "${CMAKE_CURRENT_BINARY_DIR}/manual")
+
+add_custom_target(mixxx-help)
+add_dependencies(mixxx-lib mixxx-help)
+foreach(MANUAL_LANGUAGE ca;cs;de;de-DE;en;en-GB;es;es-ES;es-MX;fi;fr;gl;id;it;ja-JP;kn;nl;pl;pt;pt-BR;ro;ru;ru-RU;sl;sq;sr;tr;zh-CN;zh-TW)
+    string(REPLACE "-" "_" MANUAL_LANGUAGE_SPHINX "${MANUAL_LANGUAGE}")
+  add_custom_command(
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc"
+    COMMAND "${VENV_PYTHON}" -m sphinx -q -b qthelp -Dlanguage=${MANUAL_LANGUAGE_SPHINX} "${CMAKE_CURRENT_BINARY_DIR}/manual/source" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}"
+    COMMAND ${QHELPGENERATOR_EXECUTABLE} -o "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}/Mixxx.qhcp"
+    DEPENDS mixxx-help-git
+  )
+  add_custom_target("mixxx-help-${MANUAL_LANGUAGE}" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc")
+  add_dependencies(mixxx-help "mixxx-help-${MANUAL_LANGUAGE}")
+endforeach()
+
+
 
 # Windows-only resource file
 if(WIN32)
