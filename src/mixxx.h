@@ -70,7 +70,7 @@ class MixxxMainWindow : public QMainWindow {
     /// show the preferences dialog
     void slotOptionsPreferences();
     /// show the manual viewer
-    void slotHelpManual();
+    void slotHelpManual(const QString& documentPath);
     /// show the about dialog
     void slotHelpAbout();
     /// toggle full screen mode

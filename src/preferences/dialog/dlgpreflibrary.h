@@ -31,7 +31,7 @@ class DlgPrefLibrary : public DlgPreferencePage, public Ui::DlgPrefLibraryDlg  {
             Library* pLibrary);
     ~DlgPrefLibrary() override {}
 
-    QUrl helpUrl() const override;
+    QString helpDocument() const override;
 
   public slots:
     // Common preference page slots.

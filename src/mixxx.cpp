@@ -470,6 +470,7 @@ void MixxxMainWindow::initialize(QApplication* pApp, const CmdlineArgs& args) {
             m_pLibrary);
     m_pPrefDlg->setWindowIcon(QIcon(":/images/mixxx_icon.svg"));
     m_pPrefDlg->setHidden(true);
+    connect(m_pPrefDlg, &DlgPreferences::showManual, this, &MixxxMainWindow::slotHelpManual);
 
     QDir helpPath(pConfig->getResourcePath());
     if (helpPath.cd("help")) {
@@ -478,30 +479,6 @@ void MixxxMainWindow::initialize(QApplication* pApp, const CmdlineArgs& args) {
         if (fileInfo.exists()) {
             m_pHelpViewer = new HelpViewer(fileInfo);
         }
-    }
-
-    if (!m_pHelpViewer) {
-        QDir resourceDir(pConfig->getResourcePath());
-        // Default to the mixxx.org hosted version of the manual.
-        QUrl m_manualUrl(MIXXX_MANUAL_URL);
-#if defined(__APPLE__)
-        // FIXME: We don't include the PDF manual in the bundle on OSX.
-        // Default to the web-hosted version.
-#elif defined(__WINDOWS__)
-        // On Windows, the manual PDF sits in the same folder as the 'skins' folder.
-        if (resourceDir.exists(MIXXX_MANUAL_FILENAME)) {
-            m_manualUrl = QUrl::fromLocalFile(
-                    resourceDir.absoluteFilePath(MIXXX_MANUAL_FILENAME));
-        }
-#elif defined(__LINUX__)
-        // On GNU/Linux, the manual is installed to e.g. /usr/share/mixxx/doc/
-        if (resourceDir.cd("../doc/mixxx") && resourceDir.exists(MIXXX_MANUAL_FILENAME)) {
-            m_manualUrl = QUrl::fromLocalFile(
-                    resourceDir.absoluteFilePath(MIXXX_MANUAL_FILENAME));
-        }
-#else
-        // No idea, default to the mixxx.org hosted version.
-#endif
     }
 
     launchProgress(60);
@@ -1439,13 +1416,14 @@ void MixxxMainWindow::slotChangedPlayingDeck(int deck) {
     }
 }
 
-void MixxxMainWindow::slotHelpManual() {
+void MixxxMainWindow::slotHelpManual(const QString& documentPath) {
     if (m_pHelpViewer) {
+        m_pHelpViewer->openDocument(documentPath);
         m_pHelpViewer->show();
         return;
     }
 
-    QDesktopServices::openUrl(m_manualUrl);
+    QDesktopServices::openUrl(QUrl(QString(MIXXX_MANUAL_URL) + documentPath));
 }
 
 void MixxxMainWindow::slotHelpAbout() {

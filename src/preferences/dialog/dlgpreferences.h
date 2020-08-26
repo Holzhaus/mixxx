@@ -102,6 +102,7 @@ DlgPreferences(MixxxMainWindow* mixxx,
   signals:
     void closeDlg();
     void showDlg();
+    void showManual(const QString& documentPath);
 
     // Emitted just after the user clicks Apply or OK.
     void applyPreferences();

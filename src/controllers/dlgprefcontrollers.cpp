@@ -61,8 +61,8 @@ void DlgPrefControllers::slotResetToDefaults() {
     }
 }
 
-QUrl DlgPrefControllers::helpUrl() const {
-    return QUrl(MIXXX_MANUAL_CONTROLLERS_URL);
+QString DlgPrefControllers::helpDocument() const {
+    return QString(MIXXX_MANUAL_CONTROLLERS_PATH);
 }
 
 bool DlgPrefControllers::handleTreeItemClick(QTreeWidgetItem* clickedItem) {

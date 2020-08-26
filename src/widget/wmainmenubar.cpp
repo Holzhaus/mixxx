@@ -530,7 +530,9 @@ void WMainMenuBar::initialize() {
     auto pHelpManual = new QAction(manualTitle, this);
     pHelpManual->setStatusTip(manualText);
     pHelpManual->setWhatsThis(buildWhatsThis(manualTitle, manualText));
-    connect(pHelpManual, &QAction::triggered, this, &WMainMenuBar::showManual);
+    connect(pHelpManual, &QAction::triggered, this, [this] {
+        emit showManual(MIXXX_MANUAL_INDEX_PATH);
+    });
     pHelpMenu->addAction(pHelpManual);
 
     QString shortcutsTitle = tr("&Keyboard Shortcuts") + externalLinkSuffix;
@@ -539,7 +541,7 @@ void WMainMenuBar::initialize() {
     pHelpShortcuts->setStatusTip(shortcutsText);
     pHelpShortcuts->setWhatsThis(buildWhatsThis(shortcutsTitle, shortcutsText));
     connect(pHelpShortcuts, &QAction::triggered, this, [this] {
-        slotVisitUrl(MIXXX_MANUAL_SHORTCUTS_URL);
+        emit showManual(MIXXX_MANUAL_SHORTCUTS_PATH);
     });
     pHelpMenu->addAction(pHelpShortcuts);
 

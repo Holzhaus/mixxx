@@ -14,7 +14,7 @@ class DlgPreferencePage : public QWidget {
     /// Returns the help URL for the current page.
     /// Subclasses can provide a path to the appropriate manual page by
     /// overriding this. The default implementation returns an invalid QUrl.
-    virtual QUrl helpUrl() const;
+    virtual QString helpDocument() const;
 
   public slots:
     /// Called when the preference dialog is shown to the user (not necessarily

@@ -434,8 +434,8 @@ void DlgPrefController::slotApply() {
     setDirty(false);
 }
 
-QUrl DlgPrefController::helpUrl() const {
-    return QUrl(MIXXX_MANUAL_CONTROLLERS_URL);
+QString DlgPrefController::helpDocument() const {
+    return QString(MIXXX_MANUAL_CONTROLLERS_PATH);
 }
 
 void DlgPrefController::slotPresetSelected(int chosenIndex) {

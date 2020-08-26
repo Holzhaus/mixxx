@@ -35,7 +35,7 @@ class DlgPrefVinyl : public DlgPreferencePage, Ui::DlgPrefVinylDlg  {
     DlgPrefVinyl(QWidget* pParent, VinylControlManager* m_pVCMan, UserSettingsPointer _config);
     virtual ~DlgPrefVinyl();
 
-    QUrl helpUrl() const override;
+    QString helpDocument() const override;
 
   public slots:
     void slotUpdate() override;
