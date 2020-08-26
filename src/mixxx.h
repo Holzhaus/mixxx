@@ -21,6 +21,7 @@ class ControllerManager;
 class ControlPushButton;
 class DlgDeveloperTools;
 class DlgPreferences;
+class HelpViewer;
 class EffectsManager;
 class EngineMaster;
 class GuiTick;
@@ -68,6 +69,8 @@ class MixxxMainWindow : public QMainWindow {
     void slotOptionsKeyboard(bool toggle);
     /// show the preferences dialog
     void slotOptionsPreferences();
+    /// show the manual viewer
+    void slotHelpManual();
     /// show the about dialog
     void slotHelpAbout();
     /// toggle full screen mode
@@ -149,6 +152,8 @@ class MixxxMainWindow : public QMainWindow {
 
     VinylControlManager* m_pVCManager;
 
+    HelpViewer* m_pHelpViewer;
+
     KeyboardEventFilter* m_pKeyboard;
 
     mixxx::DbConnectionPoolPtr m_pDbConnectionPool;
@@ -171,6 +176,7 @@ class MixxxMainWindow : public QMainWindow {
     Timer m_runtime_timer;
 
     const CmdlineArgs& m_cmdLineArgs;
+    QUrl m_manualUrl;
 
     ControlPushButton* m_pTouchShift;
     mixxx::ScreenSaverPreference m_inhibitScreensaver;

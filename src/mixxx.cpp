@@ -12,6 +12,7 @@
 #include <QUrl>
 #include <QtDebug>
 
+#include "defs_urls.h"
 #include "dialog/dlgabout.h"
 #include "dialog/dlgdevelopertools.h"
 #include "effects/builtin/builtinbackend.h"
@@ -61,6 +62,7 @@
 #include "waveform/sharedglcontext.h"
 #include "waveform/visualsmanager.h"
 #include "waveform/waveformwidgetfactory.h"
+#include "widget/helpviewer.h"
 #include "widget/wmainmenubar.h"
 
 #ifdef __VINYLCONTROL__
@@ -139,6 +141,7 @@ MixxxMainWindow::MixxxMainWindow(QApplication* pApp, const CmdlineArgs& args)
 #ifdef __VINYLCONTROL__
           m_pVCManager(nullptr),
 #endif
+          m_pHelpViewer(nullptr),
           m_pKeyboard(nullptr),
           m_pLibrary(nullptr),
           m_pDeveloperToolsDlg(nullptr),
@@ -468,6 +471,39 @@ void MixxxMainWindow::initialize(QApplication* pApp, const CmdlineArgs& args) {
     m_pPrefDlg->setWindowIcon(QIcon(":/images/mixxx_icon.svg"));
     m_pPrefDlg->setHidden(true);
 
+    QDir helpPath(pConfig->getResourcePath());
+    if (helpPath.cd("help")) {
+        qWarning() << "Create Helpviewer";
+        QFileInfo fileInfo(helpPath, "manual.qhc");
+        if (fileInfo.exists()) {
+            m_pHelpViewer = new HelpViewer(fileInfo);
+        }
+    }
+
+    if (!m_pHelpViewer) {
+        QDir resourceDir(pConfig->getResourcePath());
+        // Default to the mixxx.org hosted version of the manual.
+        QUrl m_manualUrl(MIXXX_MANUAL_URL);
+#if defined(__APPLE__)
+        // FIXME: We don't include the PDF manual in the bundle on OSX.
+        // Default to the web-hosted version.
+#elif defined(__WINDOWS__)
+        // On Windows, the manual PDF sits in the same folder as the 'skins' folder.
+        if (resourceDir.exists(MIXXX_MANUAL_FILENAME)) {
+            m_manualUrl = QUrl::fromLocalFile(
+                    resourceDir.absoluteFilePath(MIXXX_MANUAL_FILENAME));
+        }
+#elif defined(__LINUX__)
+        // On GNU/Linux, the manual is installed to e.g. /usr/share/mixxx/doc/
+        if (resourceDir.cd("../doc/mixxx") && resourceDir.exists(MIXXX_MANUAL_FILENAME)) {
+            m_manualUrl = QUrl::fromLocalFile(
+                    resourceDir.absoluteFilePath(MIXXX_MANUAL_FILENAME));
+        }
+#else
+        // No idea, default to the mixxx.org hosted version.
+#endif
+    }
+
     launchProgress(60);
 
     // Connect signals to the menubar. Should be done before we go fullscreen
@@ -748,6 +784,11 @@ void MixxxMainWindow::finalize() {
     // EngineMaster depends on Config and m_pEffectsManager.
     qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting EngineMaster";
     delete m_pEngine;
+
+    if (m_pHelpViewer) {
+        qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting HelpViewer";
+        delete m_pPrefDlg;
+    }
 
     qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting DlgPreferences";
     delete m_pPrefDlg;
@@ -1125,6 +1166,10 @@ void MixxxMainWindow::connectMenuBar() {
 
     // Help
     connect(m_pMenuBar,
+            &WMainMenuBar::showManual,
+            this,
+            &MixxxMainWindow::slotHelpManual);
+    connect(m_pMenuBar,
             &WMainMenuBar::showAbout,
             this,
             &MixxxMainWindow::slotHelpAbout);
@@ -1392,6 +1437,15 @@ void MixxxMainWindow::slotChangedPlayingDeck(int deck) {
             mixxx::ScreenSaverHelper::inhibit();
         }
     }
+}
+
+void MixxxMainWindow::slotHelpManual() {
+    if (m_pHelpViewer) {
+        m_pHelpViewer->show();
+        return;
+    }
+
+    QDesktopServices::openUrl(m_manualUrl);
 }
 
 void MixxxMainWindow::slotHelpAbout() {

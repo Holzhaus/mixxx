@@ -851,6 +851,8 @@ add_library(mixxx-lib STATIC EXCLUDE_FROM_ALL
   src/waveform/widgets/softwarewaveformwidget.cpp
   src/waveform/widgets/waveformwidgetabstract.cpp
   src/widget/controlwidgetconnection.cpp
+  src/widget/helpbrowser.cpp
+  src/widget/helpviewer.cpp
   src/widget/hexspinbox.cpp
   src/widget/paintable.cpp
   src/widget/wanalysislibrarytableview.cpp
@@ -1405,6 +1407,31 @@ else()
 endif()
 add_dependencies(mixxx-lib mixxx-res mixxx-script)
 
+# Generate Mixxx help
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+find_program(QHELPGENERATOR_EXECUTABLE NAMES qhelpgenerator-qt5 qhelpgenerator)
+if (WIN32)
+    set(VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/venv/bin/python.exe")
+else ()
+    set(VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/venv/bin/python")
+endif ()
+message(STATUS "VENV PATH ${VENV_PYTHON}")
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc"
+  BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/manual"
+  COMMENT "Build manual help file"
+  COMMAND "${CMAKE_COMMAND}" -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/manual"
+  COMMAND git clone --depth=1 -b manual-2.3.x "https://github.com/mixxxdj/manual.git" "${CMAKE_CURRENT_BINARY_DIR}/manual"
+  COMMAND ${Python3_EXECUTABLE} -m venv "${CMAKE_CURRENT_BINARY_DIR}/venv"
+  COMMAND "${VENV_PYTHON}" -m pip install -r "${CMAKE_CURRENT_BINARY_DIR}/manual/requirements.txt"
+  COMMAND "${VENV_PYTHON}" -m sphinx -q -b qthelp "${CMAKE_CURRENT_BINARY_DIR}/manual/source" "${CMAKE_CURRENT_BINARY_DIR}/manual/build"
+  COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/res/help"
+  COMMAND ${QHELPGENERATOR_EXECUTABLE} -o "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/Mixxx.qhcp"
+  COMMAND echo "VENV ${VENV_PYTHON} ${CMAKE_CURRENT_BINARY_DIR}/venv"
+)
+add_custom_target(mixxx-help SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc")
+add_dependencies(mixxx-res mixxx-help)
+
 # Windows-only resource file
 if(WIN32)
   string(TIMESTAMP MIXXX_YEAR "%Y")
@@ -1657,6 +1684,7 @@ find_package(Qt5
     Concurrent
     Core
     Gui
+    Help
     Network
     OpenGL
     Qml
@@ -1673,6 +1701,7 @@ target_link_libraries(mixxx-lib PUBLIC
   Qt5::Concurrent
   Qt5::Core
   Qt5::Gui
+  Qt5::Help
   Qt5::Network
   Qt5::OpenGL
   Qt5::Qml
