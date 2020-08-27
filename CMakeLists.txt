@@ -1074,6 +1074,14 @@ install(
     "${MIXXX_INSTALL_DATADIR}"
 )
 
+# Help files
+install(
+  DIRECTORY
+    "${CMAKE_CURRENT_BINARY_DIR}/res/help"
+  DESTINATION
+    "${MIXXX_INSTALL_DATADIR}"
+)
+
 # Translation files
 install(
   DIRECTORY
@@ -1407,43 +1415,51 @@ else()
 endif()
 add_dependencies(mixxx-lib mixxx-res mixxx-script)
 
-# Generate Mixxx help
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
-find_program(QHELPGENERATOR_EXECUTABLE NAMES qhelpgenerator-qt5 qhelpgenerator)
-if (WIN32)
-    set(VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/venv/bin/python.exe")
-else ()
-    set(VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/venv/bin/python")
-endif ()
-message(STATUS "VENV PATH ${VENV_PYTHON}")
-add_custom_command(
-  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/manual"
-  BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/venv"
-  COMMENT "Build manual help file"
-  DEPENDS mixxx-res
-  COMMAND git clone --depth=1 -b manual-2.3.x "https://github.com/mixxxdj/manual.git" "${CMAKE_CURRENT_BINARY_DIR}/manual"
-  COMMAND ${Python3_EXECUTABLE} -m venv "${CMAKE_CURRENT_BINARY_DIR}/venv"
-  COMMAND "${VENV_PYTHON}" -m pip install -r "${CMAKE_CURRENT_BINARY_DIR}/manual/requirements.txt"
-  COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/res/help"
-  COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/manual/build"
-)
-add_custom_target(mixxx-help-git SOURCES "${CMAKE_CURRENT_BINARY_DIR}/manual")
-
-add_custom_target(mixxx-help)
-add_dependencies(mixxx-lib mixxx-help)
-foreach(MANUAL_LANGUAGE ca;cs;de;de-DE;en;en-GB;es;es-ES;es-MX;fi;fr;gl;id;it;ja-JP;kn;nl;pl;pt;pt-BR;ro;ru;ru-RU;sl;sq;sr;tr;zh-CN;zh-TW)
-    string(REPLACE "-" "_" MANUAL_LANGUAGE_SPHINX "${MANUAL_LANGUAGE}")
+# Built-in mixxx manual
+option(HELP "Include built-in manual" ON)
+if(HELP)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  set(HELP_GENERATOR Qt5::qhelpgenerator)
+  if(NOT TARGET "${HELP_GENERATOR}")
+    set(HELP_GENERATOR Qt5::qcollectiongenerator)
+    if(NOT TARGET "${HELP_GENERATOR}")
+      message(FATAL "qcollectiongenerator not found, documentation collection will not be generated.")
+    endif()
+  endif()
+  if (WIN32)
+      set(HELP_VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/manual/venv/Scripts/python.exe")
+  else ()
+      set(HELP_VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/manual/venv/bin/python")
+  endif ()
   add_custom_command(
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc"
-    COMMAND "${VENV_PYTHON}" -m sphinx -q -b qthelp -Dlanguage=${MANUAL_LANGUAGE_SPHINX} "${CMAKE_CURRENT_BINARY_DIR}/manual/source" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}"
-    COMMAND ${QHELPGENERATOR_EXECUTABLE} -o "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}/Mixxx.qhcp"
-    DEPENDS mixxx-help-git
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/manual"
+    COMMENT "Build manual help file"
+    DEPENDS mixxx-res
+    COMMAND git clone --depth 1 -b "manual-${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.x" "https://github.com/mixxxdj/manual.git"
+    COMMAND "${Python3_EXECUTABLE}" -m venv "manual/venv"
+    COMMAND "${HELP_VENV_PYTHON}" -m pip install -r "manual/requirements.txt"
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "res/help"
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "manual/build"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    USES_TERMINAL
   )
-  add_custom_target("mixxx-help-${MANUAL_LANGUAGE}" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc")
-  add_dependencies(mixxx-help "mixxx-help-${MANUAL_LANGUAGE}")
-endforeach()
+  add_custom_target(mixxx-help-git SOURCES "${CMAKE_CURRENT_BINARY_DIR}/manual")
 
-
+  add_custom_target(mixxx-help)
+  add_dependencies(mixxx-lib mixxx-help)
+  foreach(MANUAL_LANGUAGE ca;cs;de;de-DE;en;en-GB;es;es-ES;es-MX;fi;fr;gl;id;it;ja-JP;kn;nl;pl;pt;pt-BR;ro;ru;ru-RU;sl;sq;sr;tr;zh-CN;zh-TW)
+      string(REPLACE "-" "_" MANUAL_LANGUAGE_SPHINX "${MANUAL_LANGUAGE}")
+    add_custom_command(
+      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc"
+      COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}"
+      COMMAND "${HELP_VENV_PYTHON}" -m sphinx -q -b qthelp -Dlanguage=${MANUAL_LANGUAGE_SPHINX} "${CMAKE_CURRENT_BINARY_DIR}/manual/source" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}"
+      COMMAND "${HELP_GENERATOR}" -o "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}/Mixxx.qhcp"
+      DEPENDS mixxx-help-git
+    )
+    add_custom_target("mixxx-help-${MANUAL_LANGUAGE}" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc")
+    add_dependencies(mixxx-help "mixxx-help-${MANUAL_LANGUAGE}")
+  endforeach()
+endif()
 
 # Windows-only resource file
 if(WIN32)
