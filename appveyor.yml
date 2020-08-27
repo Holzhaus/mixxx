@@ -59,6 +59,7 @@ for:
     - sudo apt -y install
       ccache
       cmake
+      graphviz
       libavcodec-dev
       libavformat-dev
       libavutil-dev
@@ -90,9 +91,12 @@ for:
       libwavpack-dev
       portaudio19-dev
       protobuf-compiler
+      python3
+      python3-venv
       qt5-default
       qtdeclarative5-dev
       qt5keychain-dev
+      qttools5-dev
       qtscript5-dev
       xsltproc
 

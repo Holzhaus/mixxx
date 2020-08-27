@@ -86,6 +86,7 @@ jobs:
         - pip install --user cmake
         - cmake --version
         - ccache -s
+        - pyenv global system 3.8
       install:
         - mkdir cmake_build
         - cd cmake_build
@@ -192,6 +193,7 @@ jobs:
         - find "${MIXXX_ENVPATH}" -name "*.pc" -or -path "*/bin/taglib-config" -exec sed -i".orig" -e "s|/Users/mixxx/bs-2.3-mac/amd64/environment/${MIXXX_ENVNAME}|${MIXXX_ENVPATH}|g" {} \;
         - export QT_DIR="$(find "${MIXXX_ENVPATH}" -type d -path "*/cmake/Qt5")"
         - export QT_QPA_PLATFORM_PLUGIN_PATH="$(find "${MIXXX_ENVPATH}" -type d -path "*/plugins")"
+        - pyenv global system 3.8
       install:
         - mkdir cmake_build
         - cd cmake_build
@@ -219,6 +221,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - graphviz
       - libavformat-dev
       - libchromaprint-dev
       - libebur128-dev
@@ -250,9 +253,13 @@ addons:
       - portaudio19-dev
       - protobuf-compiler
       - qt5-default
+      - qt5keychain-dev
       - qtdeclarative5-dev
       - qtscript5-dev
-      - qt5keychain-dev
+      - qttools5-dev
+      - qttools5-dev-tools
+      - python3
+      - python3-venv
 
 
 notifications:
