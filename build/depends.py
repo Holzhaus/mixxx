@@ -983,6 +983,8 @@ class MixxxCore(Feature):
                    "src/widget/wpixmapstore.cpp",
                    "src/widget/paintable.cpp",
                    "src/widget/wimagestore.cpp",
+                   "src/widget/helpbrowser.cpp",
+                   "src/widget/helpviewer.cpp",
                    "src/widget/hexspinbox.cpp",
                    "src/widget/wtrackproperty.cpp",
                    "src/widget/wstarrating.cpp",
