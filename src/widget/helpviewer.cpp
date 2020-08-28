@@ -4,6 +4,9 @@
 #include <QHelpContentWidget>
 #include <QHelpEngine>
 #include <QHelpIndexWidget>
+#include <QHelpSearchEngine>
+#include <QHelpSearchQueryWidget>
+#include <QHelpSearchResultWidget>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
 #include <QHelpLink>
 #endif
@@ -18,18 +21,38 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
           m_pHelpEngine(new QHelpEngine(helpPath.filePath())) {
     DEBUG_ASSERT(helpPath.exists());
     m_pHelpEngine->setupData();
+    m_pHelpEngine->searchEngine()->reindexDocumentation();
 
     QString namespaceName(m_pHelpEngine->namespaceName(helpPath.filePath()));
     DEBUG_ASSERT(!namespaceName.isEmpty());
     m_documentUrlPrefix = QStringLiteral("qthelp://") + namespaceName + QStringLiteral("/doc");
 
+    QWidget* pSearchPage = new QWidget(this);
+    QVBoxLayout* pSearchLayout = new QVBoxLayout(this);
+    pSearchLayout->addWidget(m_pHelpEngine->searchEngine()->queryWidget());
+    pSearchLayout->addWidget(m_pHelpEngine->searchEngine()->resultWidget());
+    pSearchPage->setLayout(pSearchLayout);
+
     QTabWidget* pWidget = new QTabWidget(this);
     pWidget->setMaximumWidth(200);
     pWidget->addTab(m_pHelpEngine->contentWidget(), tr("Contents"));
     pWidget->addTab(m_pHelpEngine->indexWidget(), tr("Index"));
+    pWidget->addTab(pSearchPage, tr("Search"));
 
     m_pHelpBrowser = new HelpBrowser(m_pHelpEngine, this);
     openDocument("/index.html");
+
+    connect(m_pHelpEngine->searchEngine()->queryWidget(),
+            &QHelpSearchQueryWidget::search,
+            [this] {
+                m_pHelpEngine->searchEngine()->search(
+                        m_pHelpEngine->searchEngine()
+                                ->queryWidget()
+                                ->searchInput());
+            });
+    connect(m_pHelpEngine->searchEngine()->resultWidget(),
+            &QHelpSearchResultWidget::requestShowLink,
+            [this](const QUrl& url) { m_pHelpBrowser->setSource(url); });
 
     connect(m_pHelpEngine->contentWidget(),
             &QHelpContentWidget::linkActivated,
