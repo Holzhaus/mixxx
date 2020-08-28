@@ -1431,11 +1431,35 @@ if(HELP)
   else ()
       set(HELP_VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/manual/venv/bin/python")
   endif ()
+  set(HELP_GIT_URL "https://github.com/mixxxdj/manual.git" CACHE STRING "Git URL of the manual repo to use for generating help files")
+  set(HELP_GIT_BRANCH "manual-${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.x" CACHE STRING "Git branch of the manual to use for generating help files")
+  if(NOT HELP_GIT_URL OR NOT HELP_GIT_BRANCH)
+    message(FATAL "HELP_GIT_URL and HELP_GIT_BRANCH must not be empty!")
+  endif()
+  if(IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/manual")
+    execute_process(
+      COMMAND git remote get-url origin
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/manual"
+      OUTPUT_VARIABLE HELP_GIT_URL_ACTUAL
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      ERROR_QUIET
+    )
+    execute_process(
+      COMMAND git name-rev --name-only HEAD
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/manual"
+      OUTPUT_VARIABLE HELP_GIT_BRANCH_ACTUAL
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      ERROR_QUIET
+    )
+    if(NOT "${HELP_GIT_URL}" STREQUAL "${HELP_GIT_URL_ACTUAL}" OR NOT "${HELP_GIT_BRANCH}" STREQUAL "${HELP_GIT_BRANCH_ACTUAL}")
+        file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/manual")
+    endif()
+  endif()
   add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/manual"
     COMMENT "Build manual help file"
     DEPENDS mixxx-res
-    COMMAND git clone --depth 1 -b "manual-${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.x" "https://github.com/mixxxdj/manual.git"
+    COMMAND git clone --single-branch --depth 1 -b "${HELP_GIT_BRANCH}" "${HELP_GIT_URL}" "manual"
     COMMAND "${Python3_EXECUTABLE}" -m venv "manual/venv"
     COMMAND "${HELP_VENV_PYTHON}" -m pip install -r "manual/requirements.txt"
     COMMAND "${CMAKE_COMMAND}" -E make_directory "res/help"
