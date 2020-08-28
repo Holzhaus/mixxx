@@ -7,6 +7,7 @@
 #include <QHelpSearchEngine>
 #include <QHelpSearchQueryWidget>
 #include <QHelpSearchResultWidget>
+#include <QRegExp>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
 #include <QHelpLink>
 #endif
@@ -15,6 +16,11 @@
 
 #include "util/assert.h"
 #include "widget/helpbrowser.h"
+
+namespace {
+const QRegExp kSlugifyRegExp("[\\W+]");
+const QString kSlugifyReplacement = QStringLiteral("-");
+} // namespace
 
 HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
         : QWidget(parent),
@@ -60,21 +66,31 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
             [this](const QUrl& url) { m_pHelpBrowser->setSource(url); });
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    // FIXME: This is a very ugly hack that works around the non-working
+    // documentActivated/documentsActivate signals. See QTBUG-84727.
     connect(m_pHelpEngine->indexWidget(),
-            &QHelpIndexWidget::documentActivated,
-            [this](const QHelpLink& document, const QString& keyword) {
-                Q_UNUSED(keyword);
-                m_pHelpBrowser->setSource(document.url);
+            &QHelpIndexWidget::activated,
+            [this](const QModelIndex& index) {
+                QString keyword = m_pHelpEngine->indexModel()->data(index).toString();
+                m_pHelpBrowser->setSource(QUrl(m_documentUrlPrefix +
+                        QStringLiteral("/glossary.html#term-") +
+                        keyword.replace(kSlugifyRegExp, kSlugifyReplacement)));
             });
-    connect(m_pHelpEngine->indexWidget(),
-            &QHelpIndexWidget::documentsActivated,
-            [this](const QList<QHelpLink>& documents, const QString& keyword) {
-                Q_UNUSED(keyword);
-                if (documents.isEmpty()) {
-                    return;
-                }
-                m_pHelpBrowser->setSource(documents.first().url);
-            });
+    // connect(m_pHelpEngine->indexWidget(),
+    //         &QHelpIndexWidget::documentActivated,
+    //         [this](const QHelpLink& document, const QString& keyword) {
+    //             Q_UNUSED(keyword);
+    //             m_pHelpBrowser->setSource(document.url);
+    //         });
+    // connect(m_pHelpEngine->indexWidget(),
+    //         &QHelpIndexWidget::documentsActivated,
+    //         [this](const QList<QHelpLink>& documents, const QString& keyword) {
+    //             Q_UNUSED(keyword);
+    //             if (documents.isEmpty()) {
+    //                 return;
+    //             }
+    //             m_pHelpBrowser->setSource(documents.first().url);
+    //         });
 #else
     connect(m_pHelpEngine->indexWidget(),
             &QHelpIndexWidget::linkActivated,
