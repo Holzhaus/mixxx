@@ -6,6 +6,9 @@
 class HelpBrowser;
 class QHelpEngine;
 
+/// The help viewer class represents the whole help window, consisting of a
+/// tabbed sidebar (content/index/search) and the HelpBrowser (i.e. the HTML
+/// renderer).
 class HelpViewer : public QWidget {
   public:
     explicit HelpViewer(const QFileInfo& helpFile, QWidget* parent = nullptr);
