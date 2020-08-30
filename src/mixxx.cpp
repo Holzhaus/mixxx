@@ -772,7 +772,7 @@ void MixxxMainWindow::finalize() {
 
     if (m_pHelpViewer) {
         qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting HelpViewer";
-        delete m_pPrefDlg;
+        delete m_pHelpViewer;
     }
 
     qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting DlgPreferences";
