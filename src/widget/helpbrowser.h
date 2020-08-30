@@ -4,8 +4,8 @@
 #include <QVariant>
 
 // forward declarations
-class QWidget;
-class QHelpEngine;
+QT_FORWARD_DECLARE_CLASS(QHelpEngine);
+QT_FORWARD_DECLARE_CLASS(QWidget);
 
 /// This is the HTML renderer that shows Qt Help files and supports
 /// loading `qthelp://` URLs and has a custom context menu.
