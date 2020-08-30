@@ -14,12 +14,14 @@
 #include <QSplitter>
 #include <QTabWidget>
 
+#include "defs_urls.h"
 #include "util/assert.h"
 #include "widget/helpbrowser.h"
 
 namespace {
 const QRegExp kSlugifyRegExp("[\\W+]");
 const QString kSlugifyReplacement = QStringLiteral("-");
+const QString kIndexDocument = QStringLiteral(MIXXX_MANUAL_INDEX_PATH);
 } // namespace
 
 HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
@@ -47,7 +49,15 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
     pSidebarWidget->setLayout(pSidebarLayout);
 
     m_pHelpBrowser = new HelpBrowser(m_pHelpEngine, this);
-    openDocument("/index.html");
+
+    QSplitter* pSplitter = new QSplitter(Qt::Horizontal);
+    pSplitter->insertWidget(0, pSidebarWidget);
+    pSplitter->insertWidget(1, m_pHelpBrowser);
+
+    QHBoxLayout* pLayout = new QHBoxLayout();
+    pLayout->addWidget(pSplitter);
+    setLayout(pLayout);
+    setWindowFlags(Qt::Window);
 
     connect(m_pHelpEngine->searchEngine(),
             &QHelpSearchEngine::searchingFinished,
@@ -103,15 +113,7 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
             [this](const QUrl& url, QString) { m_pHelpBrowser->setSource(url); });
 #endif
 
-    QSplitter* pSplitter = new QSplitter(Qt::Horizontal);
-    pSplitter->insertWidget(0, pSidebarWidget);
-    pSplitter->insertWidget(1, m_pHelpBrowser);
-
-    QHBoxLayout* pLayout = new QHBoxLayout();
-    pLayout->addWidget(pSplitter);
-    setLayout(pLayout);
-
-    setWindowFlags(Qt::Window);
+    openDocument(kIndexDocument);
 }
 
 void HelpViewer::openDocument(const QString& documentPath) {
