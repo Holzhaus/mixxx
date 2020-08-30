@@ -26,7 +26,6 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
         : QWidget(parent),
           m_pHelpEngine(new QHelpEngine(helpPath.filePath())) {
     DEBUG_ASSERT(helpPath.exists());
-    m_pHelpEngine->setUsesFilterEngine(false);
     m_pHelpEngine->setAutoSaveFilter(false);
     DEBUG_ASSERT(m_pHelpEngine->setupData());
     m_pHelpEngine->searchEngine()->reindexDocumentation();
