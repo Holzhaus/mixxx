@@ -15,6 +15,7 @@ class HelpBrowser : public QTextBrowser {
     QVariant loadResource(int type, const QUrl& name);
 
   private slots:
+    void slotAnchorClicked(const QUrl& link);
     void slotCustomContextMenu(const QPoint& pos);
 
   private:

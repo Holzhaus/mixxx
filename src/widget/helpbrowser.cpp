@@ -15,6 +15,14 @@ const QString kHelpUrlScheme = QStringLiteral("qthelp");
 HelpBrowser::HelpBrowser(QHelpEngine* pHelpEngine, QWidget* parent)
         : QTextBrowser(parent),
           m_pHelpEngine(pHelpEngine) {
+    // Add custom link handling
+    setOpenLinks(false);
+    connect(this,
+            &QTextBrowser::anchorClicked,
+            this,
+            &HelpBrowser::slotAnchorClicked);
+
+    // Add custom context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this,
             &QTextBrowser::customContextMenuRequested,
@@ -28,6 +36,16 @@ QVariant HelpBrowser::loadResource(int type, const QUrl& name) {
     }
 
     return QTextBrowser::loadResource(type, name);
+}
+
+void HelpBrowser::slotAnchorClicked(const QUrl& link) {
+    if (link.scheme() == kHelpUrlScheme) {
+        setSource(link);
+        return;
+    }
+
+    // Load external links in Webbrowser
+    QDesktopServices::openUrl(link);
 }
 
 void HelpBrowser::slotCustomContextMenu(const QPoint& pos) {
