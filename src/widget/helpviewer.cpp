@@ -1,5 +1,6 @@
 #include "widget/helpviewer.h"
 
+#include <QAction>
 #include <QHBoxLayout>
 #include <QHelpContentWidget>
 #include <QHelpEngine>
@@ -13,6 +14,7 @@
 #endif
 #include <QSplitter>
 #include <QTabWidget>
+#include <QToolBar>
 
 #include "defs_urls.h"
 #include "util/assert.h"
@@ -50,9 +52,34 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
 
     m_pHelpBrowser = new HelpBrowser(m_pHelpEngine, this);
 
+    QToolBar* pToolBar = new QToolBar(this);
+    pToolBar->addAction(QIcon::fromTheme("go-home"), tr("Main Page"), [this] {
+        m_pHelpBrowser->home();
+    });
+    QAction* pBackwardAction = pToolBar->addAction(
+            QIcon::fromTheme("go-previous"), tr("Back"), [this] {
+                m_pHelpBrowser->backward();
+            });
+    connect(m_pHelpBrowser, &HelpBrowser::backwardAvailable, [pBackwardAction](bool available) {
+        pBackwardAction->setEnabled(available);
+    });
+    QAction* pForwardAction = pToolBar->addAction(QIcon::fromTheme("go-next"),
+            tr("Forward"),
+            [this] { m_pHelpBrowser->forward(); });
+    connect(m_pHelpBrowser, &HelpBrowser::forwardAvailable, [pForwardAction](bool available) {
+        pForwardAction->setEnabled(available);
+    });
+
+    QVBoxLayout* pBrowserLayout = new QVBoxLayout(this);
+    pBrowserLayout->addWidget(pToolBar);
+    pBrowserLayout->addWidget(m_pHelpBrowser);
+
+    QWidget* pBrowserWidget = new QWidget(this);
+    pBrowserWidget->setLayout(pBrowserLayout);
+
     QSplitter* pSplitter = new QSplitter(Qt::Horizontal);
     pSplitter->insertWidget(0, pSidebarWidget);
-    pSplitter->insertWidget(1, m_pHelpBrowser);
+    pSplitter->insertWidget(1, pBrowserWidget);
 
     QHBoxLayout* pLayout = new QHBoxLayout();
     pLayout->addWidget(pSplitter);
