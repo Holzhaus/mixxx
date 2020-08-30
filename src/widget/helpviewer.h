@@ -3,8 +3,8 @@
 #include <QWidget>
 
 // forward declarations
+QT_FORWARD_DECLARE_CLASS(QHelpEngine);
 class HelpBrowser;
-class QHelpEngine;
 
 /// The help viewer class represents the whole help window, consisting of a
 /// tabbed sidebar (content/index/search) and the HelpBrowser (i.e. the HTML
