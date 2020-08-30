@@ -34,20 +34,27 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
     DEBUG_ASSERT(!namespaceName.isEmpty());
     m_documentUrlPrefix = QStringLiteral("qthelp://") + namespaceName + QStringLiteral("/doc");
 
-    QWidget* pSearchPage = new QWidget(this);
-    QVBoxLayout* pSearchLayout = new QVBoxLayout(this);
-    pSearchLayout->addWidget(m_pHelpEngine->searchEngine()->queryWidget());
-    pSearchLayout->addWidget(m_pHelpEngine->searchEngine()->resultWidget());
-    pSearchPage->setLayout(pSearchLayout);
+    QVBoxLayout* pSidebarLayout = new QVBoxLayout(this);
+    pSidebarLayout->addWidget(m_pHelpEngine->searchEngine()->queryWidget());
 
-    QTabWidget* pWidget = new QTabWidget(this);
-    pWidget->addTab(m_pHelpEngine->contentWidget(), tr("Contents"));
-    pWidget->addTab(m_pHelpEngine->indexWidget(), tr("Index"));
-    pWidget->addTab(pSearchPage, tr("Search"));
+    m_pTabWidget = new QTabWidget(this);
+    m_pTabWidget->addTab(m_pHelpEngine->contentWidget(), tr("Contents"));
+    m_pTabWidget->addTab(m_pHelpEngine->indexWidget(), tr("Index"));
+    m_pTabWidget->addTab(m_pHelpEngine->searchEngine()->resultWidget(), tr("Search"));
+    pSidebarLayout->addWidget(m_pTabWidget);
+
+    QWidget* pSidebarWidget = new QWidget(this);
+    pSidebarWidget->setLayout(pSidebarLayout);
 
     m_pHelpBrowser = new HelpBrowser(m_pHelpEngine, this);
     openDocument("/index.html");
 
+    connect(m_pHelpEngine->searchEngine(),
+            &QHelpSearchEngine::searchingFinished,
+            [this](int searchResultCount) {
+                Q_UNUSED(searchResultCount);
+                m_pTabWidget->setCurrentWidget(m_pHelpEngine->searchEngine()->resultWidget());
+            });
     connect(m_pHelpEngine->searchEngine()->queryWidget(),
             &QHelpSearchQueryWidget::search,
             [this] {
@@ -97,7 +104,7 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
 #endif
 
     QSplitter* pSplitter = new QSplitter(Qt::Horizontal);
-    pSplitter->insertWidget(0, pWidget);
+    pSplitter->insertWidget(0, pSidebarWidget);
     pSplitter->insertWidget(1, m_pHelpBrowser);
 
     QHBoxLayout* pLayout = new QHBoxLayout();

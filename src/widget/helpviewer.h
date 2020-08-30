@@ -4,6 +4,7 @@
 
 // forward declarations
 QT_FORWARD_DECLARE_CLASS(QHelpEngine);
+QT_FORWARD_DECLARE_CLASS(QTabWidget);
 class HelpBrowser;
 
 /// The help viewer class represents the whole help window, consisting of a
@@ -18,6 +19,7 @@ class HelpViewer : public QWidget {
   private:
     QHelpEngine* m_pHelpEngine;
     HelpBrowser* m_pHelpBrowser;
+    QTabWidget* m_pTabWidget;
 
     QString m_documentUrlPrefix;
 };
