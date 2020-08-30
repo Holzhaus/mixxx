@@ -437,8 +437,8 @@ Output:  false if an exception
 bool ControllerEngine::internalExecute(QScriptValue thisObject,
         QScriptValue functionObject,
         QScriptValueList args) {
-    if (m_pEngine == nullptr) {
-        qDebug() << "ControllerEngine::execute: No script engine exists!";
+    VERIFY_OR_DEBUG_ASSERT(m_pEngine) {
+        qWarning() << "ControllerEngine::execute: No script engine exists!";
         return false;
     }
 
@@ -473,7 +473,7 @@ bool ControllerEngine::execute(QScriptValue functionObject,
         const QString& group,
         mixxx::Duration timestamp) {
     Q_UNUSED(timestamp);
-    if (m_pEngine == nullptr) {
+    VERIFY_OR_DEBUG_ASSERT(m_pEngine) {
         return false;
     }
     QScriptValueList args;
@@ -810,7 +810,7 @@ void ControllerEngine::log(QString message) {
 //          If unsuccessful, returns undefined.
 QScriptValue ControllerEngine::makeConnection(QString group, QString name,
                                               const QScriptValue callback) {
-    VERIFY_OR_DEBUG_ASSERT(m_pEngine != nullptr) {
+    VERIFY_OR_DEBUG_ASSERT(m_pEngine) {
         qWarning() << "Tried to connect script callback, but there is no script engine!";
         return QScriptValue();
     }
@@ -948,7 +948,7 @@ QScriptValue ControllerEngine::connectControl(
     if (passedCallback.isString()) {
         // This check is redundant with makeConnection, but it must be done here
         // before evaluating the code string.
-        VERIFY_OR_DEBUG_ASSERT(m_pEngine != nullptr) {
+        VERIFY_OR_DEBUG_ASSERT(m_pEngine) {
             qWarning() << "Tried to connect script callback, but there is no script engine!";
             return QScriptValue(false);
         }
