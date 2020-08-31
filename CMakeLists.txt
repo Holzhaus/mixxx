@@ -1419,12 +1419,9 @@ add_dependencies(mixxx-lib mixxx-res mixxx-script)
 option(HELP "Include built-in manual" ON)
 if(HELP)
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
-  set(HELP_GENERATOR Qt5::qhelpgenerator)
-  if(NOT TARGET "${HELP_GENERATOR}")
-    set(HELP_GENERATOR Qt5::qcollectiongenerator)
-    if(NOT TARGET "${HELP_GENERATOR}")
-      message(FATAL_ERROR "Found neither qhelpgenerator nor qcollectiongenerator!")
-    endif()
+  find_program(HELP_GENERATOR NAMES qhelpgenerator-qt5 qhelpgenerator qcollectiongenerator-qt5 qcollectionsgenerator HINTS "${Qt5_DIR}/bin")
+  if("${HELP_GENERATOR}" STREQUAL "HELP_GENERATOR-NOTFOUND")
+    message(FATAL_ERROR "Found neither qhelpgenerator nor qcollectiongenerator!")
   endif()
   if (WIN32)
       set(HELP_VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/manual/venv/Scripts/python.exe")
@@ -1455,12 +1452,14 @@ if(HELP)
         file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/manual")
     endif()
   endif()
+  file(DOWNLOAD "https://bootstrap.pypa.io/get-pip.py" "${CMAKE_CURRENT_BINARY_DIR}/get-pip.py")
   add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/manual"
     COMMENT "Build manual help file"
     DEPENDS mixxx-res
     COMMAND git clone --single-branch --depth 1 -b "${HELP_GIT_BRANCH}" "${HELP_GIT_URL}" "manual"
     COMMAND "${Python3_EXECUTABLE}" -m venv "manual/venv"
+    COMMAND "${HELP_VENV_PYTHON}" "get-pip.py"
     COMMAND "${HELP_VENV_PYTHON}" -m pip install -r "manual/requirements.txt"
     COMMAND "${CMAKE_COMMAND}" -E make_directory "res/help"
     COMMAND "${CMAKE_COMMAND}" -E make_directory "manual/build"
