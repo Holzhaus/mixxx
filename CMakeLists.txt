@@ -1418,70 +1418,16 @@ add_dependencies(mixxx-lib mixxx-res mixxx-script)
 # Built-in mixxx manual
 option(HELP "Include built-in manual" ON)
 if(HELP)
-  find_package(Python3 REQUIRED COMPONENTS Interpreter)
-  find_program(HELP_GENERATOR NAMES qhelpgenerator-qt5 qhelpgenerator qcollectiongenerator-qt5 qcollectionsgenerator HINTS "${Qt5_DIR}/bin")
-  if("${HELP_GENERATOR}" STREQUAL "HELP_GENERATOR-NOTFOUND")
-    message(FATAL_ERROR "Found neither qhelpgenerator nor qcollectiongenerator!")
-  endif()
-  if (WIN32)
-      set(HELP_VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/manual/venv/Scripts/python.exe")
-  else ()
-      set(HELP_VENV_PYTHON "${CMAKE_CURRENT_BINARY_DIR}/manual/venv/bin/python")
-  endif ()
-  set(HELP_GIT_URL "https://github.com/mixxxdj/manual.git" CACHE STRING "Git URL of the manual repo to use for generating help files")
-  set(HELP_GIT_BRANCH "manual-${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.x" CACHE STRING "Git branch of the manual to use for generating help files")
-  if(NOT HELP_GIT_URL OR NOT HELP_GIT_BRANCH)
-    message(FATAL_ERROR "HELP_GIT_URL and HELP_GIT_BRANCH must not be empty!")
-  endif()
-  if(IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/manual")
-    execute_process(
-      COMMAND git remote get-url origin
-      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/manual"
-      OUTPUT_VARIABLE HELP_GIT_URL_ACTUAL
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-      ERROR_QUIET
-    )
-    execute_process(
-      COMMAND git name-rev --name-only HEAD
-      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/manual"
-      OUTPUT_VARIABLE HELP_GIT_BRANCH_ACTUAL
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-      ERROR_QUIET
-    )
-    if(NOT "${HELP_GIT_URL}" STREQUAL "${HELP_GIT_URL_ACTUAL}" OR NOT "${HELP_GIT_BRANCH}" STREQUAL "${HELP_GIT_BRANCH_ACTUAL}")
-        file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/manual")
-    endif()
-  endif()
-  file(DOWNLOAD "https://bootstrap.pypa.io/get-pip.py" "${CMAKE_CURRENT_BINARY_DIR}/get-pip.py")
+  # TODO: Use URL like "https://downloads.mixxx.org/manual/manual-${CMAKE_PROJECT_VERSION_MAJOR}-${CMAKE_PROJECT_VERSION_MAJOR}-qthelp.tar.gz"
+  file(DOWNLOAD "https://transfer.sh/fEY9I/manual-2.3.tar.gz" "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz" SHOW_PROGRESS)
+  file(ARCHIVE_EXTRACT INPUT "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp")
   add_custom_command(
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/manual"
-    COMMENT "Build manual help file"
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp" "${CMAKE_CURRENT_BINARY_DIR}/res/help"
     DEPENDS mixxx-res
-    COMMAND git clone --single-branch --depth 1 -b "${HELP_GIT_BRANCH}" "${HELP_GIT_URL}" "manual"
-    COMMAND "${Python3_EXECUTABLE}" -m venv "manual/venv"
-    COMMAND "${HELP_VENV_PYTHON}" "get-pip.py"
-    COMMAND "${HELP_VENV_PYTHON}" -m pip install -r "manual/requirements.txt"
-    COMMAND "${CMAKE_COMMAND}" -E make_directory "res/help"
-    COMMAND "${CMAKE_COMMAND}" -E make_directory "manual/build"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-    USES_TERMINAL
   )
-  add_custom_target(mixxx-help-git SOURCES "${CMAKE_CURRENT_BINARY_DIR}/manual")
-
-  add_custom_target(mixxx-help)
+  add_custom_target(mixxx-help SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help")
   add_dependencies(mixxx-lib mixxx-help)
-  foreach(MANUAL_LANGUAGE ca;cs;de;de-DE;en;en-GB;es;es-ES;es-MX;fi;fr;gl;id;it;ja-JP;kn;nl;pl;pt;pt-BR;ro;ru;ru-RU;sl;sq;sr;tr;zh-CN;zh-TW)
-      string(REPLACE "-" "_" MANUAL_LANGUAGE_SPHINX "${MANUAL_LANGUAGE}")
-    add_custom_command(
-      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc"
-      COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}"
-      COMMAND "${HELP_VENV_PYTHON}" -m sphinx -q -b qthelp -Dlanguage=${MANUAL_LANGUAGE_SPHINX} "${CMAKE_CURRENT_BINARY_DIR}/manual/source" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}"
-      COMMAND "${HELP_GENERATOR}" -o "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc" "${CMAKE_CURRENT_BINARY_DIR}/manual/build/${MANUAL_LANGUAGE}/Mixxx.qhcp"
-      DEPENDS mixxx-help-git
-    )
-    add_custom_target("mixxx-help-${MANUAL_LANGUAGE}" SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual-${MANUAL_LANGUAGE}.qhc")
-    add_dependencies(mixxx-help "mixxx-help-${MANUAL_LANGUAGE}")
-  endforeach()
 endif()
 
 # Windows-only resource file
