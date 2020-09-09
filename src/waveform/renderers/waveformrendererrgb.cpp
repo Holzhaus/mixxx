@@ -10,6 +10,13 @@
 #include "util/math.h"
 #include "util/painterscope.h"
 
+namespace {
+const QColor lowColor = QColor(60, 60, 255);
+const QColor midColor = QColor(40, 255, 40, 230);
+const QColor highColor = QColor(255, 200, 200, 230);
+const QList<QColor> bandColors = {lowColor, midColor, highColor};
+} // namespace
+
 WaveformRendererRGB::WaveformRendererRGB(
         WaveformWidgetRenderer* waveformWidgetRenderer)
         : WaveformRendererSignalBase(waveformWidgetRenderer) {
@@ -46,7 +53,7 @@ void WaveformRendererRGB::draw(QPainter* painter,
     PainterScope PainterScope(painter);
 
     painter->setRenderHints(QPainter::Antialiasing, false);
-    painter->setRenderHints(QPainter::SmoothPixmapTransform, false);
+    painter->setRenderHints(QPainter::SmoothPixmapTransform, true);
     painter->setWorldMatrixEnabled(false);
     painter->resetTransform();
 
@@ -117,8 +124,6 @@ void WaveformRendererRGB::draw(QPainter* painter,
         unsigned char maxLow  = 0;
         unsigned char maxMid  = 0;
         unsigned char maxHigh = 0;
-        float maxAll = 0.;
-        float maxAllNext = 0.;
 
         for (int i = visualIndexStart;
              i >= 0 && i + 1 < dataSize && i + 1 <= visualIndexStop; i += 2) {
@@ -128,52 +133,45 @@ void WaveformRendererRGB::draw(QPainter* painter,
             maxLow  = math_max3(maxLow,  waveformData.filtered.low,  waveformDataNext.filtered.low);
             maxMid  = math_max3(maxMid,  waveformData.filtered.mid,  waveformDataNext.filtered.mid);
             maxHigh = math_max3(maxHigh, waveformData.filtered.high, waveformDataNext.filtered.high);
-            float all = pow(waveformData.filtered.low * lowGain, 2) +
-                pow(waveformData.filtered.mid * midGain, 2) +
-                pow(waveformData.filtered.high * highGain, 2);
-            maxAll = math_max(maxAll, all);
-            float allNext = pow(waveformDataNext.filtered.low * lowGain, 2) +
-                pow(waveformDataNext.filtered.mid * midGain, 2) +
-                pow(waveformDataNext.filtered.high * highGain, 2);
-            maxAllNext = math_max(maxAllNext, allNext);
         }
 
-        qreal maxLowF = maxLow * lowGain;
-        qreal maxMidF = maxMid * midGain;
-        qreal maxHighF = maxHigh * highGain;
+        qreal low = maxLow * lowGain;
+        qreal mid = maxMid * midGain;
+        qreal high = maxHigh * highGain;
 
-        qreal red   = maxLowF * m_rgbLowColor_r + maxMidF * m_rgbMidColor_r + maxHighF * m_rgbHighColor_r;
-        qreal green = maxLowF * m_rgbLowColor_g + maxMidF * m_rgbMidColor_g + maxHighF * m_rgbHighColor_g;
-        qreal blue  = maxLowF * m_rgbLowColor_b + maxMidF * m_rgbMidColor_b + maxHighF * m_rgbHighColor_b;
+        QList<qreal> bandValues = {
+                2 * low,
+                2 * mid,
+                2 * high,
+        };
 
-        // Compute maximum (needed for value normalization)
-        qreal max = math_max3(red, green, blue);
-
-        // Prevent division by zero
-        if (max > 0.0f) {
+        for (int i = 0; i < 3; i++) {
             // Set color
-            color.setRgbF(red / max, green / max, blue / max);
-
-            pen.setColor(color);
+            pen.setColor(bandColors[i]);
 
             painter->setPen(pen);
             switch (m_alignment) {
                 case Qt::AlignBottom:
                 case Qt::AlignRight:
-                    painter->drawLine(
-                        x, breadth,
-                        x, breadth - (int)(heightFactor * sqrtf(math_max(maxAll, maxAllNext))));
+                    painter->drawLine(x,
+                            breadth,
+                            x,
+                            breadth -
+                                    static_cast<int>(
+                                            heightFactor * bandValues[i]));
                     break;
                 case Qt::AlignTop:
                 case Qt::AlignLeft:
                     painter->drawLine(
-                        x, 0,
-                        x, (int)(heightFactor * sqrtf(math_max(maxAll, maxAllNext))));
+                            x, 0, x, static_cast<int>(heightFactor * bandValues[i]));
                     break;
                 default:
-                    painter->drawLine(
-                        x, (int)(halfBreadth - heightFactor * sqrtf(maxAll)),
-                        x, (int)(halfBreadth + heightFactor * sqrtf(maxAllNext)));
+                    painter->drawLine(x,
+                            static_cast<int>(
+                                    halfBreadth - heightFactor * bandValues[i]),
+                            x,
+                            static_cast<int>(halfBreadth +
+                                    heightFactor * bandValues[i]));
             }
         }
     }
