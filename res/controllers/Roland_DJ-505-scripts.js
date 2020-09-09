@@ -654,6 +654,42 @@ DJ505.Deck = function(deckNumbers, offset) {
         midi: [0xB0 + offset, 0x1A],
         group: "[QuickEffectRack1_" + this.currentDeck + "]",
         inKey: "super1",
+        unshift: function() {
+            this.input = function(channel, control, value, _status, _group) {
+                if (this.MSB !== undefined) {
+                    value = (this.MSB << 7) + value;
+                }
+                this.inSetParameter(this.inValueScale(value));
+
+                if (this.previousValueReceived === undefined) {
+                    engine.softTakeover(this.group, this.inKey, true);
+                }
+                this.previousValueReceived = value;
+            };
+        },
+        shift: function() {
+            engine.softTakeoverIgnoreNextValue(this.group, this.inKey);
+            this.valueAtLastEffectSwitch = this.previousValueReceived;
+            // Floor the threshold to ensure that every effect can be selected
+            this.changeThreshold = Math.floor(this.max /
+                engine.getValue(this.group, "num_presetsavailable"));
+
+            this.input = function(channel, control, value, _status, _group) {
+                if (this.MSB !== undefined) {
+                    value = (this.MSB << 7) + value;
+                }
+                var change = value - this.valueAtLastEffectSwitch;
+                if (Math.abs(change) >= this.changeThreshold
+                    // this.valueAtLastEffectSwitch can be undefined if
+                    // shift was pressed before the first MIDI value was received.
+                    || this.valueAtLastEffectSwitch === undefined) {
+                    engine.setValue(this.group, "chain_selector", change);
+                    this.valueAtLastEffectSwitch = value;
+                }
+
+                this.previousValueReceived = value;
+            };
+        },
     });
 
     this.pfl = new components.Button({
