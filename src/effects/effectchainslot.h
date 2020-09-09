@@ -147,6 +147,8 @@ class EffectChainSlot : public QObject {
 
     std::unique_ptr<ControlPushButton> m_pControlClear;
     std::unique_ptr<ControlObject> m_pControlNumEffectSlots;
+    std::unique_ptr<ControlObject> m_pControlNumEffectChainPresetsAvailable;
+    std::unique_ptr<ControlObject> m_pControlNumQuickEffectChainPresetsAvailable;
     std::unique_ptr<ControlObject> m_pControlChainLoaded;
     std::unique_ptr<ControlPushButton> m_pControlChainEnabled;
     std::unique_ptr<ControlPushButton> m_pControlChainMixMode;

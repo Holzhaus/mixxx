@@ -40,6 +40,29 @@ EffectChainSlot::EffectChainSlot(const QString& group,
             ConfigKey(m_group, "num_effectslots"));
     m_pControlNumEffectSlots->setReadOnly();
 
+    m_pControlNumEffectChainPresetsAvailable = std::make_unique<ControlObject>(
+            ConfigKey(m_group, "num_effectchainpresetsavailable"));
+    m_pControlNumEffectChainPresetsAvailable->set(m_pChainPresetManager->numPresets());
+    m_pControlNumEffectChainPresetsAvailable->setReadOnly();
+    connect(m_pChainPresetManager.get(),
+            &EffectChainPresetManager::effectChainPresetListUpdated,
+            [this] {
+                m_pControlNumEffectChainPresetsAvailable->forceSet(
+                        m_pChainPresetManager->numPresets());
+            });
+
+    m_pControlNumQuickEffectChainPresetsAvailable = std::make_unique<ControlObject>(
+            ConfigKey(m_group, "num_quickeffectchainpresetsavailable"));
+    m_pControlNumQuickEffectChainPresetsAvailable->set(
+            m_pChainPresetManager->numQuickEffectPresets());
+    m_pControlNumQuickEffectChainPresetsAvailable->setReadOnly();
+    connect(m_pChainPresetManager.get(),
+            &EffectChainPresetManager::quickEffectChainPresetListUpdated,
+            [this] {
+                m_pControlNumQuickEffectChainPresetsAvailable->forceSet(
+                        m_pChainPresetManager->numQuickEffectPresets());
+            });
+
     m_pControlChainLoaded =
             std::make_unique<ControlObject>(ConfigKey(m_group, "loaded"));
     m_pControlChainLoaded->setReadOnly();
