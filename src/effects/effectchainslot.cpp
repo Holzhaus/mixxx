@@ -40,28 +40,18 @@ EffectChainSlot::EffectChainSlot(const QString& group,
             ConfigKey(m_group, "num_effectslots"));
     m_pControlNumEffectSlots->setReadOnly();
 
-    m_pControlNumEffectChainPresetsAvailable = std::make_unique<ControlObject>(
-            ConfigKey(m_group, "num_effectchainpresetsavailable"));
-    m_pControlNumEffectChainPresetsAvailable->set(m_pChainPresetManager->numPresets());
-    m_pControlNumEffectChainPresetsAvailable->setReadOnly();
+    m_pControlNumPresetsAvailable = std::make_unique<ControlObject>(
+            ConfigKey(m_group, "num_presetsavailable"));
+    m_pControlNumPresetsAvailable->set(m_pChainPresetManager->numPresets());
+    m_pControlNumPresetsAvailable->setReadOnly();
     connect(m_pChainPresetManager.get(),
             &EffectChainPresetManager::effectChainPresetListUpdated,
-            [this] {
-                m_pControlNumEffectChainPresetsAvailable->forceSet(
-                        m_pChainPresetManager->numPresets());
-            });
-
-    m_pControlNumQuickEffectChainPresetsAvailable = std::make_unique<ControlObject>(
-            ConfigKey(m_group, "num_quickeffectchainpresetsavailable"));
-    m_pControlNumQuickEffectChainPresetsAvailable->set(
-            m_pChainPresetManager->numQuickEffectPresets());
-    m_pControlNumQuickEffectChainPresetsAvailable->setReadOnly();
+            this,
+            &EffectChainSlot::slotPresetListUpdated);
     connect(m_pChainPresetManager.get(),
             &EffectChainPresetManager::quickEffectChainPresetListUpdated,
-            [this] {
-                m_pControlNumQuickEffectChainPresetsAvailable->forceSet(
-                        m_pChainPresetManager->numQuickEffectPresets());
-            });
+            this,
+            &EffectChainSlot::slotPresetListUpdated);
 
     m_pControlChainLoaded =
             std::make_unique<ControlObject>(ConfigKey(m_group, "loaded"));
@@ -286,6 +276,13 @@ EffectSlotPointer EffectChainSlot::addEffectSlot(const QString& group) {
     return pEffectSlot;
 }
 
+int EffectChainSlot::numPresets() const {
+    VERIFY_OR_DEBUG_ASSERT(m_pChainPresetManager) {
+        return 0;
+    }
+    return m_pChainPresetManager->numPresets();
+}
+
 void EffectChainSlot::registerInputChannel(const ChannelHandleAndGroup& handleGroup,
         const double initialValue) {
     VERIFY_OR_DEBUG_ASSERT(!m_channelEnableButtons.contains(handleGroup)) {
@@ -365,6 +362,10 @@ void EffectChainSlot::slotChannelStatusChanged(
     } else {
         disableForInputChannel(handleGroup);
     }
+}
+
+void EffectChainSlot::slotPresetListUpdated() {
+    m_pControlNumPresetsAvailable->forceSet(numPresets());
 }
 
 void EffectChainSlot::enableForInputChannel(const ChannelHandleAndGroup& handleGroup) {

@@ -114,6 +114,7 @@ QuickEffectChainSlot::QuickEffectChainSlot(const QString& group,
         addEffectSlot(formatEffectSlotGroup(group, i));
         m_effectSlots.at(i)->setEnabled(true);
     }
+    m_pControlNumPresetsAvailable->set(m_pChainPresetManager->numQuickEffectPresets());
 }
 
 QString QuickEffectChainSlot::formatEffectChainSlotGroup(const QString& group) {
@@ -138,6 +139,13 @@ EffectChainPresetPointer QuickEffectChainSlot::presetAtIndex(int index) const {
 void QuickEffectChainSlot::loadChainPreset(EffectChainPresetPointer pPreset) {
     EffectChainSlot::loadChainPreset(pPreset);
     setSuperParameter(pPreset->superKnob(), true);
+}
+
+int QuickEffectChainSlot::numPresets() const {
+    VERIFY_OR_DEBUG_ASSERT(m_pChainPresetManager) {
+        return 0;
+    }
+    return m_pChainPresetManager->numQuickEffectPresets();
 }
 
 EqualizerEffectChainSlot::EqualizerEffectChainSlot(const QString& group,
