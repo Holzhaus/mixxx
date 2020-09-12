@@ -114,7 +114,15 @@ QuickEffectChainSlot::QuickEffectChainSlot(const QString& group,
         addEffectSlot(formatEffectSlotGroup(group, i));
         m_effectSlots.at(i)->setEnabled(true);
     }
-    m_pControlNumPresetsAvailable->set(m_pChainPresetManager->numQuickEffectPresets());
+    disconnect(m_pChainPresetManager.get(),
+            &EffectChainPresetManager::effectChainPresetListUpdated,
+            this,
+            &QuickEffectChainSlot::slotPresetListUpdated);
+    m_pControlNumPresetsAvailable->forceSet(m_pChainPresetManager->numQuickEffectPresets());
+    connect(m_pChainPresetManager.get(),
+            &EffectChainPresetManager::quickEffectChainPresetListUpdated,
+            this,
+            &QuickEffectChainSlot::slotPresetListUpdated);
 }
 
 QString QuickEffectChainSlot::formatEffectChainSlotGroup(const QString& group) {

@@ -131,13 +131,15 @@ class EffectChainSlot : public QObject {
     std::unique_ptr<ControlObject> m_pControlNumPresetsAvailable;
     QList<EffectSlotPointer> m_effectSlots;
 
+  protected slots:
+    void slotPresetListUpdated();
+
   private slots:
     void slotControlLoadChainPreset(double value);
     void slotControlChainSelector(double value);
     void slotControlChainNextPreset(double value);
     void slotControlChainPrevPreset(double value);
     void slotChannelStatusChanged(double value, const ChannelHandleAndGroup& handleGroup);
-    void slotPresetListUpdated();
 
   private:
     QString debugString() const {

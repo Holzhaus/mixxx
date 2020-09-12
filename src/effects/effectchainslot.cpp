@@ -48,10 +48,6 @@ EffectChainSlot::EffectChainSlot(const QString& group,
             &EffectChainPresetManager::effectChainPresetListUpdated,
             this,
             &EffectChainSlot::slotPresetListUpdated);
-    connect(m_pChainPresetManager.get(),
-            &EffectChainPresetManager::quickEffectChainPresetListUpdated,
-            this,
-            &EffectChainSlot::slotPresetListUpdated);
 
     m_pControlChainLoaded =
             std::make_unique<ControlObject>(ConfigKey(m_group, "loaded"));
