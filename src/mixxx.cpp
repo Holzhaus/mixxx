@@ -472,14 +472,7 @@ void MixxxMainWindow::initialize(QApplication* pApp, const CmdlineArgs& args) {
     m_pPrefDlg->setHidden(true);
     connect(m_pPrefDlg, &DlgPreferences::showManual, this, &MixxxMainWindow::slotHelpManual);
 
-    QDir helpPath(pConfig->getResourcePath());
-    if (helpPath.cd("help")) {
-        QFileInfo fileInfo(helpPath, QStringLiteral("manual.qhc"));
-        if (fileInfo.exists()) {
-            m_pHelpViewer = new HelpViewer(fileInfo);
-        }
-    }
-
+    m_pHelpViewer = new HelpViewer(pConfig);
     launchProgress(60);
 
     // Connect signals to the menubar. Should be done before we go fullscreen
@@ -1416,13 +1409,7 @@ void MixxxMainWindow::slotChangedPlayingDeck(int deck) {
 }
 
 void MixxxMainWindow::slotHelpManual(const QString& documentPath) {
-    if (m_pHelpViewer) {
-        m_pHelpViewer->openDocument(documentPath);
-        m_pHelpViewer->show();
-        return;
-    }
-
-    QDesktopServices::openUrl(QUrl(QString(MIXXX_MANUAL_URL) + documentPath));
+    m_pHelpViewer->open(documentPath);
 }
 
 void MixxxMainWindow::slotHelpAbout() {

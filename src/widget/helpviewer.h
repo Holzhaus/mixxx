@@ -2,6 +2,8 @@
 #include <QString>
 #include <QWidget>
 
+#include "preferences/usersettings.h"
+
 // forward declarations
 QT_FORWARD_DECLARE_CLASS(QHelpEngine);
 QT_FORWARD_DECLARE_CLASS(QTabWidget);
@@ -12,11 +14,13 @@ class HelpBrowser;
 /// renderer).
 class HelpViewer : public QWidget {
   public:
-    explicit HelpViewer(const QFileInfo& helpFile, QWidget* parent = nullptr);
+    explicit HelpViewer(const UserSettingsPointer& helpFile, QWidget* parent = nullptr);
 
-    void openDocument(const QString& documentPath);
+    void open(const QString& documentPath);
 
   private:
+    void openDocument(const QString& documentPath);
+
     QHelpEngine* m_pHelpEngine;
     HelpBrowser* m_pHelpBrowser;
     QTabWidget* m_pTabWidget;

@@ -1,6 +1,8 @@
 #include "widget/helpviewer.h"
 
 #include <QAction>
+#include <QDesktopServices>
+#include <QDir>
 #include <QHBoxLayout>
 #include <QHelpContentWidget>
 #include <QHelpEngine>
@@ -24,18 +26,51 @@ namespace {
 const QRegExp kSlugifyRegExp("[\\W+]");
 const QString kSlugifyReplacement = QStringLiteral("-");
 const QString kIndexDocument = QStringLiteral(MIXXX_MANUAL_INDEX_PATH);
+
+QFileInfo getHelpPath(const UserSettingsPointer& pConfig) {
+    QDir helpPath(pConfig->getResourcePath());
+    if (helpPath.cd("help")) {
+        QFileInfo fileInfo(helpPath, QStringLiteral("manual.qhc"));
+        if (fileInfo.exists()) {
+            return fileInfo;
+        }
+    }
+    return QFileInfo();
+}
+
 } // namespace
 
-HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
-        : QWidget(parent),
-          m_pHelpEngine(new QHelpEngine(helpPath.filePath())) {
-    DEBUG_ASSERT(helpPath.exists());
-    m_pHelpEngine->setAutoSaveFilter(false);
-    DEBUG_ASSERT(m_pHelpEngine->setupData());
-    m_pHelpEngine->searchEngine()->reindexDocumentation();
+HelpViewer::HelpViewer(const UserSettingsPointer& pConfig, QWidget* parent)
+        : QWidget(parent) {
+    QFileInfo helpPath = getHelpPath(pConfig);
+    if (!helpPath.isFile()) {
+        return;
+    }
 
-    QString namespaceName(m_pHelpEngine->namespaceName(helpPath.filePath()));
-    DEBUG_ASSERT(!namespaceName.isEmpty());
+    QHelpEngine* pHelpEngine = new QHelpEngine(helpPath.filePath());
+    if (!pHelpEngine) {
+        return;
+    }
+
+    if (!pHelpEngine->setupData()) {
+        delete pHelpEngine;
+        return;
+    }
+
+    QString namespaceName(pHelpEngine->namespaceName(helpPath.filePath()));
+    if (namespaceName.isEmpty()) {
+        delete pHelpEngine;
+        return;
+    }
+    const QStringList customFilters = pHelpEngine->customFilters();
+    if (!customFilters.contains(QStringLiteral("en"))) {
+        delete pHelpEngine;
+        return;
+    }
+
+    m_pHelpEngine = pHelpEngine;
+    m_pHelpEngine->searchEngine()->reindexDocumentation();
+    m_pHelpEngine->setAutoSaveFilter(false);
     m_documentUrlPrefix = QStringLiteral("qthelp://") + namespaceName + QStringLiteral("/doc");
 
     m_language = QStringLiteral("en");
@@ -165,4 +200,14 @@ void HelpViewer::openDocument(const QString& documentPath) {
         url.setPath(path + m_language + QStringLiteral(".html"));
     }
     m_pHelpBrowser->setSource(url);
+}
+
+void HelpViewer::open(const QString& documentPath) {
+    if (m_pHelpEngine) {
+        openDocument(documentPath);
+        show();
+        return;
+    }
+
+    QDesktopServices::openUrl(QUrl(QString(MIXXX_MANUAL_URL) + documentPath));
 }
