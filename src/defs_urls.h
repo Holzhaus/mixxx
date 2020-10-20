@@ -33,7 +33,7 @@
 #define MIXXX_MANUAL_EQ_PATH "/chapters/preferences.html#equalizers"
 #define MIXXX_MANUAL_BROADCAST_PATH "/chapters/livebroadcasting.html#configuring-mixxx"
 #define MIXXX_MANUAL_VINYL_PATH "/chapters/vinyl_control.html#configuring-vinyl-control"
-#define MIXXX_MANUAL_CONTROLLERMANUAL_PREFIX MIXXX_MANUAL_URL "/hardware/controllers/"
+#define MIXXX_MANUAL_CONTROLLERMANUAL_PREFIX "/hardware/controllers/"
 #define MIXXX_MANUAL_CONTROLLERMANUAL_SUFFIX ".html"
 
 #endif

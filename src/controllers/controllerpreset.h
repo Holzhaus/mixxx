@@ -142,15 +142,6 @@ class ControllerPreset {
         return m_manualPage;
     }
 
-    QString manualLink() const {
-        QString page = manualPage();
-        if (page.isEmpty()) {
-            return {};
-        }
-
-        return MIXXX_MANUAL_CONTROLLERMANUAL_PREFIX + page + MIXXX_MANUAL_CONTROLLERMANUAL_SUFFIX;
-    }
-
     inline void setWikiLink(const QString wikilink) {
         m_wikilink = wikilink;
         setDirty(true);

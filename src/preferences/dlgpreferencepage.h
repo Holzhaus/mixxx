@@ -16,6 +16,9 @@ class DlgPreferencePage : public QWidget {
     /// overriding this. The default implementation returns an invalid QUrl.
     virtual QString helpDocument() const;
 
+  signals:
+    void showManual(const QString& documentPath);
+
   public slots:
     /// Called when the preference dialog is shown to the user (not necessarily
     /// when this PreferencePage is shown to the user). At this point, the

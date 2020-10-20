@@ -90,6 +90,22 @@ DlgPrefController::DlgPrefController(
             &ControllerManager::slotApplyPreset);
 
     // Open script file links
+    connect(m_ui.labelLoadedPresetSupportLinks,
+            &QLabel::linkActivated,
+            [this](const QString& link) {
+                QUrl url(link);
+                if (!url.isValid()) {
+                    qWarning() << "Got invalid URL:" << link;
+                    return;
+                }
+                if (url.scheme() == "manual") {
+                    emit showManual(url.path());
+                    return;
+                }
+                QDesktopServices::openUrl(url);
+            });
+
+    // Open script file links
     connect(m_ui.labelLoadedPresetScriptFileLinks,
             &QLabel::linkActivated,
             [](const QString& path) {
@@ -270,14 +286,19 @@ QString DlgPrefController::presetWikiLink(
 
 QString DlgPrefController::presetManualLink(
         const ControllerPresetPointer pPreset) const {
-    QString url;
-    if (pPreset) {
-        QString link = pPreset->manualLink();
-        if (!link.isEmpty()) {
-            url = "<a href=\"" + link + "\">Manual</a>";
-        }
+    if (!pPreset) {
+        return {};
     }
-    return url;
+
+    QString page = pPreset->manualPage();
+    if (page.isEmpty()) {
+        return {};
+    }
+
+    return QStringLiteral("<a href=\"manual://") +
+            MIXXX_MANUAL_CONTROLLERMANUAL_PREFIX + page +
+            MIXXX_MANUAL_CONTROLLERMANUAL_SUFFIX +
+            QStringLiteral("\">Manual</a>");
 }
 
 QString DlgPrefController::presetScriptFileLinks(
