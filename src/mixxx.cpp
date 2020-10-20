@@ -474,18 +474,9 @@ void MixxxMainWindow::initialize(QApplication* pApp, const CmdlineArgs& args) {
 
     QDir helpPath(pConfig->getResourcePath());
     if (helpPath.cd("help")) {
-        QLocale locale;
-        QList<QString> languages;
-        languages.append(locale.uiLanguages());
-        languages.append("en");
-        for (const QString& language : qAsConst(languages)) {
-            QFileInfo fileInfo(helpPath,
-                    QStringLiteral("manual-") + language +
-                            QStringLiteral(".qhc"));
-            if (fileInfo.exists()) {
-                m_pHelpViewer = new HelpViewer(fileInfo);
-                break;
-            }
+        QFileInfo fileInfo(helpPath, QStringLiteral("manual.qhc"));
+        if (fileInfo.exists()) {
+            m_pHelpViewer = new HelpViewer(fileInfo);
         }
     }
 

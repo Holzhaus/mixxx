@@ -38,6 +38,20 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
     DEBUG_ASSERT(!namespaceName.isEmpty());
     m_documentUrlPrefix = QStringLiteral("qthelp://") + namespaceName + QStringLiteral("/doc");
 
+    m_language = QStringLiteral("en");
+    {
+        QStringList customFilters = m_pHelpEngine->customFilters();
+        QLocale locale;
+        QList<QString> languages;
+        for (const QString& language : locale.uiLanguages()) {
+            if (customFilters.contains(language)) {
+                m_language = language;
+                break;
+            }
+        }
+    }
+    m_pHelpEngine->setCurrentFilter(m_language);
+
     QVBoxLayout* pSidebarLayout = new QVBoxLayout(this);
     pSidebarLayout->addWidget(m_pHelpEngine->searchEngine()->queryWidget());
 
@@ -54,7 +68,7 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
 
     QToolBar* pToolBar = new QToolBar(this);
     pToolBar->addAction(QIcon::fromTheme("go-home"), tr("Main Page"), [this] {
-        m_pHelpBrowser->home();
+        openDocument(kIndexDocument);
     });
     QAction* pBackwardAction = pToolBar->addAction(
             QIcon::fromTheme("go-previous"), tr("Back"), [this] {
@@ -116,7 +130,7 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
             [this](const QModelIndex& index) {
                 QString keyword = m_pHelpEngine->indexModel()->data(index).toString();
                 m_pHelpBrowser->setSource(QUrl(m_documentUrlPrefix +
-                        QStringLiteral("/glossary.html#term-") +
+                        QStringLiteral("/glossary.") + m_language + QStringLiteral(".html#term-") +
                         keyword.replace(kSlugifyRegExp, kSlugifyReplacement)));
             });
     // connect(m_pHelpEngine->indexWidget(),
@@ -144,5 +158,11 @@ HelpViewer::HelpViewer(const QFileInfo& helpPath, QWidget* parent)
 }
 
 void HelpViewer::openDocument(const QString& documentPath) {
-    m_pHelpBrowser->setSource(QUrl(m_documentUrlPrefix + documentPath));
+    QUrl url(m_documentUrlPrefix + documentPath);
+    QString path = url.path();
+    if (path.endsWith(QStringLiteral(".html"))) {
+        path.chop(4);
+        url.setPath(path + m_language + QStringLiteral(".html"));
+    }
+    m_pHelpBrowser->setSource(url);
 }

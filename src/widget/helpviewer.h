@@ -22,4 +22,5 @@ class HelpViewer : public QWidget {
     QTabWidget* m_pTabWidget;
 
     QString m_documentUrlPrefix;
+    QString m_language;
 };
