@@ -17,6 +17,7 @@
 .#*
 
 # Qt Help Collection
+*.qch
 *.qhc
 
 dist32

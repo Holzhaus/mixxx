@@ -1139,6 +1139,15 @@ install(
     "${MIXXX_INSTALL_DATADIR}"
 )
 
+# QtHelp files
+if(HELP)
+  install(DIRECTORY
+    "${CMAKE_CURRENT_BINARY_DIR}/res/help"
+  DESTINATION
+    "${MIXXX_INSTALL_DATADIR}"
+  )
+endif()
+
 # QScriptEngine extensions
 install(
   DIRECTORY
@@ -1435,14 +1444,24 @@ add_dependencies(mixxx-lib mixxx-res mixxx-script)
 option(HELP "Include built-in manual" ON)
 if(HELP)
   # TODO: Use URL like "https://downloads.mixxx.org/manual/manual-${CMAKE_PROJECT_VERSION_MAJOR}-${CMAKE_PROJECT_VERSION_MAJOR}-qthelp.tar.gz"
-  file(DOWNLOAD "https://transfer.sh/fEY9I/manual-2.3.tar.gz" "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz" SHOW_PROGRESS)
-  file(ARCHIVE_EXTRACT INPUT "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp")
+  if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz")
+    file(DOWNLOAD "https://0x0.st/iD36.gz" "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz" SHOW_PROGRESS)
+    file(ARCHIVE_EXTRACT INPUT "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp.tar.gz" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp")
+  endif()
   add_custom_command(
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/res/help"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp" "${CMAKE_CURRENT_BINARY_DIR}/res/help"
+    OUTPUT
+      "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qch"
+      "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/res/help"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp/manual.qch" "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qch"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/manual-qthelp/manual.qhc" "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc"
     DEPENDS mixxx-res
   )
-  add_custom_target(mixxx-help SOURCES "${CMAKE_CURRENT_BINARY_DIR}/res/help")
+  add_custom_target(mixxx-help
+    DEPENDS
+      "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qch"
+      "${CMAKE_CURRENT_BINARY_DIR}/res/help/manual.qhc"
+  )
   add_dependencies(mixxx-lib mixxx-help)
 endif()
 
