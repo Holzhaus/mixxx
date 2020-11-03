@@ -295,6 +295,24 @@ for:
     - path: 'cmake_build/*.exe'
     - path: 'cmake_build/*.msi'
 
+  deploy:
+    - provider: Script
+    - set "ARTIFACT=%MIXXX_PACKAGE_NAME%.msi"
+    - set "ARTIFACT_LATEST=mixxx-%APPVEYOR_REPO_BRANCH:/=-%.msi"
+    - sh: |
+        export DEPLOY_SERVER=downloads.mixxx.org
+        cd "cmake_build"
+        sha256sum  "${ARTIFACT}" > "${ARTIFACT}.sha256sum"
+        ssh "${DEPLOY_SERVER}" 'mkdir -p "builds/appveyor/.upload/"'
+        rsync -e ssh "${ARTIFACT}" "${ARTIFACT}.sha256sum" "${DEPLOY_SERVER}:builds/appveyor/.upload/"
+        printf 'cd "builds/appveyor/.upload" || exit 1\n' > deploy_latest.sh
+        printf 'sha256sum -c "%s.sha256sum" || exit 1\n' "${ARTIFACT}" >> deploy_latest.sh
+        printf 'cd .. || exit 1\n' >> deploy_latest.sh
+        printf 'mv ".upload/%s" ".upload/%s.sha256sum" .\n' "${ARTIFACT}" "${ARTIFACT}" >> deploy_latest.sh
+        printf 'ln -sf "%s" "%s"\n' "${ARTIFACT}" "${ARTIFACT_LATEST}" >> deploy_latest.sh
+        printf 'ln -sf "%s.sha256sum" "%s.sha256sum"\n' "${ARTIFACT}" "${ARTIFACT_LATEST}" >> deploy_latest.sh
+        ssh "${DEPLOY_SERVER}" "$(< deploy_lastest.sh)"
+
   on_finish:
     # Uncomment the following line if you don't want the build VM to be destroyed
     # and be able to RDP on it until a special “lock” file on VM desktop is deleted
@@ -312,10 +330,6 @@ on_failure:
 
 on_finish:
   - echo "*** DONE ***"
-
-deploy:
-  - provider: Environment
-    name: downloads.mixxx.org
 
 notifications:
   - provider: Webhook
