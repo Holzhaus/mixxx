@@ -32,6 +32,7 @@ extern "C" {
 
 #include <QBuffer>
 #include <QByteArray>
+#include <QFile>
 #include <QLibrary>
 
 #include "encoder/encoder.h"
