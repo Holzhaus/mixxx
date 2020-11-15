@@ -477,7 +477,7 @@ Syncable* EngineSync::pickNonSyncSyncTarget(EngineChannel* pDontPick) const {
 
 bool EngineSync::otherSyncedPlaying(const QString& group) {
     bool othersInSync = false;
-    for (Syncable* theSyncable : qAsConst(m_syncables)) {
+    for (Syncable* theSyncable : m_syncables) {
         bool isSynchonized = theSyncable->isSynchronized();
         if (theSyncable->getGroup() == group) {
             if (!isSynchonized) {

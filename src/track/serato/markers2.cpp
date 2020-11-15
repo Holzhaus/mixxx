@@ -567,7 +567,7 @@ QByteArray SeratoMarkers2::dumpID3() const {
 QList<SeratoMarkers2EntryPointer> SeratoMarkers2::findEntriesByType(
         SeratoMarkers2Entry::TypeId typeId) const {
     QList<SeratoMarkers2EntryPointer> entriesFound;
-    for (const auto& pEntry : qAsConst(m_entries)) {
+    for (const auto& pEntry : m_entries) {
         VERIFY_OR_DEBUG_ASSERT(pEntry) {
             continue;
         }
