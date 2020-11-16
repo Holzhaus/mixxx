@@ -80,7 +80,6 @@ jobs:
           -DHID=ON \
           -DLILV=ON \
           -DOPUS=ON \
-          -DQTKEYCHAIN=ON \
           -DVINYLCONTROL=ON \
           -DFAAD=ON \
           -DKEYFINDER=ON \
@@ -95,3 +94,157 @@ jobs:
     - name: Build
       run: cmake --build . -j $(nproc)
       working-directory: cmake_build
+
+  windows-msvc:
+    name: Windows / MSVC
+    runs-on: windows-2019
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+    - name: Set up cmake
+      uses: jwlawson/actions-setup-cmake@v1.4
+      with:
+        cmake-version: '3.13.x'
+    - name: Set up build environment
+      id: setup_environment
+      shell: cmake -P {0}
+      run: |
+        file(READ "build/windows/golden_environment" BUILDENV_NAME)
+        string(STRIP "${BUILDENV_NAME}" BUILDENV_NAME)
+        string(REPLACE "PLATFORM" "$ENV{PLATFORM}" BUILDENV_NAME "${BUILDENV_NAME}")
+        string(REPLACE "CONFIGURATION" "$ENV{CONFIGURATION}" BUILDENV_NAME "${BUILDENV_NAME}")
+
+        message("::group::Download environment")
+        set(BUILDENV_URL "$ENV{BUILDENV_BASEURL}/${BUILDENV_NAME}.zip")
+        set(BUILDENV_FILE "./${BUILDENV_NAME}.zip")
+        message("URL: ${BUILDENV_URL}")
+        file(DOWNLOAD "${BUILDENV_URL}" "${BUILDENV_FILE}" SHOW_PROGRESS STATUS DOWNLOAD_STATUS)
+        list(GET DOWNLOAD_STATUS_LIST 0 DOWNLAOD_STATUS)
+        if (NOT DOWNLOAD_STATUS EQUAL 0)
+            message(FATAL_ERROR "Downloading environment failed!")
+        endif()
+        message("::endgroup")
+
+        message("::group::Unpack environment")
+        file(TO_CMAKE_PATH "${CMAKE_SOURCE_DIR}/buildenv" BUILDENV_PATH)
+        file(MAKE_DIRECTORY "${BUILDENV_PATH}")
+        execute_process(COMMAND unzip "${BUILDENV_FILE}" -d "${BUILDENV_PATH}")
+        message("::endgroup")
+
+        file(REMOVE "${BUILDENV_FILE}")
+        file(GLOB QT_PATH_CANDIDATES "${BUILDENV_PATH}/${BUILDENV_NAME}/Qt-*")
+        list(GET QT_PATH_CANDIDATES 0 QT_PATH)
+        file(TO_NATIVE_PATH "${BUILDENV_PATH}/${BUILDENV_NAME}" BUILDENV_PATH_NATIVE)
+        file(TO_NATIVE_PATH "${QT_PATH}" QT_PATH_NATIVE)
+        message("::set-output name=buildenv_path::${BUILDENV_PATH_NATIVE}")
+        message("::set-output name=qt_path::${QT_PATH_NATIVE}")
+      env:
+        PLATFORM: x64
+        CONFIGURATION: release-fastbuild
+        BUILDENV_BASEURL: https://downloads.mixxx.org/builds/buildserver/2.3.x-windows/
+    - name: Install additional build tools
+      run: |
+        choco install ninja
+        python -m pip install git+https://github.com/frerich/clcache.git
+    - name: Create build directory
+      run: mkdir cmake_build
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      shell: cmake -P {0}
+      run: |
+        string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+        message("::set-output name=timestamp::${current_date}")
+    - name: Set up ccache cache
+      uses: actions/cache@v1.1.0
+      with:
+        path: .cache/ccache
+        key: ${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        restore-keys: |
+            ${{ github.job }}-ccache-
+    - name: Configure
+      shell: cmake -P {0}
+      run: |
+        # Execute environment script and write resulting environment variables
+        # to a file (needed for MSVC).
+        if (NOT "$ENV{ENVIRONMENT_SCRIPT}" STREQUAL "")
+          execute_process(
+            COMMAND "$ENV{ENVIRONMENT_SCRIPT}" && set
+            OUTPUT_FILE environment_script_output.txt
+          )
+          file(STRINGS environment_script_output.txt OUTPUT_LINES)
+          foreach(LINE IN LISTS OUTPUT_LINES)
+            if (LINE MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              message("${CMAKE_MATCH_1}=${CMAKE_MATCH_2}")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+        endif()
+
+        # Configure build using CMake
+        execute_process(COMMAND "${CMAKE_COMMAND}"
+          "-DCMAKE_INSTALL_PREFIX=$ENV{INSTALL_PREFIX}"
+          -DCMAKE_BUILD_TYPE=Release
+          -DDEBUG_ASSERTIONS_FATAL=ON
+          -DBATTERY=ON
+          -DBROADCAST=ON
+          -DBULK=ON
+          -DHID=ON
+          -DHSS1394=ON
+          -DKEYFINDER=OFF
+          -DLOCALECOMPARE=ON
+          -DMAD=ON
+          -DMEDIAFOUNDATION=ON
+          -DOPUS=ON
+          -DQTKEYCHAIN=ON
+          -DVINYLCONTROL=ON
+          -DSTATIC_DEPS=ON
+          ..
+          RESULT_VARIABLE STATUS
+        )
+        if (NOT STATUS EQUAL 0)
+          message(FATAL_ERROR "Configuration failed")
+        endif()
+      env:
+        INSTALL_PREFIX: C:\mixxx
+        CMAKE_PREFIX_PATH: ${{ steps.setup_environment.outputs.buildenv_path }};${{ steps.setup_environment.outputs.qt_path }}
+        ENVIRONMENT_SCRIPT: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+        CMAKE_GENERATOR: Ninja
+        CC: cl
+        CXX: cl
+      working-directory: cmake_build
+    - name: Set up problem matcher
+      uses: ammaraskar/gcc-problem-matcher@master
+    - name: Build
+      shell: cmake -P {0}
+      run: |
+        # Restore environment variables from file (needed for MSVC)
+        if (EXISTS "environment_script_output.txt")
+          file(STRINGS environment_script_output.txt OUTPUT_LINES)
+          foreach(LINE IN LISTS OUTPUT_LINES)
+            if (LINE MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              message("${CMAKE_MATCH_1}=${CMAKE_MATCH_2}")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+        endif()
+
+        # Build Mixxx
+        execute_process(COMMAND "${CMAKE_COMMAND}" --build . RESULT_VARIABLE STATUS)
+        if (NOT STATUS EQUAL 0)
+          message(FATAL_ERROR "Configuration failed")
+        endif()
+      working-directory: cmake_build
+    - name: Test
+      run: ctest --timeout 45
+      working-directory: cmake_build
+      env:
+        GTEST_COLOR: 1
+        CTEST_OUTPUT_ON_FAILURE: 1
+        QT_QPA_PLATFORM: offscreen
+    - name: Package
+      run: cpack -G WIX
+      working-directory: cmake_build
+      env:
+        GTEST_COLOR: 1
+        CTEST_OUTPUT_ON_FAILURE: 1
+        QT_QPA_PLATFORM: offscreen
