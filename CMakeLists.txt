@@ -1089,16 +1089,68 @@ if (APPLE)
     execute_process(COMMAND chmod +x "${CMAKE_CURRENT_BINARY_DIR}/run-mixxx.sh")
   endif()
 else()
-    include(InstallRequiredSystemLibraries)
-    install(
-        FILES
-            ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
-        DESTINATION
-            "${MIXXX_INSTALL_BINDIR}"
-        COMPONENT
-            Libraries
-    )
+  include(InstallRequiredSystemLibraries)
+  install(
+    FILES
+        ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+    DESTINATION
+        "${MIXXX_INSTALL_BINDIR}"
+    COMPONENT
+        Libraries
+  )
 endif()
+
+option(CODESIGN "Sign executables and libraries with digital certificate" OFF)
+mark_as_advanced(CODESIGN)
+if(CODESIGN)
+  set(SIGNTOOL_ARGS /a /t http://timestamp.verisign.com/scripts/timstamp.dll CACHE STRING "parameters for signtool (list)")
+  find_program(SIGNTOOL_EXECUTABLE signtool)
+  if(NOT SIGNTOOL_EXECUTABLE)
+    message(FATAL_ERROR "signtool is not found. Signing executables not possible")
+  endif()
+
+  # Check if we're able to sign an executable
+  if(NOT DEFINED CODESIGN_OK)
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/testsign.c "int main(){return 0;}")
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/testsign)
+    try_compile(
+      RESULT ${CMAKE_CURRENT_BINARY_DIR}/testsign ${CMAKE_CURRENT_BINARY_DIR}/testsign.c
+      COPY_FILE ${CMAKE_CURRENT_BINARY_DIR}/testsign.exe
+    )
+    execute_process(
+      COMMAND ${SIGNTOOL_EXECUTABLE} sign ${SIGNTOOL_PARAMETERS} ${CMAKE_CURRENT_BINARY_DIR}/testsign.exe
+      RESULT_VARIABLE ERR ERROR_QUIET OUTPUT_QUIET
+    )
+    if(ERR EQUAL 0)
+        set(CODESIGN_OK 1 CACHE INTERNAL "Can sign executables")
+    else()
+      message(STATUS "Disable authenticode signing for executables")
+      set(CODESIGN_OK 0 CACHE INTERNAL "Invalid or missing certificate")
+    endif()
+  endif()
+  mark_as_advanced(SIGNTOOL_EXECUTABLE SIGNTOOL_ARGS)
+endif()
+
+macro(sign_target target)
+  get_target_property(target_type ${target} TYPE)
+  if(target_type AND NOT target_type MATCHES "STATIC")
+    get_target_property(target_location ${target}  LOCATION)
+    if(CMAKE_GENERATOR MATCHES "Visual Studio")
+      string(REPLACE "${CMAKE_CFG_INTDIR}" "\${CMAKE_INSTALL_CONFIG_NAME}" target_location ${target_location})
+    endif()
+    install(CODE
+    "execute_process(COMMAND ${SIGNTOOL_EXECUTABLE} sign ${SIGNTOOL_PARAMETERS} ${target_location} RESULT_VARIABLE ERR)
+     if(NOT \${ERR} EQUAL 0)
+       message(FATAL_ERROR \"Error signing  ${target_location}\")
+     endif()
+    ")
+  endif()
+ENDMACRO()
+
+if(SIGNCODE AND SIGNCODE_ENABLED)
+  sign_target(mixxx)
+endif()
+
 
 install(
   TARGETS
