@@ -73,6 +73,8 @@ jobs:
               -DMAD=ON
               -DMEDIAFOUNDATION=ON
               -DSTATIC_DEPS=ON
+              -DCODESIGN=ON
+              "-DCODESIGN_ARGS=/f %WINDOWS_CODESIGN_CERTIFICATE_PATH% /p %WINDOWS_CODESIGN_CERTIFICATE_PASSWORD%"
             cc: cl
             cxx: cl
             cmake_generator: Ninja
@@ -143,6 +145,19 @@ jobs:
 
         CMAKE_ARGS="-DAPPLE_CODESIGN_IDENTITY=${APPLE_CODESIGN_IDENTITY}"
         echo "::set-output name=cmake_args::${CMAKE_ARGS}"
+
+    - name: "[Windows] Set up Windows code signing"
+      if: runner.os == 'Windows' && env.WINDOWS_CODESIGN_CERTIFICATE_PASSWORD != null && env.WINDOWS_CODESIGN_CERTIFICATE_PATH != null && env.WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SALT != null && env.WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SECRET != null
+      run: |
+        iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
+        appveyor-tools/secure-file -decrypt "%WINDOWS_CODESIGN_CERTIFICATE_PATH%" -secret "%WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SECRET%" -salt "%WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SALT%"
+        Add-Content -Path "%GITHUB_ENV%" -Value "WINDOWS_CODESIGN_CERTIFICATE_PATH=%WINDOWS_CODESIGN_CERTIFICATE_PATH%"
+        Add-Content -Path "%GITHUB_ENV%" -Value "WINDOWS_CODESIGN_CERTIFICATE_PASSWORD=%WINDOWS_CODESIGN_CERTIFICATE_PASSWORD%"
+      env:
+        WINDOWS_CODESIGN_CERTIFICATE_PATH: ${{ github.workspace }}\mixxx.pfx
+        WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SALT: ${{ secrets.WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SALT }}
+        WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SECRET: ${{ secrets.WINDOWS_CODESIGN_CERTIFICATE_SECURE_FILE_SECRET }}
+        WINDOWS_CODESIGN_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CODESIGN_CERTIFICATE_PASSWORD }}
 
     - name: "Set up build environment"
       id: buildenv
@@ -241,6 +256,11 @@ jobs:
     - name: "[macOS] Sign Package"
       if: runner.os == 'macOS' && env.MACOS_CODESIGN_OPENSSL_PASSWORD != null && env.MACOS_CODESIGN_CERTIFICATE_PASSWORD != null
       run: codesign --verbose=4 --options runtime --sign "${APPLE_CODESIGN_IDENTITY}" --entitlements ../build/osx/entitlements.plist *.dmg
+      working-directory: cmake_build
+
+    - name: "[Windows] Sign Package"
+      if: runner.os == 'Windows' && env.WINDOWS_CODESIGN_CERTIFICATE_PATH != null && env.WINDOWS_CODESIGN_CERTIFICATE_PASSWORD != null
+      run: signtool sign /f "..\%WINDOWS_CODESIGN_CERTIFICATE_PATH%" /p "%WINDOWS_CODESIGN_CERTIFICATE_PASSWORD%" *.msi
       working-directory: cmake_build
 
     - name: "[macOS] Upload build to downloads.mixxx.org"
