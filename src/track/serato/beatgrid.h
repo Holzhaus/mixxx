@@ -39,6 +39,10 @@ class SeratoBeatGridNonTerminalMarker final {
         return m_beatsTillNextMarker;
     }
 
+    void setBeatsTillNextMarker(quint32 beatsTillNextMarker) {
+        m_beatsTillNextMarker = beatsTillNextMarker;
+    }
+
   private:
     float m_positionSecs;
     quint32 m_beatsTillNextMarker;

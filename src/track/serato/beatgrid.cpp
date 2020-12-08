@@ -420,65 +420,91 @@ QByteArray SeratoBeatGrid::dumpBase64Encoded() const {
 void SeratoBeatGrid::setBeats(BeatsPointer pBeats,
         const audio::StreamInfo& streamInfo,
         double timingOffsetMillis) {
-    SINT endPositionFrames =
-            static_cast<SINT>(streamInfo.getSignalInfo().secs2frames(
-                    streamInfo.getDuration().toDoubleSeconds()));
-    SINT lastMarkerPositionFrames = static_cast<SINT>(pBeats->findPrevBeat(endPositionFrames));
-
-    QList<SeratoBeatGridNonTerminalMarkerPointer> nonTerminalMarkers;
-    SeratoBeatGridTerminalMarkerPointer pTerminalMarker = nullptr;
-    if (lastMarkerPositionFrames != -1) {
-        const double timingOffsetSecs = timingOffsetMillis / 1000;
-        const double bpm = pBeats->getBpmAroundPosition(lastMarkerPositionFrames, 1);
-        DEBUG_ASSERT(bpm >= 0);
-        const double lastMarkerPositionSecs =
-                streamInfo.getSignalInfo().frames2secs(
-                        lastMarkerPositionFrames) -
-                timingOffsetSecs;
-        pTerminalMarker = std::make_shared<SeratoBeatGridTerminalMarker>(
-                lastMarkerPositionSecs, bpm);
-
-        SINT lastBeatPositionFrames = lastMarkerPositionFrames;
-        SINT currentBeatPositionFrames = static_cast<SINT>(
-                pBeats->findPrevBeat(lastBeatPositionFrames - 2));
-        DEBUG_ASSERT(currentBeatPositionFrames != -1);
-        SINT deltaSamples = lastBeatPositionFrames - currentBeatPositionFrames;
-        int beatsTillNextMarker = 0;
-        while (currentBeatPositionFrames != -1) {
-            DEBUG_ASSERT(lastBeatPositionFrames != currentBeatPositionFrames);
-            SINT tempDeltaSamples = lastBeatPositionFrames - currentBeatPositionFrames;
-
-            if (deltaSamples == tempDeltaSamples) {
-                beatsTillNextMarker++;
-            } else {
-                const double positionSecs =
-                        streamInfo.getSignalInfo().frames2secs(
-                                lastBeatPositionFrames) -
-                        timingOffsetSecs;
-                nonTerminalMarkers.prepend(
-                        std::make_shared<SeratoBeatGridNonTerminalMarker>(
-                                positionSecs, beatsTillNextMarker));
-                lastMarkerPositionFrames = lastBeatPositionFrames;
-                beatsTillNextMarker = 0;
-            }
-            deltaSamples = tempDeltaSamples;
-            lastBeatPositionFrames = currentBeatPositionFrames;
-            const SINT prevBeatSearchPositionFrames = lastBeatPositionFrames - 2;
-            currentBeatPositionFrames = static_cast<SINT>(
-                    pBeats->findPrevBeat(prevBeatSearchPositionFrames));
-            qWarning() << currentBeatPositionFrames << lastBeatPositionFrames;
-        }
-
-        if (lastBeatPositionFrames != lastMarkerPositionFrames) {
-            const double positionSecs = streamInfo.getSignalInfo().frames2secs(
-                    lastBeatPositionFrames);
-            nonTerminalMarkers.prepend(
-                    std::make_shared<SeratoBeatGridNonTerminalMarker>(
-                            positionSecs, beatsTillNextMarker));
-        }
+    VERIFY_OR_DEBUG_ASSERT(pBeats) {
+        return;
     }
 
-    setTerminalMarker(pTerminalMarker);
+    const double timingOffsetSecs = timingOffsetMillis / 1000;
+    SINT endPositionSamples = streamInfo.getSignalInfo().frames2samples(
+            static_cast<SINT>(streamInfo.getSignalInfo().secs2frames(
+                    std::ceil(streamInfo.getDuration().toDoubleSeconds()))));
+
+    QList<SeratoBeatGridNonTerminalMarkerPointer> nonTerminalMarkers;
+
+    auto pBeatsIterator = pBeats->findBeats(0, endPositionSamples);
+
+    // This might be null if the track doesn't contain any beats
+    if (!pBeatsIterator) {
+        setTerminalMarker(nullptr);
+        setNonTerminalMarkers({});
+        return;
+    }
+
+    SINT currentBeatPositionSamples = 0;
+    SINT previousBeatPositionSamples = 0;
+    double previousDeltaSamples = -1;
+    int beatsTillNextMarker = 0;
+    while (pBeatsIterator->hasNext()) {
+        previousBeatPositionSamples = currentBeatPositionSamples;
+        currentBeatPositionSamples = static_cast<SINT>(pBeatsIterator->next());
+
+        const double currentDeltaSamples = currentBeatPositionSamples - previousBeatPositionSamples;
+        if (currentDeltaSamples != previousDeltaSamples) {
+            if (!nonTerminalMarkers.isEmpty()) {
+                DEBUG_ASSERT(beatsTillNextMarker > 0);
+                const auto pNonTerminalMarker =
+                        nonTerminalMarkers.at(nonTerminalMarkers.size() - 1);
+                DEBUG_ASSERT(pNonTerminalMarker);
+                pNonTerminalMarker->setBeatsTillNextMarker(beatsTillNextMarker);
+
+                // After adding the first marker, the the sample delta won't
+                // match, because it compares the distance between beats 1 and
+                // two with the distance between the start of the track and the
+                // first beat. This special case makes sure that we don't add
+                // an unnecessary additional marker that has
+                // beatsTillNextMarker set to 1.
+                if (nonTerminalMarkers.size() == 1) {
+                    previousDeltaSamples = currentDeltaSamples;
+                    beatsTillNextMarker++;
+                    continue;
+                }
+            }
+            beatsTillNextMarker = 0;
+
+            // Don't create a SeratoBeatGridNonTerminalMarker entry for the
+            // last beat, this needs to be a terminal marker entry
+            if (pBeatsIterator->hasNext()) {
+                const double positionSecs =
+                        streamInfo.getSignalInfo().frames2secs(
+                                streamInfo.getSignalInfo().samples2frames(
+                                        currentBeatPositionSamples)) -
+                        timingOffsetSecs;
+                nonTerminalMarkers.append(
+                        std::make_shared<SeratoBeatGridNonTerminalMarker>(
+                                positionSecs, 0));
+            }
+        }
+        previousDeltaSamples = currentDeltaSamples;
+        beatsTillNextMarker++;
+    }
+
+    VERIFY_OR_DEBUG_ASSERT(currentBeatPositionSamples != -1) {
+        return;
+    }
+
+    DEBUG_ASSERT(!nonTerminalMarkers.isEmpty());
+    DEBUG_ASSERT(beatsTillNextMarker > 0);
+    const auto pNonTerminalMarker = nonTerminalMarkers.at(nonTerminalMarkers.size() - 1);
+    DEBUG_ASSERT(pNonTerminalMarker);
+    pNonTerminalMarker->setBeatsTillNextMarker(beatsTillNextMarker);
+
+    const double positionSecs =
+            streamInfo.getSignalInfo().frames2secs(
+                    streamInfo.getSignalInfo().samples2frames(
+                            currentBeatPositionSamples)) -
+            timingOffsetSecs;
+    const double bpm = pBeats->getBpmAroundPosition(currentBeatPositionSamples, 1);
+    setTerminalMarker(std::make_shared<SeratoBeatGridTerminalMarker>(positionSecs, bpm));
     setNonTerminalMarkers(nonTerminalMarkers);
 }
 
