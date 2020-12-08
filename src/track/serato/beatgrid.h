@@ -124,7 +124,9 @@ class SeratoBeatGrid final {
         m_pTerminalMarker = pTerminalMarker;
     }
 
-    void setBeats(BeatsPointer pBeats, const audio::StreamInfo& streamInfo);
+    void setBeats(BeatsPointer pBeats,
+            const audio::StreamInfo& streamInfo,
+            double timingOffsetMillis);
 
     quint8 footer() const {
         return m_footer;

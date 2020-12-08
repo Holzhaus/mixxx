@@ -417,53 +417,64 @@ QByteArray SeratoBeatGrid::dumpBase64Encoded() const {
     return base64EncodedData;
 }
 
-void SeratoBeatGrid::setBeats(BeatsPointer pBeats, const audio::StreamInfo& streamInfo) {
-    SINT endFramePosition =
+void SeratoBeatGrid::setBeats(BeatsPointer pBeats,
+        const audio::StreamInfo& streamInfo,
+        double timingOffsetMillis) {
+    SINT endPositionFrames =
             static_cast<SINT>(streamInfo.getSignalInfo().secs2frames(
                     streamInfo.getDuration().toDoubleSeconds()));
-    SINT lastMarkerFramePosition = static_cast<SINT>(pBeats->findPrevBeat(endFramePosition));
+    SINT lastMarkerPositionFrames = static_cast<SINT>(pBeats->findPrevBeat(endPositionFrames));
 
     QList<SeratoBeatGridNonTerminalMarkerPointer> nonTerminalMarkers;
     SeratoBeatGridTerminalMarkerPointer pTerminalMarker = nullptr;
-    if (lastMarkerFramePosition != -1) {
-        double bpm = pBeats->getBpmAroundPosition(lastMarkerFramePosition, 1);
+    if (lastMarkerPositionFrames != -1) {
+        const double timingOffsetSecs = timingOffsetMillis / 1000;
+        const double bpm = pBeats->getBpmAroundPosition(lastMarkerPositionFrames, 1);
         DEBUG_ASSERT(bpm >= 0);
+        const double lastMarkerPositionSecs =
+                streamInfo.getSignalInfo().frames2secs(
+                        lastMarkerPositionFrames) -
+                timingOffsetSecs;
         pTerminalMarker = std::make_shared<SeratoBeatGridTerminalMarker>(
-                lastMarkerFramePosition, bpm);
+                lastMarkerPositionSecs, bpm);
 
-        SINT lastBeatFramePosition = lastMarkerFramePosition;
-        SINT currentBeatFramePosition = static_cast<SINT>(
-                pBeats->findPrevBeat(lastBeatFramePosition - 1));
-        SINT deltaSamples = lastBeatFramePosition - currentBeatFramePosition;
+        SINT lastBeatPositionFrames = lastMarkerPositionFrames;
+        SINT currentBeatPositionFrames = static_cast<SINT>(
+                pBeats->findPrevBeat(lastBeatPositionFrames - 2));
+        DEBUG_ASSERT(currentBeatPositionFrames != -1);
+        SINT deltaSamples = lastBeatPositionFrames - currentBeatPositionFrames;
         int beatsTillNextMarker = 0;
-        while (currentBeatFramePosition != -1) {
-            SINT tempDeltaSamples = lastBeatFramePosition - currentBeatFramePosition;
+        while (currentBeatPositionFrames != -1) {
+            DEBUG_ASSERT(lastBeatPositionFrames != currentBeatPositionFrames);
+            SINT tempDeltaSamples = lastBeatPositionFrames - currentBeatPositionFrames;
 
             if (deltaSamples == tempDeltaSamples) {
                 beatsTillNextMarker++;
             } else {
                 const double positionSecs =
                         streamInfo.getSignalInfo().frames2secs(
-                                lastBeatFramePosition);
+                                lastBeatPositionFrames) -
+                        timingOffsetSecs;
                 nonTerminalMarkers.prepend(
                         std::make_shared<SeratoBeatGridNonTerminalMarker>(
                                 positionSecs, beatsTillNextMarker));
-                lastMarkerFramePosition = lastBeatFramePosition;
+                lastMarkerPositionFrames = lastBeatPositionFrames;
                 beatsTillNextMarker = 0;
             }
             deltaSamples = tempDeltaSamples;
-            lastBeatFramePosition = currentBeatFramePosition;
-            currentBeatFramePosition = static_cast<SINT>(
-                    pBeats->findPrevBeat(lastBeatFramePosition - 1));
+            lastBeatPositionFrames = currentBeatPositionFrames;
+            const SINT prevBeatSearchPositionFrames = lastBeatPositionFrames - 2;
+            currentBeatPositionFrames = static_cast<SINT>(
+                    pBeats->findPrevBeat(prevBeatSearchPositionFrames));
+            qWarning() << currentBeatPositionFrames << lastBeatPositionFrames;
         }
 
-        if (lastBeatFramePosition != lastMarkerFramePosition) {
+        if (lastBeatPositionFrames != lastMarkerPositionFrames) {
             const double positionSecs = streamInfo.getSignalInfo().frames2secs(
-                    lastBeatFramePosition);
+                    lastBeatPositionFrames);
             nonTerminalMarkers.prepend(
                     std::make_shared<SeratoBeatGridNonTerminalMarker>(
                             positionSecs, beatsTillNextMarker));
-            lastMarkerFramePosition = lastBeatFramePosition;
         }
     }
 

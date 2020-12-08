@@ -1368,6 +1368,8 @@ ExportTrackMetadataResult Track::exportMetadata(
             double timingOffset = mixxx::SeratoTags::guessTimingOffsetMillis(
                     getLocation(), m_streamInfoFromSource->getSignalInfo());
             seratoTags->setCueInfos(cueInfos, timingOffset);
+
+            seratoTags->setBeats(m_pBeats, *m_streamInfoFromSource);
         }
     }
 #else
