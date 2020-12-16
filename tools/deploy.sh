@@ -13,6 +13,7 @@ set -eu -o pipefail
 
 SSH="ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+GIT_VERSION="$(git describe --tags)"
 DEST_PATH="${DESTDIR}/${GIT_BRANCH}"
 TMP_PATH="${DESTDIR}/.tmp/${UPLOAD_ID}"
 
@@ -57,10 +58,10 @@ do
     # Move from the temporary path to the final destination.
     ${SSH} "${SSH_USER}@${SSH_HOST}" << EOF
     trap 'rm -rf "${TMP_PATH}"' EXIT
-    mkdir -p "${DEST_PATH}" &&
-    mv "${TMP_PATH}/${FILENAME}" "${TMP_PATH}/${FILENAME_HASH}" "${DEST_PATH}" &&
+    mkdir -p "${DEST_PATH}/${GIT_VERSION}" &&
+    mv "${TMP_PATH}/${FILENAME}" "${TMP_PATH}/${FILENAME_HASH}" "${DEST_PATH}/${GIT_VERSION}" &&
     cd "${DEST_PATH}" &&
-    ln -sf "${FILENAME_HASH}" "${SYMLINK_NAME}.sha256sum" &&
-    ln -sf "${FILENAME}" "${SYMLINK_NAME}"
+    ln -sf "${GIT_VERSION}/${FILENAME_HASH}" "${SYMLINK_NAME}.sha256sum" &&
+    ln -sf "${GIT_VERSION}/${FILENAME}" "${SYMLINK_NAME}"
 EOF
 done
