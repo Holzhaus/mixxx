@@ -64,9 +64,10 @@ class FakeOverwriteAnswerer : public QObject {
 
 class TrackExporterTest : public testing::Test {
   public:
-    TrackExporterTest() :
-        m_testDataDir(QDir::current().absoluteFilePath(
-                "src/test/id3-test-data")) { }
+    TrackExporterTest()
+            : m_testDataDir(QDir::current().absoluteFilePath(
+                      "src/test/data/id3-test-data")) {
+    }
 
     void SetUp() override {
         ASSERT_TRUE(m_exportTempDir.isValid());

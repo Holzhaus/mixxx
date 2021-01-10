@@ -55,10 +55,9 @@ class CoverArtCacheTest : public LibraryTest, public CoverArtCache {
 
 const QString kCoverFileTest("cover_test.jpg");
 const QString kCoverLocationTest(QDir::currentPath() %
-                                 "/src/test/id3-test-data/" % kCoverFileTest);
+        "/src/test/data/id3-test-data/" % kCoverFileTest);
 const QString kTrackLocationTest(QDir::currentPath() %
-                                 "/src/test/id3-test-data/cover-test-png.mp3");
-
+        "/src/test/data/id3-test-data/cover-test-png.mp3");
 
 // We need 3 separate test cases:
 // 1) loadCoverFromMetadata()
