@@ -4,13 +4,7 @@
 #include "sources/metadatasourcetaglib.h"
 #include "test/mixxxtest.h"
 
-namespace {
-
-const QDir kTestDir = QDir::current().absoluteFilePath("src/test/data/id3-test-data");
-
-} // anonymous namespace
-
-class TagLibTest : public testing::Test {
+class TagLibTest : public MixxxTest {
 };
 
 TEST_F(TagLibTest, WriteID3v2Tag) {
@@ -18,7 +12,7 @@ TEST_F(TagLibTest, WriteID3v2Tag) {
     const QString tmpFileName = mixxxtest::generateTemporaryFileName("no_id3v1_mp3");
 
     // Create the temporary file by copying an existing file
-    mixxxtest::copyFile(kTestDir.absoluteFilePath("empty.mp3"), tmpFileName);
+    mixxxtest::copyFile(dataFile("id3-test-data/empty.mp3").absoluteFilePath(), tmpFileName);
 
     // Ensure that the temporary file is removed after the test
     mixxxtest::FileRemover tmpFileRemover(tmpFileName);

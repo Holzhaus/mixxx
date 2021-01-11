@@ -40,14 +40,29 @@ class MixxxTest : public testing::Test {
     // Simulate restarting Mixxx by saving and reloading the UserSettings.
     void saveAndReloadConfig();
 
-    QDir getTestDataDir() const {
-        return m_testDataDir.path();
+    /// Get a QDir instance for the test data directory (`src/test/data`).
+    QDir dataDir() const {
+        return m_dataDir.path();
+    }
+
+    /// Get a QFileInfo instance for a file in the test data directory.
+    QFileInfo dataFile(const QString& path) const {
+        QFileInfo fileInfo(m_dataDir.filePath(path));
+        DEBUG_ASSERT(fileInfo.exists());
+        return fileInfo;
+    }
+
+    /// Get a QDir instance for a temp directory that will be deleted after the
+    /// test(s) finished.
+    QDir tempDataDir() const {
+        return m_tempDataDir.path();
     }
 
   private:
     static QScopedPointer<MixxxApplication> s_pApplication;
 
-    const QTemporaryDir m_testDataDir;
+    const QTemporaryDir m_tempDataDir;
+    QDir m_dataDir;
 
   protected:
     UserSettingsPointer m_pConfig;

@@ -10,8 +10,6 @@
 
 namespace {
 
-const QDir kTestDir(QDir::current().absoluteFilePath("src/test/data/id3-test-data"));
-
 const SINT kBufferSizes[] = {
         256,
         512,
@@ -75,11 +73,11 @@ class SoundSourceProxyTest : public MixxxTest {
         return supportedFileNameSuffixes;
     }
 
-    static QStringList getFilePaths() {
+    QStringList getFilePaths() {
         QStringList filePaths;
         const QStringList fileNameSuffixes = getFileNameSuffixes();
         for (const auto& fileNameSuffix : fileNameSuffixes) {
-            filePaths.append(kTestDir.absoluteFilePath("cover-test" + fileNameSuffix));
+            filePaths.append(dataFile("id3-test-data/cover-test" + fileNameSuffix).filePath());
         }
         return filePaths;
     }
@@ -210,8 +208,8 @@ TEST_F(SoundSourceProxyTest, openEmptyFile) {
 }
 
 TEST_F(SoundSourceProxyTest, readArtist) {
-    auto pTrack = Track::newTemporary(TrackFile(
-            kTestDir, "artist.mp3"));
+    const QFileInfo trackFileInfo = dataFile("id3-test-data/artist.mp3");
+    auto pTrack = Track::newTemporary(TrackFile(trackFileInfo.dir(), trackFileInfo.fileName()));
     SoundSourceProxy proxy(pTrack);
     mixxx::TrackMetadata trackMetadata;
     EXPECT_EQ(mixxx::MetadataSource::ImportResult::Succeeded, proxy.importTrackMetadata(&trackMetadata));
@@ -219,8 +217,8 @@ TEST_F(SoundSourceProxyTest, readArtist) {
 }
 
 TEST_F(SoundSourceProxyTest, TOAL_TPE2) {
-    auto pTrack = Track::newTemporary(TrackFile(
-            kTestDir, "TOAL_TPE2.mp3"));
+    const QFileInfo trackFileInfo = dataFile("id3-test-data/TOAL_TPE2.mp3");
+    auto pTrack = Track::newTemporary(TrackFile(trackFileInfo.dir(), trackFileInfo.fileName()));
     SoundSourceProxy proxy(pTrack);
     mixxx::TrackMetadata trackMetadata;
     EXPECT_EQ(mixxx::MetadataSource::ImportResult::Succeeded, proxy.importTrackMetadata(&trackMetadata));

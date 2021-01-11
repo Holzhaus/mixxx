@@ -92,7 +92,7 @@ TEST_F(DirectoryDAOTest, addDirTest) {
 
 TEST_F(DirectoryDAOTest, removeDirTest) {
     DirectoryDAO m_DirectoryDao = internalCollection()->getDirectoryDAO();
-    QString testdir = getTestDataDir().path();
+    const QString testdir = dataDir().path();
 
     // check if directory doa adds and thinks everything is ok
     m_DirectoryDao.addDirectory(testdir);

@@ -130,7 +130,7 @@ TEST_F(ConfigObjectTest, Save) {
 
     m_pConfig->save();
     m_pConfig = UserSettingsPointer(
-            new UserSettings(getTestDataDir().filePath("test.cfg")));
+            new UserSettings(tempDataDir().filePath("test.cfg")));
 
     for (int i = 0; i < 10; ++i) {
         EXPECT_EQ(i, config()->getValue<int>(

@@ -148,7 +148,7 @@ class BaseSignalPathTest : public MixxxTest {
             const int iBufferSize,
             const QString& reference_title,
             const double delta = .0001) {
-        QFile f(QDir::currentPath() + "/src/test/data/reference_buffers/" + reference_title);
+        QFile f(dataFile("reference_buffers/" + reference_title).absoluteFilePath());
         bool pass = true;
         int i = 0;
         // If the file is not there, we will fail and write out the .actual
@@ -185,7 +185,7 @@ class BaseSignalPathTest : public MixxxTest {
             qWarning() << "Buffer does not match" << reference_title
                        << ", actual buffer written to "
                        << "reference_buffers/" + fname_actual;
-            QFile actual(QDir::currentPath() + "/src/test/data/reference_buffers/" + fname_actual);
+            QFile actual(dataFile("reference_buffers/" + fname_actual).absoluteFilePath());
             ASSERT_TRUE(actual.open(QFile::WriteOnly | QFile::Text));
             QTextStream out(&actual);
             for (int i = 0; i < iBufferSize; i += 2) {
@@ -232,8 +232,7 @@ class BaseSignalPathTest : public MixxxTest {
 class SignalPathTest : public BaseSignalPathTest {
   protected:
     SignalPathTest() {
-        const QString kTrackLocationTest = QDir::currentPath() + "/src/test/data/sine-30.wav";
-        TrackPointer pTrack(Track::newTemporary(kTrackLocationTest));
+        TrackPointer pTrack(Track::newTemporary(dataFile("sine-30.wav").absoluteFilePath()));
 
         loadTrack(m_pMixerDeck1, pTrack);
         loadTrack(m_pMixerDeck2, pTrack);

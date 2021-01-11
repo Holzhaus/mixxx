@@ -5,12 +5,13 @@
 #include <QDir>
 #include <QtDebug>
 
+#include "mixxxtest.h"
 #include "track/serato/markers.h"
 #include "util/memory.h"
 
 namespace {
 
-class SeratoMarkersTest : public testing::Test {
+class SeratoMarkersTest : public MixxxTest {
   protected:
     void parseEntry(
             const QByteArray& inputValue,
@@ -177,13 +178,15 @@ TEST_F(SeratoMarkersTest, ParseEntry) {
 }
 
 TEST_F(SeratoMarkersTest, ParseMarkersDataMP3) {
-    parseMarkersDataInDirectory(QDir("src/test/data/serato/mp3/markers_"),
-            mixxx::taglib::FileType::MP3);
+    QDir dir = dataDir();
+    ASSERT_TRUE(dir.cd("serato/mp3/markers_/"));
+    parseMarkersDataInDirectory(dir, mixxx::taglib::FileType::MP3);
 }
 
 TEST_F(SeratoMarkersTest, ParseMarkersDataMP4) {
-    parseMarkersDataInDirectory(QDir("src/test/data/serato/mp4/markers_"),
-            mixxx::taglib::FileType::MP4);
+    QDir dir = dataDir();
+    ASSERT_TRUE(dir.cd("serato/mp4/markers_/"));
+    parseMarkersDataInDirectory(dir, mixxx::taglib::FileType::MP4);
 }
 
 TEST_F(SeratoMarkersTest, ParseEmptyDataMP3) {

@@ -8,6 +8,14 @@
 #include "track/track.h"
 #include "util/assert.h"
 
+namespace {
+
+const QString kTestFileA = QStringLiteral("id3-test-data/cover-test-jpg.mp3");
+const QString kTestFileB = QStringLiteral("id3-test-data/cover-test-png.mp3");
+const QString kTestFileC = QStringLiteral("id3-test-data/artist.mp3");
+
+} // namespace
+
 TrackPointer newTestTrack(int sampleRate) {
     TrackPointer pTrack(Track::newTemporary());
     pTrack->setAudioProperties(
@@ -750,10 +758,8 @@ TEST_F(SearchQueryParserTest, CrateFilter) {
                                     QStringList(), ""));
 
     // locations for test tracks
-    const QString kTrackALocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-jpg.mp3");
-    const QString kTrackBLocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-png.mp3");
+    const QString kTrackALocationTest(dataFile(kTestFileA).filePath());
+    const QString kTrackBLocationTest(dataFile(kTestFileB).filePath());
 
     // Create new crate and add it to the collection
     Crate testCrate;
@@ -794,12 +800,9 @@ TEST_F(SearchQueryParserTest, ShortCrateFilter) {
                                     searchColumns, ""));
 
     // locations for test tracks
-    const QString kTrackALocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-jpg.mp3");
-    const QString kTrackBLocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-png.mp3");
-    const QString kTrackCLocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/artist.mp3");
+    const QString kTrackALocationTest(dataFile(kTestFileA).filePath());
+    const QString kTrackBLocationTest(dataFile(kTestFileB).filePath());
+    const QString kTrackCLocationTest(dataFile(kTestFileC).filePath());
 
     // Create new crate and add it to the collection
     Crate testCrate;
@@ -850,10 +853,8 @@ TEST_F(SearchQueryParserTest, CrateFilterQuote){
                                     QStringList(), ""));
 
     // locations for test tracks
-    const QString kTrackALocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-jpg.mp3");
-    const QString kTrackBLocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-png.mp3");
+    const QString kTrackALocationTest(dataFile(kTestFileA).filePath());
+    const QString kTrackBLocationTest(dataFile(kTestFileB).filePath());
 
     // Create new crate and add it to the collection
     Crate testCrate;
@@ -894,10 +895,10 @@ TEST_F(SearchQueryParserTest, CrateFilterWithOther){
                                     QStringList(), ""));
 
     // locations for test tracks
-    const QString kTrackALocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-jpg.mp3");
-    const QString kTrackBLocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-png.mp3");
+    const QString kTrackALocationTest(dataFile(kTestFileA).filePath());
+    const QString kTrackBLocationTest(dataFile(kTestFileB).filePath());
+    qWarning() << kTrackALocationTest;
+    qWarning() << kTrackBLocationTest;
 
     // Create new crate and add it to the collection
     Crate testCrate;
@@ -939,10 +940,8 @@ TEST_F(SearchQueryParserTest, CrateFilterWithCrateFilterAndNegation){
                                     QStringList(), ""));
 
     // locations for test tracks
-    const QString kTrackALocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-jpg.mp3");
-    const QString kTrackBLocationTest(QDir::currentPath() %
-            "/src/test/data/id3-test-data/cover-test-png.mp3");
+    const QString kTrackALocationTest(dataFile(kTestFileA).filePath());
+    const QString kTrackBLocationTest(dataFile(kTestFileB).filePath());
 
     // Create new crates and add them to the collection
     Crate testCrateA;

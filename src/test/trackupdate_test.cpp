@@ -1,14 +1,14 @@
+#include <QString>
 #include <QtDebug>
 
-#include "test/mixxxtest.h"
-
-#include "track/track.h"
 #include "library/coverart.h"
 #include "sources/soundsourceproxy.h"
+#include "test/mixxxtest.h"
+#include "track/track.h"
 
 namespace {
 
-const QDir kTestDir(QDir::current().absoluteFilePath("src/test/data/id3-test-data"));
+const QString kTestTrackFile = QStringLiteral("id3-test-data/TOAL_TPE2.mp3");
 
 } // anonymous namespace
 
@@ -23,12 +23,12 @@ class TrackUpdateTest: public MixxxTest {
         return pTrack->getCoverInfo().type != CoverInfo::NONE;
     }
 
-    static TrackPointer newTestTrack() {
-        return Track::newTemporary(TrackFile(
-                kTestDir, "TOAL_TPE2.mp3"));
+    TrackPointer newTestTrack() {
+        const QFileInfo fileInfo = dataFile(kTestTrackFile);
+        return Track::newTemporary(TrackFile(fileInfo.dir(), fileInfo.fileName()));
     }
 
-    static TrackPointer newTestTrackParsed() {
+    TrackPointer newTestTrackParsed() {
         auto pTrack = newTestTrack();
         SoundSourceProxy(pTrack).updateTrackFromSource();
         EXPECT_TRUE(pTrack->isMetadataSynchronized());
@@ -39,7 +39,7 @@ class TrackUpdateTest: public MixxxTest {
         return pTrack;
     }
 
-    static TrackPointer newTestTrackParsedModified() {
+    TrackPointer newTestTrackParsedModified() {
         auto pTrack = newTestTrackParsed();
         pTrack->setArtist(pTrack->getArtist() + pTrack->getArtist());
         auto coverInfo = pTrack->getCoverInfo();

@@ -1,16 +1,17 @@
 #include <gtest/gtest.h>
+#include <taglib/textidentificationframe.h>
+#include <taglib/tstring.h>
 
+#include <QDir>
+#include <QtDebug>
+
+#include "mixxxtest.h"
 #include "track/serato/markers2.h"
 #include "util/memory.h"
 
-#include <taglib/tstring.h>
-#include <taglib/textidentificationframe.h>
-#include <QtDebug>
-#include <QDir>
-
 namespace {
 
-class SeratoMarkers2Test : public testing::Test {
+class SeratoMarkers2Test : public MixxxTest {
   protected:
     void parseBpmLockEntry(const QByteArray& inputValue, bool valid, bool locked) {
         const mixxx::SeratoMarkers2EntryPointer parsedEntry =
@@ -398,23 +399,27 @@ TEST_F(SeratoMarkers2Test, ParseLoopEntry) {
 }
 
 TEST_F(SeratoMarkers2Test, ParseMarkers2DataMP3) {
-    parseMarkers2DataInDirectory(QDir("src/test/data/serato/mp3/markers2"),
-            mixxx::taglib::FileType::MP3);
+    QDir dir(dataDir());
+    ASSERT_TRUE(dir.cd("serato/mp3/markers2/"));
+    parseMarkers2DataInDirectory(dir, mixxx::taglib::FileType::MP3);
 }
 
 TEST_F(SeratoMarkers2Test, ParseMarkers2DataMP4) {
-    parseMarkers2DataInDirectory(QDir("src/test/data/serato/mp4/markers2"),
-            mixxx::taglib::FileType::MP4);
+    QDir dir(dataDir());
+    ASSERT_TRUE(dir.cd("serato/mp4/markers2/"));
+    parseMarkers2DataInDirectory(dir, mixxx::taglib::FileType::MP4);
 }
 
 TEST_F(SeratoMarkers2Test, ParseMarkers2DataFLAC) {
-    parseMarkers2DataInDirectory(QDir("src/test/data/serato/flac/markers2"),
-            mixxx::taglib::FileType::FLAC);
+    QDir dir(dataDir());
+    ASSERT_TRUE(dir.cd("serato/flac/markers2/"));
+    parseMarkers2DataInDirectory(dir, mixxx::taglib::FileType::FLAC);
 }
 
 TEST_F(SeratoMarkers2Test, ParseMarkers2DataOGG) {
-    parseMarkers2DataInDirectory(QDir("src/test/data/serato/ogg/markers2"),
-            mixxx::taglib::FileType::OGG);
+    QDir dir(dataDir());
+    ASSERT_TRUE(dir.cd("serato/ogg/markers2/"));
+    parseMarkers2DataInDirectory(dir, mixxx::taglib::FileType::OGG);
 }
 
 TEST_F(SeratoMarkers2Test, ParseEmptyDataMP3) {

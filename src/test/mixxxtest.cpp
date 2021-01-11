@@ -59,10 +59,13 @@ MixxxTest::ApplicationScope::~ApplicationScope() {
     mixxx::Logging::shutdown();
 }
 
-MixxxTest::MixxxTest() {
-    DEBUG_ASSERT(m_testDataDir.isValid());
+MixxxTest::MixxxTest()
+        : m_dataDir(QDir::current()) {
+    const bool dataDirFound = m_dataDir.cd("src/test/data");
+    DEBUG_ASSERT(dataDirFound);
+
     m_pConfig = UserSettingsPointer(new UserSettings(
-            makeTestConfigFile(getTestDataDir().filePath("test.cfg"))));
+            makeTestConfigFile(tempDataDir().filePath("test.cfg"))));
     ControlDoublePrivate::setUserConfig(m_pConfig);
 }
 
@@ -78,7 +81,7 @@ MixxxTest::~MixxxTest() {
 void MixxxTest::saveAndReloadConfig() {
     m_pConfig->save();
     m_pConfig = UserSettingsPointer(
-            new UserSettings(getTestDataDir().filePath("test.cfg")));
+            new UserSettings(tempDataDir().filePath("test.cfg")));
     ControlDoublePrivate::setUserConfig(m_pConfig);
 }
 
