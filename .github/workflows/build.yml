@@ -13,7 +13,6 @@ jobs:
             os: ubuntu-18.04
             cmake_args: >-
               -DFAAD=ON
-              -DKEYFINDER=ON
               -DLOCALECOMPARE=ON
               -DMAD=ON
               -DMODPLUG=ON
@@ -32,7 +31,6 @@ jobs:
             os: ubuntu-20.04
             cmake_args: >-
               -DFFMPEG=ON
-              -DKEYFINDER=ON
               -DLOCALECOMPARE=ON
               -DMAD=ON
               -DMODPLUG=ON
@@ -67,12 +65,14 @@ jobs:
           - name: Windows 2019 (MSVC)
             os: windows-2019
             cmake_args: >-
+              -DFFMPEG=OFF
               -DHSS1394=ON
-              -DKEYFINDER=OFF
+              -DLILV=ON
               -DLOCALECOMPARE=ON
               -DMAD=ON
               -DMEDIAFOUNDATION=ON
-              -DSTATIC_DEPS=ON
+              -DSTATIC_DEPS=OFF
+              -DWAVPACK=ON
             cc: cl
             cxx: cl
             cmake_generator: Ninja
@@ -203,10 +203,12 @@ jobs:
         -DBROADCAST=ON
         -DBULK=ON
         -DHID=ON
+        -DKEYFINDER=ON
         -DLILV=ON
         -DOPUS=ON
         -DQTKEYCHAIN=ON
         -DVINYLCONTROL=ON
+        ${{ env.CMAKE_ARGS }}
         ..
       working-directory: build
       env:

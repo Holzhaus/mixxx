@@ -67,7 +67,7 @@ EXIT /B 0
 
     IF NOT EXIST %BUILDENV_PATH% (
         ECHO ### Download prebuild build environment ###
-        SET BUILDENV_URL=https://downloads.mixxx.org/builds/buildserver/2.3.x-windows/!BUILDENV_NAME!.zip
+        SET BUILDENV_URL=https://homepages.ruhr-uni-bochum.de/jan.holthuis/!BUILDENV_NAME!.zip
         IF NOT EXIST !BUILDENV_PATH!.zip (
             ECHO ### Download prebuild build environment from !BUILDENV_URL! to !BUILDENV_PATH!.zip ###
             BITSADMIN /transfer buildenvjob /download /priority normal !BUILDENV_URL! !BUILDENV_PATH!.zip
@@ -82,18 +82,11 @@ EXIT /B 0
     ECHO ### Build environment path: !BUILDENV_PATH! ###
     ENDLOCAL
 
-    SET PATH=!BUILDENV_PATH!\bin;!PATH!
-
-    FOR /D %%G IN (%BUILDENV_PATH%\Qt-*) DO (SET Qt5_DIR=%%G)
-    SET CMAKE_PREFIX_PATH=!BUILDENV_PATH!;!Qt5_DIR!
-
-    ECHO ^Environent Variables:
-    ECHO ^- PATH=!PATH!
-    ECHO ^CMake Configuration:
-    ECHO ^- CMAKE_PREFIX_PATH=!CMAKE_PREFIX_PATH!
+    SET CMAKE_TOOLCHAIN_FILE=%BUILDENV_PATH%\scripts\buildsystems\vcpkg.cmake
+    SET CMAKE_ARGS=-DX_VCPKG_APPLOCAL_DEPS_INSTALL=ON -DCMAKE_TOOLCHAIN_FILE=!CMAKE_TOOLCHAIN_FILE! -DVCPKG_TARGET_TRIPLET=x64-windows
 
     IF DEFINED GITHUB_ENV (
-        ECHO CMAKE_PREFIX_PATH=!CMAKE_PREFIX_PATH!>>!GITHUB_ENV!
+        ECHO CMAKE_ARGS=!CMAKE_ARGS!>>!GITHUB_ENV!
         ECHO PATH=!PATH!>>!GITHUB_ENV!
     )
     GOTO :EOF
@@ -160,10 +153,13 @@ REM Generate CMakeSettings.json which is read by MS Visual Studio to determine t
     >>%CMakeSettings% echo       "generator": "Ninja",
     >>%CMakeSettings% echo       "inheritEnvironments": [ "msvc_!PLATFORM!_!PLATFORM!" ],
     >>%CMakeSettings% echo       "installRoot": "${projectDir}\\install\\!PLATFORM!__%1",
+    >>%CMakeSettings% echo       "cmakeToolchain": "!BUILDENV_PATH!\scripts\buildsystems\vcpkg.cmake",
     >>%CMakeSettings% echo       "intelliSenseMode": "windows-msvc-!PLATFORM!",
     >>%CMakeSettings% echo       "name": "!PLATFORM!__%1",
     >>%CMakeSettings% echo       "variables": [
     SET variableElementTermination=,
+    CALL :AddCMakeVar2CMakeSettings_JSON "X_VCPKG_APPLOCAL_DEPS_INSTALL"      "BOOL"   "true"
+    CALL :AddCMakeVar2CMakeSettings_JSON "VCPKG_TARGET_TRIPLET"               "STRING" "x64-windows"
     CALL :AddCMakeVar2CMakeSettings_JSON "BATTERY"                            "BOOL"   "true"
     CALL :AddCMakeVar2CMakeSettings_JSON "BROADCAST"                          "BOOL"   "true"
     CALL :AddCMakeVar2CMakeSettings_JSON "BULK"                               "BOOL"   "true"
