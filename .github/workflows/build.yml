@@ -77,7 +77,7 @@ jobs:
             cxx: cl
             cmake_generator: Ninja
             # TODO: Fix these broken tests on Windows
-            ctest_args: --exclude-regex '^AutoDJProcessorTest.*$'
+            ctest_args:
             cpack_generator: WIX
             compiler_cache: clcache
             compiler_cache_path: ${{ github.workspace }}\clcache
