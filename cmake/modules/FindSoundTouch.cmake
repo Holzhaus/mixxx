@@ -54,8 +54,18 @@ find_path(SoundTouch_INCLUDE_DIR
   DOC "SoundTouch include directory")
 mark_as_advanced(SoundTouch_INCLUDE_DIR)
 
+set(SoundTouch_LIBRARY_NAMES SoundTouch)
+if(WIN32)
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+      list(APPEND SoundTouch_LIBRARY_NAMES SoundTouch_x64)
+      list(APPEND SoundTouch_LIBRARY_NAMES SoundTouchDll_x64)
+  endif()
+  list(APPEND SoundTouch_LIBRARY_NAMES SoundTouchDll)
+endif()
+mark_as_advanced(SoundTouch_LIBRARY_NAMES)
+
 find_library(SoundTouch_LIBRARY
-  NAMES SoundTouch
+    NAMES ${SoundTouch_LIBRARY_NAMES}
   PATHS ${PC_SoundTouch_LIBRARY_DIRS}
   DOC "SoundTouch library"
 )
