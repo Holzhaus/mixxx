@@ -184,6 +184,10 @@ jobs:
     - name: "Create build directory"
       run: mkdir build
 
+    - name: "Check CMake install"
+      if: runnner.os = 'Linux'
+      run: cmake --version && type -a cmake
+
     - name: "Configure"
       run: >-
         cmake
