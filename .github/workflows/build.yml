@@ -7,11 +7,13 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: Ubuntu 18.04 (gcc)
             os: ubuntu-18.04
             cmake_args: >-
+              -DWARNINGS_FATAL=ON
               -DFAAD=ON
               -DKEYFINDER=ON
               -DLOCALECOMPARE=ON
@@ -19,6 +21,7 @@ jobs:
               -DMODPLUG=ON
               -DWAVPACK=ON
             cmake_generator: Unix Makefiles
+            cmake_build_type: RelWithDebInfo
             ctest_args:
             compiler_cache: ccache
             compiler_cache_path: ~/.ccache
@@ -31,6 +34,7 @@ jobs:
           - name: Ubuntu 20.04 (gcc)
             os: ubuntu-20.04
             cmake_args: >-
+              -DWARNINGS_FATAL=ON
               -DFFMPEG=ON
               -DKEYFINDER=ON
               -DLOCALECOMPARE=ON
@@ -38,6 +42,7 @@ jobs:
               -DMODPLUG=ON
               -DWAVPACK=ON
             cmake_generator: Unix Makefiles
+            cmake_build_type: RelWithDebInfo
             ctest_args:
             compiler_cache: ccache
             compiler_cache_path: ~/.ccache
@@ -54,6 +59,7 @@ jobs:
               -DHSS1394=ON
               -DMACOS_BUNDLE=ON
             cmake_generator: Unix Makefiles
+            cmake_build_type: RelWithDebInfo
             # TODO: Fix this broken test on macOS
             ctest_args: --exclude-regex DirectoryDAOTest.relocateDirectory
             cpack_generator: DragNDrop
@@ -76,6 +82,7 @@ jobs:
             cc: cl
             cxx: cl
             cmake_generator: Ninja
+            cmake_build_type: RelWithDebInfo
             # TODO: Fix these broken tests on Windows
             ctest_args: --exclude-regex '^AutoDJProcessorTest.*$'
             cpack_generator: WIX
@@ -195,7 +202,7 @@ jobs:
       run: >-
         cmake
         -G "${{ matrix.cmake_generator }}"
-        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_BUILD_TYPE=${{ matrix.cmake_build_type }}
         "-DCMAKE_PREFIX_PATH=${{ env.CMAKE_PREFIX_PATH }}"
         -DDEBUG_ASSERTIONS_FATAL=ON
         -DQt5_DIR=${{ env.QT_PATH }} ${{ matrix.cmake_args }} ${{ env.CMAKE_ARGS_EXTRA }}
@@ -207,6 +214,7 @@ jobs:
         -DOPUS=ON
         -DQTKEYCHAIN=ON
         -DVINYLCONTROL=ON
+        -DCMAKE_VERBOSE_MAKEFILE=OFF
         ..
       working-directory: build
       env:
@@ -222,7 +230,7 @@ jobs:
       uses: ammaraskar/msvc-problem-matcher@master
 
     - name: "Build"
-      run: cmake --build .
+      run: cmake --build . --config ${{ matrix.cmake_build_type }}
       working-directory: build
       env:
         CC: ${{ matrix.cc }}
@@ -243,11 +251,12 @@ jobs:
         # Render analyzer waveform tests to an offscreen buffer
         QT_QPA_PLATFORM: ${{ matrix.qt_qpa_platform }}
         GTEST_COLOR: 1
-        CTEST_PARALLEL_LEVEL: 2
+        # Windows tests fail randomly if run in parallel
+        CTEST_PARALLEL_LEVEL: 1
         CTEST_OUTPUT_ON_FAILURE: 1
 
     - name: Benchmark
-      run: cmake --build . --target mixxx-benchmark
+      run: cmake --build . --target mixxx-benchmark --config ${{ matrix.cmake_build_type }}
       working-directory: build
       env:
         # Render analyzer waveform tests to an offscreen buffer

@@ -1030,10 +1030,11 @@ WSearchLineEdit,
 #LibraryBPMSpinBox,
 #LibraryBPMButton::item,
 #LibraryContainer QTableView,
+#LibraryContainer QTableView::indicator,
 #LibraryContainer QTextBrowser,
 #LibraryContainer QTreeView,
-WLibrary QLabel, WLibrary QRadioButton,
-WLibrary QTableView::indicator,
+#LibraryFeatureControls QLabel,
+#LibraryFeatureControls QRadioButton,
 QToolTip,
 WBeatSpinBox QMenu,
 #LibraryContainer QMenu,
@@ -1096,7 +1097,8 @@ WTrackMenu QMenu QCheckBox,
 WEffectSelector, WEffectSelector QAbstractScrollArea,
 #fadeModeCombobox, #fadeModeCombobox QAbstractScrollArea,
 WBeatSpinBox, #spinBoxTransition,
-WLibrary QLabel, WLibrary QRadioButton {
+#LibraryFeatureControls QLabel,
+#LibraryFeatureControls QRadioButton {
   color: #888;
 }
 
@@ -1106,11 +1108,7 @@ WLibrary QLabel, WLibrary QRadioButton {
 #FxButtonLabel,
 #FxUnitLabel[highlight="0"],
 #MicAuxLabelUnconfigured,
-#DlgMissing > QPushButton:!enabled,
-#DlgHidden > QPushButton:!enabled,
-#DlgAutoDJ > QPushButton:!enabled,
-#DlgRecording > QPushButton:!enabled,
-#DlgAnalysis > QPushButton:!enabled {
+#LibraryFeatureControls QPushButton:!enabled {
   color: #666;
 }
 
@@ -1140,16 +1138,12 @@ WLibrary QLabel, WLibrary QRadioButton {
 #SkinSettingsToggle[displayValue="1"],
 QPushButton#pushButtonAutoDJ:checked,
 QPushButton#pushButtonRepeatPlaylist:checked,
-#DlgAnalysis > QPushButton:checked,
+QPushButton#pushButtonAnalyze:checked,
 QPushButton#pushButtonRecording:checked {
   color: #000;
 }
 
-#DlgMissing > QPushButton:pressed,
-#DlgHidden > QPushButton:pressed,
-#DlgAutoDJ > QPushButton:pressed,
-#DlgRecording > QPushButton:pressed,
-#DlgAnalysis > QPushButton:pressed {
+#LibraryFeatureControls QPushButton:pressed {
   color: #999;
 }
 
@@ -1199,11 +1193,7 @@ WOverview #PassthroughLabel {
 
 
 /* Library controls in AutoDJ etc. */
-#DlgMissing > QPushButton,
-#DlgHidden > QPushButton,
-#DlgAutoDJ > QPushButton,
-#DlgRecording > QPushButton,
-#DlgAnalysis > QPushButton {
+#LibraryFeatureControls QPushButton {
   color: #bbb;
   }
 
@@ -1240,11 +1230,7 @@ WPushButton#FxAssignButton1[displayValue="0"],
 #RecFeedback[displayValue="0"],
 #BroadcastButton[displayValue="0"],
 #SkinSettingsToggle[displayValue="0"],
-#DlgMissing > QPushButton,
-#DlgHidden > QPushButton,
-#DlgAutoDJ > QPushButton,
-#DlgRecording > QPushButton,
-#DlgAnalysis > QPushButton,
+#LibraryFeatureControls QPushButton,
 WEffectSelector,
 WEffectSelector:on {
   border-width: 2px;
@@ -1260,14 +1246,10 @@ WPushButton#FxAssignButton1[displayValue="1"],
 #BroadcastButton[displayValue="2"],
 #BroadcastButton[displayValue="3"],
 #SkinSettingsToggle[displayValue="1"],
-#DlgMissing > QPushButton:pressed,
-#DlgHidden > QPushButton:pressed,
-#DlgAutoDJ > QPushButton:pressed,
-#DlgRecording > QPushButton:pressed,
-#DlgAnalysis > QPushButton:pressed,
+#LibraryFeatureControls QPushButton:pressed,
 QPushButton#pushButtonAutoDJ:checked,
 QPushButton#pushButtonRepeatPlaylist:checked,
-#DlgAnalysis > QPushButton:checked,
+QPushButton#pushButtonAnalyze:checked,
 QPushButton#pushButtonRecording:checked {
   border-width: 2px;
   border-image: url(skin:/classic/buttons/btn_embedded_library_active.svg) 2 2 2 2;
@@ -1282,11 +1264,7 @@ QPushButton#pushButtonRecording:checked {
     }
 
 /* Library controls in AutoDJ etc. */
-  #DlgMissing > QPushButton:focus,
-  #DlgHidden > QPushButton:focus,
-  #DlgAutoDJ > QPushButton:focus,
-  #DlgRecording > QPushButton:focus,
-  #DlgAnalysis > QPushButton:focus {
+  #LibraryFeatureControls QPushButton:focus {
     outline: none;
   }
 
@@ -1375,11 +1353,7 @@ WPushButton#SyncDeck[value="0"],
 #MicAuxRack WPushButton[displayValue="0"],
 /* library buttons */
 QPushButton#pushButtonAutoDJ:enabled:!checked,
-#DlgMissing > QPushButton:enabled,
-#DlgHidden > QPushButton:enabled,
-#DlgAutoDJ > QPushButton:enabled,
-#DlgRecording > QPushButton:enabled,
-#DlgAnalysis > QPushButton:enabled,
+#LibraryFeatureControls QPushButton:enabled,
 WPushButton#GuiToggleButton[displayValue="0"],
 #RecFeedback[displayValue="0"],
 WPushButton#BroadcastButton[displayValue="0"],
@@ -1468,7 +1442,7 @@ QPushButton#pushButtonRepeatPlaylist:checked {
 #MacroActivate[value="1"],
 #SkinSettingsToggle[displayValue="1"],
 QPushButton#pushButtonAutoDJ:checked,
-#DlgAnalysis > QPushButton:checked {
+QPushButton#pushButtonAnalyze:checked {
   background-color: #d09300;
 }
 
