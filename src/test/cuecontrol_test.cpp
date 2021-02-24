@@ -1,5 +1,7 @@
 #include "engine/controls/cuecontrol.h"
+
 #include "test/signalpathtest.h"
+#include "track/bpm.h"
 
 class CueControlTest : public BaseSignalPathTest {
   protected:
@@ -209,7 +211,7 @@ TEST_F(CueControlTest, LoadAutodetectedCues_QuantizeEnabledNoBeats) {
     m_pQuantizeEnabled->set(1);
 
     TrackPointer pTrack = createTestTrack();
-    pTrack->setBpm(0.0);
+    pTrack->setBpm(mixxx::Bpm::kValueUndefined);
 
     pTrack->setCuePoint(CuePosition(100.0));
 
