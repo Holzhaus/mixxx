@@ -213,6 +213,8 @@ TEST_F(CueControlTest, LoadAutodetectedCues_QuantizeEnabledNoBeats) {
     TrackPointer pTrack = createTestTrack();
     pTrack->setBpm(mixxx::Bpm::kValueUndefined);
 
+    application()->processEvents();
+
     pTrack->setCuePoint(CuePosition(100.0));
 
     auto pIntro = pTrack->createAndAddCue(
@@ -228,6 +230,8 @@ TEST_F(CueControlTest, LoadAutodetectedCues_QuantizeEnabledNoBeats) {
             800.0);
 
     loadTrack(pTrack);
+
+    application()->processEvents();
 
     EXPECT_DOUBLE_EQ(100.0, m_pCuePoint->get());
     EXPECT_DOUBLE_EQ(250.0, m_pIntroStartPosition->get());
