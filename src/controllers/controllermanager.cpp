@@ -6,6 +6,8 @@
 #include "controllers/controllerlearningeventfilter.h"
 #include "controllers/defs_controllers.h"
 #include "controllers/midi/portmidienumerator.h"
+#include "engine/enginemaster.h"
+#include "engine/sync/enginesync.h"
 #include "moc_controllermanager.cpp"
 #include "util/cmdlineargs.h"
 #include "util/time.h"
@@ -78,9 +80,10 @@ bool controllerCompare(Controller *a,Controller *b) {
     return a->getName() < b->getName();
 }
 
-ControllerManager::ControllerManager(UserSettingsPointer pConfig)
+ControllerManager::ControllerManager(UserSettingsPointer pConfig, EngineMaster* pMixingEngine)
         : QObject(),
           m_pConfig(pConfig),
+          m_pMixingEngine(pMixingEngine),
           // WARNING: Do not parent m_pControllerLearningEventFilter to
           // ControllerManager because the CM is moved to its own thread and runs
           // its own event loop.
@@ -192,7 +195,14 @@ void ControllerManager::updateControllerList() {
 
     locker.relock();
     if (newDeviceList != m_controllers) {
+        m_pMixingEngine->getEngineSync()->setControllerSyncables({});
         m_controllers = newDeviceList;
+
+        QList<std::shared_ptr<Syncable>> controllerSyncables;
+        for (const auto* pController : m_controllers) {
+            controllerSyncables.append(pController->syncable());
+        }
+        m_pMixingEngine->getEngineSync()->setControllerSyncables(controllerSyncables);
         locker.unlock();
         emit devicesChanged();
     }
