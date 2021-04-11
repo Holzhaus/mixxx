@@ -81,7 +81,7 @@ jobs:
             os: windows-2019
             # TODO: Reenable FFmpeg after licensing issues have been clarified
             cmake_args: >-
-              -DBULK=OFF
+              -DBULK=ON
               -DFFMPEG=OFF
               -DHSS1394=ON
               -DLOCALECOMPARE=ON
