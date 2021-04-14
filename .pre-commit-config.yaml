@@ -110,6 +110,16 @@ repos:
   - id: shellcheck
 - repo: local
   hooks:
+  - id: csscomb
+    name: csscomb
+    description: Reformat qss files
+    entry: csscomb --tty-mode
+    language: node
+    additional_dependencies:
+    - git+https://github.com/Holzhaus/csscomb.js.git#22caa199f2e5417445c147005cfc64bb165c1799
+    files: ^.*\.[cq]ss$
+- repo: local
+  hooks:
   - id: qsscheck
     name: qsscheck
     description: Run qsscheck to detect broken QSS.
