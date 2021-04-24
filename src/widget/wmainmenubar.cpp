@@ -603,6 +603,17 @@ void WMainMenuBar::initialize() {
 
     pHelpMenu->addSeparator();
 
+#ifdef MIXXX_ENABLE_UPDATER
+    QString updateTitle = tr("Check for &Updates");
+    QString updateText = tr("Check for Updates");
+    auto* pHelpUpdateApp = new QAction(updateTitle, this);
+    pHelpUpdateApp->setStatusTip(updateText);
+    pHelpUpdateApp->setWhatsThis(buildWhatsThis(updateTitle, updateText));
+    connect(pHelpUpdateApp, &QAction::triggered, this, &WMainMenuBar::showUpdater);
+
+    pHelpMenu->addAction(pHelpUpdateApp);
+#endif
+
     QString aboutTitle = tr("&About");
     QString aboutText = tr("About the application");
     auto* pHelpAboutApp = new QAction(aboutTitle, this);

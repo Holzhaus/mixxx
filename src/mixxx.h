@@ -10,6 +10,7 @@
 #include "preferences/usersettings.h"
 #include "soundio/sounddeviceerror.h"
 #include "track/track_decl.h"
+#include "update/updatechecker.h"
 #include "util/cmdlineargs.h"
 #include "util/db/dbconnectionpool.h"
 #include "util/parented_ptr.h"
@@ -73,6 +74,10 @@ class MixxxMainWindow : public QMainWindow {
     void slotOptionsPreferences();
     // shows an about dlg
     void slotHelpAbout();
+    // shows an updater dlg
+    void slotHelpUpdater();
+    // shows an updater dlg
+    void slotShowUpdater();
     // toggle full screen mode
     void slotViewFullScreen(bool toggle);
     // Open the developer tools dialog.
@@ -99,6 +104,9 @@ class MixxxMainWindow : public QMainWindow {
     // Event filter to block certain events (eg. tooltips if tooltips are disabled)
     bool eventFilter(QObject *obj, QEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+
+  private slots:
+    void slotUpdateStatusChanged(mixxx::UpdateStatus status);
 
   private:
     void initialize(QApplication *app, const CmdlineArgs& args);
@@ -163,6 +171,8 @@ class MixxxMainWindow : public QMainWindow {
 
     // The library management object
     Library* m_pLibrary;
+
+    mixxx::UpdateChecker* m_pUpdateChecker;
 
     parented_ptr<WMainMenuBar> m_pMenuBar;
 

@@ -57,6 +57,7 @@ class WMainMenuBar : public QMenuBar {
     void rescanLibrary();
     void showAbout();
     void showPreferences();
+    void showUpdater();
     void toggleDeveloperTools(bool toggle);
     void toggleFullScreen(bool toggle);
     void toggleKeyboardShortcuts(bool toggle);

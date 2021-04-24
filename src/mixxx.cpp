@@ -29,6 +29,7 @@
 #include <QUrl>
 #include <QtDebug>
 
+#include "config.h"
 #include "defs_urls.h"
 #include "dialog/dlgabout.h"
 #include "dialog/dlgdevelopertools.h"
@@ -553,6 +554,21 @@ void MixxxMainWindow::initialize(QApplication* pApp, const CmdlineArgs& args) {
     } else {
         m_pMenuBar->setStyleSheet(m_pWidgetParent->styleSheet());
     }
+
+    m_pUpdateChecker = new mixxx::UpdateChecker();
+#ifdef MIXXX_ENABLE_UPDATER
+    const bool checkForUpdatesOnStartup =
+            m_pSettingsManager->settings()->getValue(
+                    ConfigKey("[Config]", "check_for_updates_on_startup"),
+                    true);
+    if (checkForUpdatesOnStartup) {
+        connect(m_pUpdateChecker,
+                &mixxx::UpdateChecker::statusChanged,
+                this,
+                &MixxxMainWindow::slotUpdateStatusChanged);
+        m_pUpdateChecker->checkForUpdates();
+    }
+#endif
 
     // Fake a 100 % progress here.
     // At a later place it will newer shown up, since it is
@@ -1202,6 +1218,11 @@ void MixxxMainWindow::connectMenuBar() {
 
     // Help
     connect(m_pMenuBar,
+            &WMainMenuBar::showUpdater,
+            this,
+            &MixxxMainWindow::slotHelpUpdater);
+
+    connect(m_pMenuBar,
             &WMainMenuBar::showAbout,
             this,
             &MixxxMainWindow::slotHelpAbout);
@@ -1472,6 +1493,18 @@ void MixxxMainWindow::slotChangedPlayingDeck(int deck) {
     }
 }
 
+void MixxxMainWindow::slotHelpUpdater() {
+    if (m_pUpdateChecker->status() != mixxx::UpdateStatus::Checking) {
+        m_pUpdateChecker->checkForUpdates();
+    }
+    slotShowUpdater();
+}
+
+void MixxxMainWindow::slotShowUpdater() {
+    //DlgUpdater* pUpdaterDlg = new DlgUpdater(this, m_pUpdateChecker);
+    //pUpdaterDlg->show();
+}
+
 void MixxxMainWindow::slotHelpAbout() {
     DlgAbout* about = new DlgAbout(this);
     about->show();
@@ -1590,6 +1623,22 @@ void MixxxMainWindow::closeEvent(QCloseEvent *event) {
     QMainWindow::closeEvent(event);
 }
 
+void MixxxMainWindow::slotUpdateStatusChanged(mixxx::UpdateStatus status) {
+    switch (status) {
+    case mixxx::UpdateStatus::UpdateAvailable:
+        slotShowUpdater();
+        // fallthrough
+    case mixxx::UpdateStatus::CheckFailed:
+    case mixxx::UpdateStatus::AlreadyUpToDate:
+        disconnect(m_pUpdateChecker,
+                &mixxx::UpdateChecker::statusChanged,
+                this,
+                &MixxxMainWindow::slotUpdateStatusChanged);
+        break;
+    default:
+        break;
+    }
+}
 
 void MixxxMainWindow::checkDirectRendering() {
     // IF

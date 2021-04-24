@@ -2646,6 +2646,9 @@ if(WAVPACK)
   target_link_libraries(mixxx-lib PUBLIC WavPack::wavpack)
 endif()
 
+option(UPDATER "Enable checking for App updates" OFF)
+set(MIXXX_ENABLE_UPDATER ${UPDATER})
+
 # Configure file with build options
 file(RELATIVE_PATH MIXXX_INSTALL_DOCDIR_RELATIVE_TO_DATADIR "${CMAKE_INSTALL_PREFIX}/${MIXXX_INSTALL_DATADIR}" "${CMAKE_INSTALL_PREFIX}/${MIXXX_INSTALL_DOCDIR}")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/src/config.h" @ONLY)
