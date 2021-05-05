@@ -31,6 +31,10 @@ inline bool toSynchronized(SyncMode mode) {
     return mode > SYNC_NONE;
 }
 
+inline bool isFollower(SyncMode mode) {
+    return (mode == SYNC_FOLLOWER);
+}
+
 inline bool isMaster(SyncMode mode) {
     return (mode == SYNC_MASTER_SOFT || mode == SYNC_MASTER_EXPLICIT);
 }
@@ -63,6 +67,7 @@ class Syncable {
 
     // Only relevant for player Syncables.
     virtual bool isPlaying() const = 0;
+    virtual bool isAudible() const = 0;
 
     // Gets the current speed of the syncable in bpm (bpm * rate slider), doesn't
     // include scratch or FF/REW values.
@@ -111,7 +116,7 @@ class SyncableListener {
 
     // A Syncable must never call notifyBpmChanged in response to a setMasterBpm()
     // call.
-    virtual void notifyBpmChanged(Syncable* pSyncable, double bpm) = 0;
+    virtual void notifyBaseBpmChanged(Syncable* pSyncable, double bpm) = 0;
     virtual void requestBpmUpdate(Syncable* pSyncable, double bpm) = 0;
 
     // Syncables notify EngineSync directly about various events. EngineSync
@@ -127,7 +132,7 @@ class SyncableListener {
     virtual void notifyBeatDistanceChanged(
             Syncable* pSyncable, double beatDistance) = 0;
 
-    virtual void notifyPlaying(Syncable* pSyncable, bool playing) = 0;
+    virtual void notifyPlayingAudible(Syncable* pSyncable, bool playingAudible) = 0;
 
     virtual Syncable* getMasterSyncable() = 0;
 };

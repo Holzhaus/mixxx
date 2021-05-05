@@ -1,9 +1,15 @@
 #pragma once
 
+#include "preferences/usersettings.h"
 #include "sources/soundsourceproviderregistry.h"
 #include "track/track_decl.h"
-#include "track/trackfile.h"
 #include "util/sandbox.h"
+
+namespace mixxx {
+
+class FileAccess;
+
+} // namespace mixxx
 
 /// Creates sound sources for tracks. Only intended to be used
 /// in a narrow scope and not shareable between multiple threads!
@@ -28,8 +34,7 @@ class SoundSourceProxy {
     }
 
     static bool isUrlSupported(const QUrl& url);
-    static bool isFileSupported(const TrackFile& trackFile);
-    static bool isFileSupported(const QFileInfo& fileInfo);
+    static bool isFileSupported(const mixxx::FileInfo& fileInfo);
     static bool isFileNameSupported(const QString& fileName);
     static bool isFileExtensionSupported(const QString& fileExtension);
 
@@ -45,11 +50,9 @@ class SoundSourceProxy {
     // The following import functions ensure that the file will not be
     // written while reading it!
     static TrackPointer importTemporaryTrack(
-            TrackFile trackFile,
-            SecurityTokenPointer pSecurityToken = SecurityTokenPointer());
+            mixxx::FileAccess trackFileAccess);
     static QImage importTemporaryCoverImage(
-            TrackFile trackFile,
-            SecurityTokenPointer pSecurityToken = SecurityTokenPointer());
+            mixxx::FileAccess trackFileAccess);
 
     explicit SoundSourceProxy(
             TrackPointer pTrack,
@@ -145,7 +148,8 @@ class SoundSourceProxy {
     static QRegExp s_supportedFileNamesRegex;
 
     friend class TrackCollectionManager;
-    static ExportTrackMetadataResult exportTrackMetadataBeforeSaving(Track* pTrack);
+    static ExportTrackMetadataResult exportTrackMetadataBeforeSaving(
+            Track* pTrack, UserSettingsPointer pConfig);
 
     // Special case: Construction from a url is needed
     // for writing metadata immediately before the TIO is destroyed.

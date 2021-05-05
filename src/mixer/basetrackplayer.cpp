@@ -206,7 +206,7 @@ TrackPointer BaseTrackPlayerImpl::loadFakeTrack(bool bPlay, double filebpm) {
             mixxx::audio::Bitrate(),
             mixxx::Duration::fromSeconds(10));
     if (filebpm > 0) {
-        pTrack->setBpm(filebpm);
+        pTrack->trySetBpm(filebpm);
     }
 
     TrackPointer pOldTrack = m_pLoadedTrack;
@@ -376,12 +376,15 @@ void BaseTrackPlayerImpl::disconnectLoadedTrack() {
 }
 
 void BaseTrackPlayerImpl::slotLoadTrack(TrackPointer pNewTrack, bool bPlay) {
-    qDebug() << "BaseTrackPlayerImpl::slotLoadTrack" << getGroup();
+    //qDebug() << "BaseTrackPlayerImpl::slotLoadTrack" << getGroup();
     // Before loading the track, ensure we have access. This uses lazy
     // evaluation to make sure track isn't NULL before we dereference it.
-    if (pNewTrack && !Sandbox::askForAccess(pNewTrack->getCanonicalLocation())) {
-        // We don't have access.
-        return;
+    if (pNewTrack) {
+        auto fileInfo = pNewTrack->getFileInfo();
+        if (!Sandbox::askForAccess(&fileInfo)) {
+            // We don't have access.
+            return;
+        }
     }
 
     auto pOldTrack = unloadTrack();
@@ -649,6 +652,8 @@ void BaseTrackPlayerImpl::slotVinylControlEnabled(double v) {
         m_pVinylControlStatus->set(VINYL_STATUS_DISABLED);
         emit noVinylControlInputConfigured();
     }
+#else
+    Q_UNUSED(v);
 #endif
 }
 

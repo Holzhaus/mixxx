@@ -14,6 +14,7 @@
 #include "defs_urls.h"
 #include "dialog/dlgabout.h"
 #include "dialog/dlgdevelopertools.h"
+#include "dialog/dlgkeywheel.h"
 #include "effects/builtin/builtinbackend.h"
 #include "effects/effectsmanager.h"
 #include "engine/enginemaster.h"
@@ -34,6 +35,9 @@
 #include "library/coverartcache.h"
 #include "library/library.h"
 #include "library/library_preferences.h"
+#ifdef __ENGINEPRIME__
+#include "library/export/libraryexporter.h"
+#endif
 #include "library/trackcollection.h"
 #include "library/trackcollectionmanager.h"
 #include "mixer/playerinfo.h"
@@ -58,7 +62,7 @@
 #include "util/time.h"
 #include "util/timer.h"
 #include "util/translations.h"
-#include "util/version.h"
+#include "util/versionstore.h"
 #include "util/widgethelper.h"
 #include "waveform/guitick.h"
 #include "waveform/sharedglcontext.h"
@@ -92,6 +96,11 @@ MixxxMainWindow::MixxxMainWindow(
           m_pLaunchImage(nullptr),
           m_pGuiTick(nullptr),
           m_pDeveloperToolsDlg(nullptr),
+          m_pPrefDlg(nullptr),
+          m_pKeywheel(nullptr),
+#ifdef __ENGINEPRIME__
+          m_pLibraryExporter(nullptr),
+#endif
           m_toolTipsCfg(mixxx::TooltipsPreference::TOOLTIPS_ON),
           m_pTouchShift(nullptr) {
     DEBUG_ASSERT(pApp);
@@ -190,6 +199,19 @@ MixxxMainWindow::MixxxMainWindow(
             m_pCoreServices->getLibrary());
     m_pPrefDlg->setWindowIcon(QIcon(":/images/mixxx_icon.svg"));
     m_pPrefDlg->setHidden(true);
+
+#ifdef __ENGINEPRIME__
+    // Initialise library exporter
+    m_pLibraryExporter = m_pCoreServices->getLibrary()->makeLibraryExporter(this);
+    connect(m_pCoreServices->getLibrary().get(),
+            &Library::exportLibrary,
+            m_pLibraryExporter.get(),
+            &mixxx::LibraryExporter::slotRequestExport);
+    connect(m_pCoreServices->getLibrary().get(),
+            &Library::exportCrate,
+            m_pLibraryExporter.get(),
+            &mixxx::LibraryExporter::slotRequestExportWithInitialCrate);
+#endif
 
     connectMenuBar();
 
@@ -373,6 +395,16 @@ MixxxMainWindow::~MixxxMainWindow() {
     VERIFY_OR_DEBUG_ASSERT(pMenuBar.isNull()) {
         qWarning() << "WMainMenuBar was not deleted by our sendPostedEvents trick.";
     }
+
+    qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting DeveloperToolsDlg";
+    if (m_pDeveloperToolsDlg) {
+        delete m_pDeveloperToolsDlg;
+    }
+
+#ifdef __ENGINEPRIME__
+    qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting LibraryExporter";
+    m_pLibraryExporter.reset();
+#endif
 
     qDebug() << t.elapsed(false).debugMillisWithUnit() << "deleting DlgPreferences";
     delete m_pPrefDlg;
@@ -569,7 +601,7 @@ QDialog::DialogCode MixxxMainWindow::noOutputDlg(bool* continueClicked) {
 }
 
 void MixxxMainWindow::slotUpdateWindowTitle(TrackPointer pTrack) {
-    QString appTitle = Version::applicationTitle();
+    QString appTitle = VersionStore::applicationName();
 
     // If we have a track, use getInfo() to format a summary string and prepend
     // it to the title.
@@ -611,6 +643,11 @@ void MixxxMainWindow::connectMenuBar() {
             &WMainMenuBar::loadTrackToDeck,
             this,
             &MixxxMainWindow::slotFileLoadSongPlayer);
+
+    connect(m_pMenuBar,
+            &WMainMenuBar::showKeywheel,
+            this,
+            &MixxxMainWindow::slotShowKeywheel);
 
     // Fullscreen
     connect(m_pMenuBar,
@@ -717,6 +754,14 @@ void MixxxMainWindow::connectMenuBar() {
                 m_pCoreServices->getLibrary().get(),
                 &Library::slotCreatePlaylist);
     }
+
+#ifdef __ENGINEPRIME__
+    DEBUG_ASSERT(m_pLibraryExporter);
+    connect(m_pMenuBar,
+            &WMainMenuBar::exportLibrary,
+            m_pLibraryExporter.get(),
+            &mixxx::LibraryExporter::slotRequestExport);
+#endif
 }
 
 void MixxxMainWindow::slotFileLoadSongPlayer(int deck) {
@@ -728,10 +773,11 @@ void MixxxMainWindow::slotFileLoadSongPlayer(int deck) {
     QString areYouSure = tr("Are you sure you want to load a new track?");
 
     if (ControlObject::get(ConfigKey(group, "play")) > 0.0) {
-        int ret = QMessageBox::warning(this, Version::applicationName(),
-            deckWarningMessage + "\n" + areYouSure,
-            QMessageBox::Yes | QMessageBox::No,
-            QMessageBox::No);
+        int ret = QMessageBox::warning(this,
+                VersionStore::applicationName(),
+                deckWarningMessage + "\n" + areYouSure,
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::No);
 
         if (ret != QMessageBox::Yes) {
             return;
@@ -754,8 +800,8 @@ void MixxxMainWindow::slotFileLoadSongPlayer(int deck) {
         // folder. Create a security bookmark while we have permission so that
         // we can access the folder on future runs. We need to canonicalize the
         // path so we first wrap the directory string with a QDir.
-        QFileInfo trackInfo(trackPath);
-        Sandbox::createSecurityToken(trackInfo);
+        mixxx::FileInfo fileInfo(trackPath);
+        Sandbox::createSecurityToken(&fileInfo);
 
         m_pCoreServices->getPlayerManager()->slotLoadToDeck(trackPath, deck);
     }
@@ -826,11 +872,12 @@ void MixxxMainWindow::slotOptionsPreferences() {
 
 void MixxxMainWindow::slotNoVinylControlInputConfigured() {
     QMessageBox::StandardButton btn = QMessageBox::warning(
-        this,
-        Version::applicationName(),
-        tr("There is no input device selected for this vinyl control.\n"
-           "Please select an input device in the sound hardware preferences first."),
-        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+            this,
+            VersionStore::applicationName(),
+            tr("There is no input device selected for this vinyl control.\n"
+               "Please select an input device in the sound hardware preferences first."),
+            QMessageBox::Ok | QMessageBox::Cancel,
+            QMessageBox::Cancel);
     if (btn == QMessageBox::Ok) {
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage();
@@ -839,11 +886,12 @@ void MixxxMainWindow::slotNoVinylControlInputConfigured() {
 
 void MixxxMainWindow::slotNoDeckPassthroughInputConfigured() {
     QMessageBox::StandardButton btn = QMessageBox::warning(
-        this,
-        Version::applicationName(),
-        tr("There is no input device selected for this passthrough control.\n"
-           "Please select an input device in the sound hardware preferences first."),
-        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+            this,
+            VersionStore::applicationName(),
+            tr("There is no input device selected for this passthrough control.\n"
+               "Please select an input device in the sound hardware preferences first."),
+            QMessageBox::Ok | QMessageBox::Cancel,
+            QMessageBox::Cancel);
     if (btn == QMessageBox::Ok) {
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage();
@@ -852,11 +900,12 @@ void MixxxMainWindow::slotNoDeckPassthroughInputConfigured() {
 
 void MixxxMainWindow::slotNoMicrophoneInputConfigured() {
     QMessageBox::StandardButton btn = QMessageBox::question(
-        this,
-        Version::applicationName(),
-        tr("There is no input device selected for this microphone.\n"
-           "Do you want to select an input device?"),
-        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+            this,
+            VersionStore::applicationName(),
+            tr("There is no input device selected for this microphone.\n"
+               "Do you want to select an input device?"),
+            QMessageBox::Ok | QMessageBox::Cancel,
+            QMessageBox::Cancel);
     if (btn == QMessageBox::Ok) {
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage();
@@ -865,11 +914,12 @@ void MixxxMainWindow::slotNoMicrophoneInputConfigured() {
 
 void MixxxMainWindow::slotNoAuxiliaryInputConfigured() {
     QMessageBox::StandardButton btn = QMessageBox::question(
-        this,
-        Version::applicationName(),
-        tr("There is no input device selected for this auxiliary.\n"
-           "Do you want to select an input device?"),
-        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+            this,
+            VersionStore::applicationName(),
+            tr("There is no input device selected for this auxiliary.\n"
+               "Do you want to select an input device?"),
+            QMessageBox::Ok | QMessageBox::Cancel,
+            QMessageBox::Cancel);
     if (btn == QMessageBox::Ok) {
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage();
@@ -890,6 +940,23 @@ void MixxxMainWindow::slotChangedPlayingDeck(int deck) {
 void MixxxMainWindow::slotHelpAbout() {
     DlgAbout* about = new DlgAbout(this);
     about->show();
+}
+
+void MixxxMainWindow::slotShowKeywheel(bool toggle) {
+    if (!m_pKeywheel) {
+        m_pKeywheel = make_parented<DlgKeywheel>(this, m_pCoreServices->getSettings());
+        // uncheck the menu item on window close
+        connect(m_pKeywheel.get(),
+                &DlgKeywheel::finished,
+                m_pMenuBar,
+                &WMainMenuBar::onKeywheelChange);
+    }
+    if (toggle) {
+        m_pKeywheel->show();
+        m_pKeywheel->raise();
+    } else {
+        m_pKeywheel->hide();
+    }
 }
 
 void MixxxMainWindow::setToolTipsCfg(mixxx::TooltipsPreference tt) {

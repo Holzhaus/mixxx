@@ -12,17 +12,16 @@
 #include "track/cue.h"
 #include "track/cueinfoimporter.h"
 #include "track/track_decl.h"
-#include "track/trackfile.h"
 #include "track/trackrecord.h"
-#include "util/sandbox.h"
+#include "util/fileaccess.h"
+#include "util/memory.h"
 #include "waveform/waveform.h"
 
 class Track : public QObject {
     Q_OBJECT
 
   public:
-    Track(TrackFile fileInfo,
-            SecurityTokenPointer pSecurityToken,
+    Track(mixxx::FileAccess fileAccess,
             TrackId trackId = TrackId());
     Track(const Track&) = delete;
     ~Track() override;
@@ -34,11 +33,20 @@ class Track : public QObject {
     // Use SoundSourceProxy::importTemporaryTrack() for importing files
     // to ensure that the file will not be written while reading it!
     static TrackPointer newTemporary(
-            TrackFile fileInfo = TrackFile(),
-            SecurityTokenPointer pSecurityToken = SecurityTokenPointer());
+            mixxx::FileAccess fileAccess = mixxx::FileAccess());
+    static TrackPointer newTemporary(
+            const QString& filePath) {
+        return newTemporary(mixxx::FileAccess(mixxx::FileInfo(filePath)));
+    }
+    static TrackPointer newTemporary(
+            const QDir& dir,
+            const QString& file) {
+        return newTemporary(mixxx::FileAccess(mixxx::FileInfo(dir, file)));
+    }
+
     // Creates a dummy instance only for testing purposes.
     static TrackPointer newDummy(
-            TrackFile fileInfo,
+            const QString& filePath,
             TrackId trackId);
 
     Q_PROPERTY(QString artist READ getArtist WRITE setArtist)
@@ -53,7 +61,7 @@ class Track : public QObject {
     Q_PROPERTY(QString track_total READ getTrackTotal WRITE setTrackTotal)
     Q_PROPERTY(int times_played READ getTimesPlayed)
     Q_PROPERTY(QString comment READ getComment WRITE setComment)
-    Q_PROPERTY(double bpm READ getBpm WRITE setBpm)
+    Q_PROPERTY(double bpm READ getBpm)
     Q_PROPERTY(QString bpmFormatted READ getBpmText STORED false)
     Q_PROPERTY(QString key READ getKeyText WRITE setKeyText)
     Q_PROPERTY(double duration READ getDuration)
@@ -63,26 +71,22 @@ class Track : public QObject {
     Q_PROPERTY(QString info READ getInfo STORED false)
     Q_PROPERTY(QString titleInfo READ getTitleInfo STORED false)
 
-    TrackFile getFileInfo() const {
-        // Copying TrackFile/QFileInfo is thread-safe (implicit sharing), no locking needed.
-        return m_fileInfo;
+    mixxx::FileAccess getFileAccess() const {
+        // Copying QFileInfo is thread-safe due to implicit sharing,
+        // i.e. no locking needed.
+        return m_fileAccess;
     }
-    SecurityTokenPointer getSecurityToken() const {
-        // Copying a QSharedPointer is thread-safe, no locking needed.
-        return m_pSecurityToken;
+    mixxx::FileInfo getFileInfo() const {
+        // Copying QFileInfo is thread-safe due to implicit sharing,
+        // i.e. no locking needed.
+        return m_fileAccess.info();
     }
 
     TrackId getId() const;
 
     // Returns absolute path to the file, including the filename.
     QString getLocation() const {
-        return m_fileInfo.location();
-    }
-    // The (refreshed) canonical location
-    QString getCanonicalLocation() const;
-    // Checks if the file exists
-    bool checkFileExists() const {
-        return m_fileInfo.checkFileExists();
+        return m_fileAccess.info().location();
     }
 
     // File/format type
@@ -93,7 +97,7 @@ class Track : public QObject {
     int getChannels() const;
 
     // Get sample rate
-    int getSampleRate() const;
+    mixxx::audio::SampleRate getSampleRate() const;
 
     // Sets the bitrate
     void setBitrate(int);
@@ -125,16 +129,20 @@ class Track : public QObject {
         return getDurationText(mixxx::Duration::Precision::MILLISECONDS);
     }
 
-    // Set BPM
-    double setBpm(double);
+    // Sets the BPM if not locked.
+    bool trySetBpm(double bpm);
+
     // Returns BPM
-    double getBpm() const;
+    double getBpm() const {
+        const QMutexLocker lock(&m_qMutex);
+        return getBpmWhileLocked().getValue();
+    }
     // Returns BPM as a string
     QString getBpmText() const;
 
     // A track with a locked BPM will not be re-analyzed by the beats or bpm
     // analyzer.
-    void setBpmLocked(bool bpmLocked = true);
+    void setBpmLocked(bool bpmLocked);
     bool isBpmLocked() const;
 
     // Set ReplayGain
@@ -291,16 +299,18 @@ class Track : public QObject {
     // Get the track's Beats list
     mixxx::BeatsPointer getBeats() const;
 
-    // Set the track's Beats
-    void setBeats(mixxx::BeatsPointer beats);
+    // Set the track's Beats if not locked
+    bool trySetBeats(mixxx::BeatsPointer pBeats);
+    bool trySetAndLockBeats(mixxx::BeatsPointer pBeats);
 
     /// Imports the given list of cue infos as cue points,
     /// thereby replacing all existing cue points!
     ///
     /// If the list is empty it tries to complete any pending
     /// import and returns the corresponding status.
-    ImportStatus importBeats(
-            mixxx::BeatsImporterPointer pBeatsImporter);
+    ImportStatus tryImportBeats(
+            mixxx::BeatsImporterPointer pBeatsImporter,
+            bool lockBpmAfterSet);
     ImportStatus getBeatsImportStatus() const;
 
     void resetKeys();
@@ -377,7 +387,6 @@ class Track : public QObject {
 
   private slots:
     void slotCueUpdated();
-    void slotBeatsUpdated();
 
   private:
     /// Set a unique identifier for the track.
@@ -387,17 +396,21 @@ class Track : public QObject {
     /// Only used by GlobalTrackCacheResolver when the track is purged from the library
     void resetId();
 
-    void relocate(
-            TrackFile fileInfo,
-            SecurityTokenPointer pSecurityToken = SecurityTokenPointer());
+    void relocate(mixxx::FileAccess fileAccess);
 
     // Set whether the TIO is dirty or not and unlock before emitting
     // any signals. This must only be called from member functions
     // while the TIO is locked.
-    void markDirtyAndUnlock(QMutexLocker* pLock, bool bDirty = true);
+    void markDirtyAndUnlock(QMutexLocker* pLock) {
+        setDirtyAndUnlock(pLock, true);
+    }
     void setDirtyAndUnlock(QMutexLocker* pLock, bool bDirty);
 
     void afterKeysUpdated(QMutexLocker* pLock);
+    void emitKeysUpdated(mixxx::track::io::key::ChromaticKey newKey);
+
+    void afterBeatsAndBpmUpdated(QMutexLocker* pLock);
+    void emitBeatsAndBpmUpdated(mixxx::Bpm newBpm);
 
     /// Sets beats and returns a boolean to indicate if BPM/Beats were updated.
     /// Only supposed to be called while the caller guards this a lock.
@@ -417,10 +430,19 @@ class Track : public QObject {
     /// caller guards this a lock.
     bool importPendingCueInfosWhileLocked();
 
-    void setBeatsMarkDirtyAndUnlock(
+    mixxx::Bpm getBpmWhileLocked() const;
+    bool trySetBpmWhileLocked(double bpmValue);
+    bool trySetBeatsWhileLocked(
+            mixxx::BeatsPointer pBeats,
+            bool lockBpmAfterSet = false);
+
+    bool trySetBeatsMarkDirtyAndUnlock(
             QMutexLocker* pLock,
-            mixxx::BeatsPointer pBeats);
-    void importPendingBeatsMarkDirtyAndUnlock(QMutexLocker* pLock);
+            mixxx::BeatsPointer pBeats,
+            bool lockBpmAfterSet);
+    bool tryImportPendingBeatsMarkDirtyAndUnlock(
+            QMutexLocker* pLock,
+            bool lockBpmAfterSet);
 
     void setCuePointsMarkDirtyAndUnlock(
             QMutexLocker* pLock,
@@ -435,7 +457,8 @@ class Track : public QObject {
     double getDuration(DurationRounding rounding) const;
 
     ExportTrackMetadataResult exportMetadata(
-            mixxx::MetadataSourcePointer pMetadataSource);
+            mixxx::MetadataSourcePointer pMetadataSource,
+            UserSettingsPointer pConfig);
 
     // Information about the actual properties of the
     // audio stream is only available after opening the
@@ -444,18 +467,20 @@ class Track : public QObject {
     // these values.
     bool hasStreamInfoFromSource() const {
         QMutexLocker lock(&m_qMutex);
-        return static_cast<bool>(m_streamInfoFromSource);
+        return m_record.hasStreamInfoFromSource();
     }
     void updateStreamInfoFromSource(
             mixxx::audio::StreamInfo&& streamInfo);
 
     // Mutex protecting access to object
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    mutable QRecursiveMutex m_qMutex;
+#else
     mutable QMutex m_qMutex;
+#endif
 
     // The file
-    mutable TrackFile m_fileInfo;
-
-    SecurityTokenPointer m_pSecurityToken;
+    mixxx::FileAccess m_fileAccess;
 
     mixxx::TrackRecord m_record;
 
@@ -466,11 +491,6 @@ class Track : public QObject {
     // Flag indicating that the user has explicitly requested to save
     // the metadata.
     bool m_bMarkedForMetadataExport;
-
-    // Reliable information about the PCM audio stream
-    // that only becomes available when opening the
-    // corresponding file.
-    std::optional<mixxx::audio::StreamInfo> m_streamInfoFromSource;
 
     // The list of cue points for the track
     QList<CuePointer> m_cuePoints;

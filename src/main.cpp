@@ -16,7 +16,7 @@
 #include "util/cmdlineargs.h"
 #include "util/console.h"
 #include "util/logging.h"
-#include "util/version.h"
+#include "util/versionstore.h"
 
 #ifdef Q_OS_LINUX
 #include <X11/Xlib.h>
@@ -77,15 +77,8 @@ int main(int argc, char * argv[]) {
     // organization name blank.
     //QCoreApplication::setOrganizationName("Mixxx");
 
-    QCoreApplication::setApplicationName(Version::applicationName());
-    QCoreApplication::setApplicationVersion(Version::version());
-
-    // Construct a list of strings based on the command line arguments
-    CmdlineArgs& args = CmdlineArgs::Instance();
-    if (!args.Parse(argc, argv)) {
-        args.printUsage();
-        return kParseCmdlineArgsErrorExitCode;
-    }
+    QCoreApplication::setApplicationName(VersionStore::applicationName());
+    QCoreApplication::setApplicationVersion(VersionStore::version());
 
     // If you change this here, you also need to change it in
     // ErrorDialogHandler::errorDialog(). TODO(XXX): Remove this hack.
@@ -98,6 +91,11 @@ int main(int argc, char * argv[]) {
 
     MixxxApplication app(argc, argv);
 
+    // Construct a list of strings based on the command line arguments
+    CmdlineArgs& args = CmdlineArgs::Instance();
+    if (!args.parse(app.arguments())) {
+        return kParseCmdlineArgsErrorExitCode;
+    }
 
 #ifdef __APPLE__
     QDir dir(QApplication::applicationDirPath());

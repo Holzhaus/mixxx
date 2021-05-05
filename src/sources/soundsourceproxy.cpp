@@ -251,17 +251,12 @@ bool SoundSourceProxy::registerProviders() {
 
 // static
 bool SoundSourceProxy::isUrlSupported(const QUrl& url) {
-    return isFileSupported(TrackFile::fromUrl(url));
+    return isFileSupported(mixxx::FileInfo::fromQUrl(url));
 }
 
 // static
-bool SoundSourceProxy::isFileSupported(const QFileInfo& fileInfo) {
+bool SoundSourceProxy::isFileSupported(const mixxx::FileInfo& fileInfo) {
     return isFileNameSupported(fileInfo.fileName());
-}
-
-// static
-bool SoundSourceProxy::isFileSupported(const TrackFile& trackFile) {
-    return isFileNameSupported(trackFile.fileName());
 }
 
 // static
@@ -309,11 +304,8 @@ SoundSourceProxy::allProviderRegistrationsForUrl(
 
 //static
 TrackPointer SoundSourceProxy::importTemporaryTrack(
-        TrackFile trackFile,
-        SecurityTokenPointer pSecurityToken) {
-    TrackPointer pTrack = Track::newTemporary(
-            std::move(trackFile),
-            std::move(pSecurityToken));
+        mixxx::FileAccess trackFileAccess) {
+    TrackPointer pTrack = Track::newTemporary(std::move(trackFileAccess));
     // Lock the track cache while populating the temporary track
     // object to ensure that no metadata is exported into any file
     // while reading from this file. Since locking individual files
@@ -325,16 +317,13 @@ TrackPointer SoundSourceProxy::importTemporaryTrack(
 
 //static
 QImage SoundSourceProxy::importTemporaryCoverImage(
-        TrackFile trackFile,
-        SecurityTokenPointer pSecurityToken) {
-    if (!trackFile.checkFileExists()) {
+        mixxx::FileAccess trackFileAccess) {
+    if (!trackFileAccess.info().checkFileExists()) {
         // Silently ignore missing files to avoid spaming the log:
         // https://bugs.launchpad.net/mixxx/+bug/1875237
         return QImage();
     }
-    TrackPointer pTrack = Track::newTemporary(
-            std::move(trackFile),
-            std::move(pSecurityToken));
+    TrackPointer pTrack = Track::newTemporary(std::move(trackFileAccess));
     // Lock the track cache while populating the temporary track
     // object to ensure that no metadata is exported into any file
     // while reading from this file. Since locking individual files
@@ -345,12 +334,12 @@ QImage SoundSourceProxy::importTemporaryCoverImage(
 
 //static
 ExportTrackMetadataResult
-SoundSourceProxy::exportTrackMetadataBeforeSaving(Track* pTrack) {
+SoundSourceProxy::exportTrackMetadataBeforeSaving(Track* pTrack, UserSettingsPointer pConfig) {
     DEBUG_ASSERT(pTrack);
     const auto fileInfo = pTrack->getFileInfo();
     mixxx::MetadataSourcePointer pMetadataSource;
     {
-        auto proxy = SoundSourceProxy(fileInfo.toUrl());
+        auto proxy = SoundSourceProxy(fileInfo.toQUrl());
         // Ensure that the actual audio properties of the
         // stream are available before exporting metadata.
         // This might be needed for converting sample positions
@@ -370,7 +359,7 @@ SoundSourceProxy::exportTrackMetadataBeforeSaving(Track* pTrack) {
         pMetadataSource = proxy.m_pSoundSource;
     }
     if (pMetadataSource) {
-        return pTrack->exportMetadata(pMetadataSource);
+        return pTrack->exportMetadata(pMetadataSource, pConfig);
     } else {
         kLogger.warning()
                 << "Unable to export track metadata into file"
@@ -383,7 +372,7 @@ SoundSourceProxy::SoundSourceProxy(
         TrackPointer pTrack,
         const mixxx::SoundSourceProviderPointer& pProvider)
         : m_pTrack(std::move(pTrack)),
-          m_url(m_pTrack ? m_pTrack->getFileInfo().toUrl() : QUrl()),
+          m_url(m_pTrack ? m_pTrack->getFileInfo().toQUrl() : QUrl()),
           m_providerRegistrations(allProviderRegistrationsForUrl(m_url)),
           m_providerRegistrationIndex(-1) {
     initSoundSource(pProvider);
@@ -537,6 +526,10 @@ void SoundSourceProxy::updateTrackFromSource(
         mergeImportedMetadata = true;
     }
 
+    // Save for later to replace the unreliable and imprecise audio
+    // properties imported from file tags (see below).
+    const auto preciseStreamInfo = trackMetadata.getStreamInfo();
+
     // Embedded cover art is imported together with the track's metadata.
     // But only if the user has not selected external cover art for this
     // track!
@@ -569,89 +562,116 @@ void SoundSourceProxy::updateTrackFromSource(
                 << (pCoverImg ? "and embedded cover art" : "")
                 << "from file"
                 << getUrl().toString();
+        // make sure that the trackMetadata was not messed up due to the failure
+        m_pTrack->readTrackMetadata(&trackMetadata, &metadataSynchronized);
     }
 
-    if (metadataImported.first != mixxx::MetadataSource::ImportResult::Succeeded) {
-        if (mergeImportedMetadata) {
-            // Nothing to do if no metadata imported
-            return;
-        } else if (trackMetadata.getTrackInfo().getTitle().trimmed().isEmpty()) {
-            // Only parse artist and title if both fields are empty to avoid
-            // inconsistencies. Otherwise the file name (without extension)
-            // is used as the title and the artist is unmodified.
-            //
-            // TODO(XXX): Disable splitting of artist/title in settings, i.e.
-            // optionally don't split even if both title and artist are empty?
-            // Some users might want to import the whole file name of untagged
-            // files as the title without splitting the artist:
-            //     https://www.mixxx.org/forums/viewtopic.php?f=3&t=12838
-            // NOTE(uklotzde, 2019-09-26): Whoever needs this should simply set
-            // splitArtistTitle = false here and compile their custom version!
-            // It is not worth extending the settings and injecting them into
-            // SoundSourceProxy for just a few people.
-            const bool splitArtistTitle =
-                    trackMetadata.getTrackInfo().getArtist().trimmed().isEmpty();
-            const auto trackFile = m_pTrack->getFileInfo();
-            kLogger.info()
-                    << "Parsing missing"
-                    << (splitArtistTitle ? "artist/title" : "title")
-                    << "from file name:"
-                    << trackFile;
-            if (trackMetadata.refTrackInfo().parseArtistTitleFromFileName(trackFile.fileName(), splitArtistTitle) &&
-                    metadataImported.second.isNull()) {
+    // Partial import
+    if (mergeImportedMetadata) {
+        // No reimport of embedded cover image desired in this case
+        DEBUG_ASSERT(!pCoverImg);
+        if (metadataImported.first == mixxx::MetadataSource::ImportResult::Succeeded) {
+            // Partial import of properties that are not (yet) stored
+            // in the database
+            m_pTrack->mergeImportedMetadata(trackMetadata);
+        } // else: Nothing to do if no metadata has been imported
+        return;
+    }
+
+    // Full import
+    if (metadataSynchronized) {
+        // Metadata has been synchronized successfully at least
+        // once in the past. Only overwrite this information if
+        // new data has actually been imported, otherwise abort
+        // and preserve the existing data!
+        if (kLogger.debugEnabled()) {
+            kLogger.debug()
+                    << "Updating track metadata"
+                    << (pCoverImg ? "and embedded cover art" : "")
+                    << "from file"
+                    << getUrl().toString();
+        }
+    } else {
+        DEBUG_ASSERT(pCoverImg);
+        if (kLogger.debugEnabled()) {
+            kLogger.debug()
+                    << "Initializing track metadata and embedded cover art from file"
+                    << getUrl().toString();
+        }
+    }
+
+    // Preserve the precise stream info data (if available) that has been
+    // obtained from the actual audio stream. If the file content itself
+    // has been modified the stream info data will be updated next time
+    // when opening and decoding the audio stream.
+    if (preciseStreamInfo.isValid()) {
+        trackMetadata.setStreamInfo(preciseStreamInfo);
+    } else if (preciseStreamInfo.getSignalInfo().isValid()) {
+        // Special case: Only the bitrate might be invalid or unknown
+        trackMetadata.refStreamInfo().setSignalInfo(
+                preciseStreamInfo.getSignalInfo());
+        if (preciseStreamInfo.getDuration() > mixxx::Duration::empty()) {
+            trackMetadata.refStreamInfo().setDuration(preciseStreamInfo.getDuration());
+        }
+    }
+
+    // Ensure that all tracks have a title
+    if (trackMetadata.getTrackInfo().getTitle().trimmed().isEmpty()) {
+        // Only parse artist and title if both fields are empty to avoid
+        // inconsistencies. Otherwise the file name (without extension)
+        // is used as the title and the artist is unmodified.
+        //
+        // TODO(XXX): Disable splitting of artist/title in settings, i.e.
+        // optionally don't split even if both title and artist are empty?
+        // Some users might want to import the whole file name of untagged
+        // files as the title without splitting the artist:
+        //     https://www.mixxx.org/forums/viewtopic.php?f=3&t=12838
+        // NOTE(uklotzde, 2019-09-26): Whoever needs this should simply set
+        // splitArtistTitle = false here and compile their custom version!
+        // It is not worth extending the settings and injecting them into
+        // SoundSourceProxy for just a few people.
+        const bool splitArtistTitle =
+                trackMetadata.getTrackInfo().getArtist().trimmed().isEmpty();
+        const auto fileInfo = m_pTrack->getFileInfo();
+        kLogger.info()
+                << "Parsing missing"
+                << (splitArtistTitle ? "artist/title" : "title")
+                << "from file name:"
+                << fileInfo;
+        if (trackMetadata.refTrackInfo().parseArtistTitleFromFileName(
+                    fileInfo.fileName(), splitArtistTitle)) {
+            // Pretend that metadata import succeeded
+            metadataImported.first = mixxx::MetadataSource::ImportResult::Succeeded;
+            if (metadataImported.second.isNull()) {
                 // Since this is also some kind of metadata import, we mark the
                 // track's metadata as synchronized with the time stamp of the file.
-                metadataImported.second = trackFile.fileLastModified();
+                metadataImported.second = fileInfo.lastModified();
             }
         }
     }
 
-    if (mergeImportedMetadata) {
-        // Partial import of properties that are not (yet) stored
-        // in the database
-        m_pTrack->mergeImportedMetadata(trackMetadata);
-    } else {
-        // Full import
-        if (metadataSynchronized) {
-            // Metadata has been synchronized successfully at least
-            // once in the past. Only overwrite this information if
-            // new data has actually been imported, otherwise abort
-            // and preserve the existing data!
-            if (metadataImported.first != mixxx::MetadataSource::ImportResult::Succeeded) {
-                return; // abort
-            }
-            if (kLogger.debugEnabled()) {
-                kLogger.debug()
-                        << "Updating track metadata"
-                        << (pCoverImg ? "and embedded cover art" : "")
-                        << "from file"
-                        << getUrl().toString();
-            }
-        } else {
-            DEBUG_ASSERT(pCoverImg);
-            if (kLogger.debugEnabled()) {
-                kLogger.debug()
-                        << "Initializing track metadata and embedded cover art from file"
-                        << getUrl().toString();
-            }
-        }
-        m_pTrack->importMetadata(trackMetadata, metadataImported.second);
-        bool pendingBeatsImport = m_pTrack->getBeatsImportStatus() == Track::ImportStatus::Pending;
-        bool pendingCueImport = m_pTrack->getCueImportStatus() == Track::ImportStatus::Pending;
-        if (pendingBeatsImport || pendingCueImport) {
-            // Try to open the audio source once to determine the actual
-            // stream properties for finishing the pending import.
-            kLogger.debug()
-                    << "Opening audio source to finish import of beats/cues";
-            const auto pAudioSource = openAudioSource();
-            Q_UNUSED(pAudioSource); // only used in debug assertion
-            DEBUG_ASSERT(!pAudioSource ||
-                    m_pTrack->getBeatsImportStatus() ==
-                            Track::ImportStatus::Complete);
-            DEBUG_ASSERT(!pAudioSource ||
-                    m_pTrack->getCueImportStatus() ==
-                            Track::ImportStatus::Complete);
-        }
+    // Do not continue with unknown and maybe invalid metadata!
+    if (metadataImported.first != mixxx::MetadataSource::ImportResult::Succeeded) {
+        return;
+    }
+
+    m_pTrack->importMetadata(trackMetadata, metadataImported.second);
+
+    bool pendingBeatsImport = m_pTrack->getBeatsImportStatus() == Track::ImportStatus::Pending;
+    bool pendingCueImport = m_pTrack->getCueImportStatus() == Track::ImportStatus::Pending;
+    if (pendingBeatsImport || pendingCueImport) {
+        // Try to open the audio source once to determine the actual
+        // stream properties for finishing the pending import.
+        kLogger.debug()
+                << "Opening audio source to finish import of beats/cues";
+        const auto pAudioSource = openAudioSource();
+        Q_UNUSED(pAudioSource); // only used in debug assertion
+        DEBUG_ASSERT(!pAudioSource ||
+                m_pTrack->getBeatsImportStatus() ==
+                        Track::ImportStatus::Complete);
+        DEBUG_ASSERT(!pAudioSource ||
+                m_pTrack->getCueImportStatus() ==
+                        Track::ImportStatus::Complete);
     }
 
     if (pCoverImg) {

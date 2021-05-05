@@ -110,6 +110,7 @@ void WTrackMenu::createMenus() {
     if (featureIsEnabled(Feature::Crate)) {
         m_pCrateMenu = new QMenu(this);
         m_pCrateMenu->setTitle(tr("Crates"));
+        m_pCrateMenu->setObjectName("CratesMenu");
         connect(m_pCrateMenu, &QMenu::aboutToShow, this, &WTrackMenu::slotPopulateCrateMenu);
     }
 
@@ -802,7 +803,7 @@ QList<TrackRef> WTrackMenu::getTrackRefs() const {
     if (m_pTrackModel) {
         trackRefs.reserve(m_trackIndexList.size());
         for (const auto& index : m_trackIndexList) {
-            auto trackRef = TrackRef::fromFileInfo(
+            auto trackRef = TrackRef::fromFilePath(
                     m_pTrackModel->getTrackLocation(index),
                     m_pTrackModel->getTrackId(index));
             if (!trackRef.isValid()) {
@@ -816,7 +817,7 @@ QList<TrackRef> WTrackMenu::getTrackRefs() const {
         for (const auto& pTrack : m_trackPointerList) {
             DEBUG_ASSERT(pTrack);
             auto trackRef = TrackRef::fromFileInfo(
-                    pTrack->getLocation(),
+                    pTrack->getFileInfo(),
                     pTrack->getId());
             trackRefs.push_back(std::move(trackRef));
         }
@@ -1197,11 +1198,11 @@ class ScaleBpmTrackPointerOperation : public mixxx::TrackPointerOperation {
         if (pTrack->isBpmLocked()) {
             return;
         }
-        mixxx::BeatsPointer pBeats = pTrack->getBeats();
+        const mixxx::BeatsPointer pBeats = pTrack->getBeats();
         if (!pBeats) {
             return;
         }
-        pBeats->scale(m_bpmScale);
+        pTrack->trySetBeats(pBeats->scale(m_bpmScale));
     }
 
     const mixxx::Beats::BPMScale m_bpmScale;
@@ -1333,10 +1334,7 @@ class ResetBeatsTrackPointerOperation : public mixxx::TrackPointerOperation {
   private:
     void doApply(
             const TrackPointer& pTrack) const override {
-        if (pTrack->isBpmLocked()) {
-            return;
-        }
-        pTrack->setBeats(mixxx::BeatsPointer());
+        pTrack->trySetBeats(mixxx::BeatsPointer());
     }
 };
 
@@ -1512,8 +1510,10 @@ class ResetWaveformTrackPointerOperation : public mixxx::TrackPointerOperation {
 void WTrackMenu::slotClearWaveform() {
     const auto progressLabelText =
             tr("Resetting waveform of %n track(s)", "", getTrackCount());
+    AnalysisDao& analysisDao =
+            m_pLibrary->trackCollections()->internalCollection()->getAnalysisDAO();
     const auto trackOperator =
-            ResetReplayGainTrackPointerOperation();
+            ResetWaveformTrackPointerOperation(analysisDao);
     applyTrackPointerOperation(
             progressLabelText,
             &trackOperator);
