@@ -3,7 +3,9 @@
 #include <QQmlEngine>
 #include <QQuickWidget>
 
+#include "coreservices.h"
 #include "skin/qml/qmlcontrolproxy.h"
+#include "skin/qml/qmllibraryproxy.h"
 #include "util/assert.h"
 
 namespace {
@@ -110,6 +112,10 @@ QWidget* QmlSkin::loadSkin(QWidget* pParent,
     }
 
     qmlRegisterType<QmlControlProxy>("Mixxx", 0, 1, "ControlProxy");
+
+    QmlLibraryProxy* pLibraryProxy = new QmlLibraryProxy(
+            pCoreServices->getLibrary().get(), pParent);
+    qmlRegisterSingletonInstance("Mixxx", 0, 1, "Library", pLibraryProxy);
 
     QQuickWidget* pWidget = new QQuickWidget(pParent);
 
