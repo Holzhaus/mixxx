@@ -9,6 +9,8 @@ Item {
     property alias key: control.key
     property alias background: background.data
     property alias foreground: foreground.data
+    property alias pressed: mousearea.pressed
+    property alias control: control
     property real min: 0
     property real max: 1
     property real angle: 130
@@ -83,7 +85,7 @@ Item {
                 control.parameter = Math.max(root.min, control.parameter - 0.1);
         }
         onDoubleClicked: resetcontrol.value = 1
-        onPressed: {
+        onReleased: {
             mousearea.posy = mouse.y;
         }
         onPositionChanged: {

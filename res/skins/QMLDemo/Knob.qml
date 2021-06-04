@@ -1,5 +1,6 @@
 import Mixxx.Controls 0.1 as MixxxControls
 import QtQuick 2.12
+import QtQuick.Controls 2.12
 import "Theme"
 
 MixxxControls.Knob {
@@ -14,6 +15,42 @@ MixxxControls.Knob {
     arcColor: root.color
     arcWidth: 2
     angle: 117
+
+    Popup {
+        id: popup
+
+        visible: root.pressed
+        width: root.width
+        x: -width - 5
+        y: root.height / 2 - height / 2
+
+        Text {
+            text: (control.parameter * 100).toFixed(0) + "%"
+            font.family: Theme.fontFamily
+            font.bold: true
+            font.pixelSize: Theme.textFontPixelSize
+            color: Theme.deckTextColor
+            anchors.centerIn: parent
+        }
+
+        background: BorderImage {
+            id: backgroundImage
+
+            anchors.fill: parent
+            horizontalTileMode: BorderImage.Stretch
+            verticalTileMode: BorderImage.Stretch
+            source: "images/button.svg"
+
+            border {
+                top: 10
+                left: 20
+                right: 20
+                bottom: 10
+            }
+
+        }
+
+    }
 
     background: Image {
         anchors.left: parent.left
