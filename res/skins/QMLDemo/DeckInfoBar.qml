@@ -2,6 +2,7 @@ import "." as Skin
 import Mixxx 0.1 as Mixxx
 import Mixxx.Controls 0.1 as MixxxControls
 import QtQuick 2.12
+import QtQuick.Controls 2.12
 import "Theme"
 
 Rectangle {
@@ -196,6 +197,27 @@ Rectangle {
             key: "rate_ratio"
         }
 
+    }
+
+    MouseArea {
+        id: mousearea
+
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onClicked: {
+            popup.x = mouse.x;
+            popup.y = mouse.y;
+            popup.open();
+        }
+    }
+
+    TrackEditorPopup {
+        id: popup
+
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        deckPlayer: root.deckPlayer
     }
 
     gradient: Gradient {
