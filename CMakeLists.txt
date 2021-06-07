@@ -2204,7 +2204,7 @@ target_include_directories(mixxx-lib SYSTEM PUBLIC lib/rigtorp/SPSCQueue/include
 # Qt
 if(QT6)
   find_package(QT 6.2 NAMES Qt6 COMPONENTS Core REQUIRED)
-  set(QT6_NEW_COMPONENTS "SvgWidgets;Core5Compat")
+  set(QT6_NEW_COMPONENTS "ShaderTools;SvgWidgets;Core5Compat")
 else()
   find_package(QT 5.12 NAMES Qt5 COMPONENTS Core REQUIRED)
 endif()
@@ -2245,6 +2245,8 @@ if(QT6)
   foreach(COMPONENT ${QT6_NEW_COMPONENTS})
     target_link_libraries(mixxx-lib PUBLIC Qt6::${COMPONENT})
   endforeach()
+
+  add_subdirectory(res/shaders)
 
   set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/qml)
   set_target_properties(mixxx-lib PROPERTIES AUTOMOC ON)
