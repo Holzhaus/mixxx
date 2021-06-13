@@ -19,6 +19,15 @@
         }                                            \
     }
 
+namespace {
+
+// When an invalid QColor is returned from C++ because the color is not
+// set, QML will interpret it to #000000 (black), which cannot be
+// distinguished from an actual black color.
+const QColor kDefaultColor("transparent");
+
+} // namespace
+
 namespace mixxx {
 namespace skin {
 namespace qml {
@@ -157,9 +166,9 @@ PROPERTY_IMPL(QString, keyText, getKeyText, setKeyText)
 QColor QmlPlayerProxy::getColor() const {
     const TrackPointer pTrack = m_pCurrentTrack;
     if (pTrack == nullptr) {
-        return QColor();
+        return kDefaultColor;
     }
-    return RgbColor::toQColor(pTrack->getColor());
+    return RgbColor::toQColor(pTrack->getColor(), kDefaultColor);
 }
 
 void QmlPlayerProxy::setColor(const QColor& value) {
