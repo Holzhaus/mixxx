@@ -45,7 +45,7 @@ cmake_push_check_state()
 if(WIN32)
     # vcpkg provides CMake targets for pthreads4w
     # This won't work if pthreads4w was built without vcpkg.
-    find_package(pthreads REQUIRED)
+    find_package(pthreads CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE PThreads4W::PThreads4W)
 
     target_compile_definitions(${PROJECT_NAME} PRIVATE
