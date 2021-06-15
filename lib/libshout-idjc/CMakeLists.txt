@@ -39,14 +39,23 @@ target_compile_definitions(${PROJECT_NAME}
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall)
 
-cmake_push_check_state()
-
 # Ensure we have pthreads
 if(WIN32)
     # vcpkg provides CMake targets for pthreads4w
     # This won't work if pthreads4w was built without vcpkg.
     find_package(pthreads CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE PThreads4W::PThreads4W)
+    message(STATUS CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    get_target_property(pth_conf PThreads4W::PThreads4W IMPORTED_CONFIGURATIONS)
+    get_target_property(pth_locrel PThreads4W::PThreads4W IMPORTED_LOCATION_RELEASE)
+    get_target_property(pth_imprel PThreads4W::PThreads4W IMPORTED_IMPLIB)
+    get_target_property(pth_locdbg PThreads4W::PThreads4W IMPORTED_LOCATION_DEBUG)
+    get_target_property(pth_impdbg PThreads4W::PThreads4W IMPORTED_IMPLIB_DEBUG)
+    message(STATUS PThread4W IMPORTED_CONFIGURATIONS ${pth_conf})
+    message(STATUS PThread4W IMPORTED_LOCATION_RELEASE ${pth_locrel})
+    message(STATUS PThread4W IMPORTED_IMPLIB ${pth_imprel})
+    message(STATUS PThread4W IMPORTED_LOCATION_DEBUG ${pth_locdbg})
+    message(STATUS PThread4W IMPORTED_IMPLIB_DEBUG ${pth_impdbg})
 
     target_compile_definitions(${PROJECT_NAME} PRIVATE
         __CLEANUP_C _TIMESPEC_DEFINED _USRDLL _MBCS _LIB _WIN32)
@@ -249,5 +258,3 @@ check_symbol_exists(X509_check_host "openssl/x509v3.h" HAVE_X509_CHECK_HOST)
 if(HAVE_X509_CHECK_HOST)
     target_compile_definitions(${PROJECT_NAME} PRIVATE XXX_HAVE_X509_check_host)
 endif()
-
-cmake_pop_check_state()
