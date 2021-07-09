@@ -246,6 +246,9 @@ QWidget* QmlSkin::loadSkin(QWidget* pParent,
     pWidget->engine()->setBaseUrl(QUrl::fromLocalFile(m_path.absoluteFilePath()));
     pWidget->engine()->addImportPath(m_path.absoluteFilePath());
 
+    const auto resourceDir = QDir(pConfig->getResourcePath());
+    pWidget->engine()->addImportPath(resourceDir.absoluteFilePath(QStringLiteral("qml")));
+
     // No memory leak here, the QQmlENgine takes ownership of the provider
     QQuickAsyncImageProvider* pImageProvider = new AsyncImageProvider();
     pWidget->engine()->addImageProvider(AsyncImageProvider::kProviderName, pImageProvider);
