@@ -315,76 +315,54 @@ audio::FramePos BeatMap::findNthBeat(audio::FramePos position, int n) const {
         return audio::kInvalidFramePos;
     }
 
-    Beat beat = beatFromFramePos(position.toNearestFrameBoundary());
+    int numBeatsLeft = std::abs(n);
 
-    // it points at the first occurrence of beat or the next largest beat
-    BeatList::const_iterator it =
-            std::lower_bound(m_beats.constBegin(), m_beats.constEnd(), beat, beatLessThan);
+    const auto searchFromPosition = (n > 0) ? position.toUpperFrameBoundary()
+                                            : position.toLowerFrameBoundary();
+    const Beat searchFromBeat = beatFromFramePos(searchFromPosition);
+    auto it = std::lower_bound(m_beats.cbegin(), m_beats.cend(), searchFromBeat, beatLessThan);
 
-    // Back-up by one.
-    if (it != m_beats.begin()) {
-        --it;
-    }
-
-    // Scan forward to find whether we are on a beat.
-    BeatList::const_iterator on_beat = m_beats.constEnd();
-    BeatList::const_iterator previous_beat = m_beats.constEnd();
-    BeatList::const_iterator next_beat = m_beats.constEnd();
-    for (; it != m_beats.end(); ++it) {
-        qint32 delta = it->frame_position() - beat.frame_position();
-
-        // We are "on" this beat.
-        if (delta == 0) {
-            on_beat = it;
-            break;
-        }
-
-        if (delta < 0) {
-            // If we are not on the beat and delta < 0 then this beat comes
-            // before our current position.
-            previous_beat = it;
-        } else {
-            // If we are past the beat and we aren't on it then this beat comes
-            // after our current position.
-            next_beat = it;
-            // Stop because we have everything we need now.
-            break;
-        }
-    }
-
-    // If we are within epsilon samples of a beat then the immediately next and
-    // previous beats are the beat we are on.
-    if (on_beat != m_beats.end()) {
-        next_beat = on_beat;
-        previous_beat = on_beat;
-    }
-
+    // Search in forward direction
     if (n > 0) {
-        for (; next_beat != m_beats.end(); ++next_beat) {
-            if (!next_beat->enabled()) {
-                continue;
+        numBeatsLeft--;
+        while (it != m_beats.cend() && numBeatsLeft > 0) {
+            if (it->enabled()) {
+                numBeatsLeft--;
             }
-            if (n == 1) {
-                return mixxx::audio::FramePos(next_beat->frame_position());
-            }
-            --n;
+            it++;
         }
-    } else if (n < 0 && previous_beat != m_beats.end()) {
-        for (; true; --previous_beat) {
-            if (previous_beat->enabled()) {
-                if (n == -1) {
-                    return mixxx::audio::FramePos(previous_beat->frame_position());
-                }
-                ++n;
-            }
+    } else {
+        if (it == m_beats.cend()) {
+            return audio::kInvalidFramePos;
+        }
 
-            // Don't step before the start of the list.
-            if (previous_beat == m_beats.begin()) {
-                break;
+        numBeatsLeft--;
+        // We may be one beat behind the searchFromBeat. In this case, we advance
+        // the reverse iterator by one beat.
+        if (it->frame_position() > searchFromBeat.frame_position()) {
+            if (it == m_beats.cbegin()) {
+                return audio::kInvalidFramePos;
             }
+            it--;
+        }
+
+        while (it != m_beats.cbegin() && numBeatsLeft > 0) {
+            if (it->enabled()) {
+                numBeatsLeft--;
+            }
+            it--;
         }
     }
-    return audio::kInvalidFramePos;
+
+    if (numBeatsLeft > 0 || it == m_beats.cend()) {
+        return audio::kInvalidFramePos;
+    }
+
+    const auto foundBeatPosition = mixxx::audio::FramePos(it->frame_position());
+
+    DEBUG_ASSERT(foundBeatPosition >= searchFromPosition || n < 0);
+    DEBUG_ASSERT(foundBeatPosition <= searchFromPosition || n > 0);
+    return foundBeatPosition;
 }
 
 bool BeatMap::findPrevNextBeats(audio::FramePos position,
