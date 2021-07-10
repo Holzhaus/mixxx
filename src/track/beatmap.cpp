@@ -294,7 +294,7 @@ audio::FramePos BeatMap::findClosestBeat(audio::FramePos position) const {
     }
     audio::FramePos prevBeatPosition;
     audio::FramePos nextBeatPosition;
-    findPrevNextBeats(position, &prevBeatPosition, &nextBeatPosition, true);
+    findPrevNextBeats(position, &prevBeatPosition, &nextBeatPosition, false);
     if (!prevBeatPosition.isValid()) {
         // If both positions are invalid, we correctly return an invalid position.
         return nextBeatPosition;
@@ -321,10 +321,6 @@ audio::FramePos BeatMap::findNthBeat(audio::FramePos position, int n) const {
     BeatList::const_iterator it =
             std::lower_bound(m_beats.constBegin(), m_beats.constEnd(), beat, beatLessThan);
 
-    // If the position is within 1/10th of a second of the next or previous
-    // beat, pretend we are on that beat.
-    const double kFrameEpsilon = 0.1 * m_sampleRate;
-
     // Back-up by one.
     if (it != m_beats.begin()) {
         --it;
@@ -338,7 +334,7 @@ audio::FramePos BeatMap::findNthBeat(audio::FramePos position, int n) const {
         qint32 delta = it->frame_position() - beat.frame_position();
 
         // We are "on" this beat.
-        if (abs(delta) < kFrameEpsilon) {
+        if (delta == 0) {
             on_beat = it;
             break;
         }
@@ -504,11 +500,7 @@ bool BeatMap::hasBeatInRange(audio::FramePos startPosition, audio::FramePos endP
     }
     audio::FramePos beatPosition = findNextBeat(startPosition.toUpperFrameBoundary());
 
-    // FIXME: The following assertion should always hold true, but it doesn't,
-    // because the position matching in findNthBeat() is fuzzy. This should be
-    // resolved, and moved to the calling code, to only use fuzzy matches when
-    // actually desired.
-    // DEBUG_ASSERT(!beatPosition.isValid() || beatPosition >= startPosition.toUpperFrameBoundary());
+    DEBUG_ASSERT(!beatPosition.isValid() || beatPosition >= startPosition.toUpperFrameBoundary());
     if (beatPosition.isValid() && beatPosition <= endPosition.toLowerFrameBoundary()) {
         return true;
     }
@@ -530,7 +522,7 @@ mixxx::Bpm BeatMap::getBpmAroundPosition(audio::FramePos position, int n) const 
 
     // To make sure we are always counting n beats, iterate backward to the
     // lower bound, then iterate forward from there to the upper bound.
-    // a value of -1 indicates we went off the map -- count from the beginning.
+    // An invalid value indicates we went off the map -- count from the beginning.
     audio::FramePos lowerFrame = findNthBeat(position, -n);
     if (!lowerFrame.isValid()) {
         lowerFrame = mixxx::audio::FramePos(m_beats.first().frame_position());
@@ -552,11 +544,10 @@ mixxx::Bpm BeatMap::getBpmAroundPosition(audio::FramePos position, int n) const 
         return {};
     }
 
-    const int kFrameEpsilon = m_sampleRate / 20;
-
     int numberOfBeats = 0;
+
     for (const auto& beat : m_beats) {
-        const auto pos = mixxx::audio::FramePos(beat.frame_position() + kFrameEpsilon);
+        const auto pos = mixxx::audio::FramePos(beat.frame_position());
         if (pos > upperFrame) {
             break;
         }

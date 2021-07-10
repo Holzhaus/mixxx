@@ -117,6 +117,8 @@ class Beats {
     /// be found, returns an invalid frame position.
     virtual audio::FramePos findNthBeat(audio::FramePos position, int n) const = 0;
 
+    mixxx::audio::FramePos snapToClosestBeat(
+            audio::FramePos startPosition, double epsilonSeconds) const;
     int numBeatsInRange(audio::FramePos startPosition, audio::FramePos endPosition) const;
 
     /// Find the frame position N beats away from `position`. The number of beats may be

@@ -1082,7 +1082,8 @@ mixxx::Bpm BpmControl::updateLocalBpm() {
         const auto currentPosition =
                 mixxx::audio::FramePos::fromEngineSamplePos(
                         getSampleOfTrack().current);
-        localBpm = pBeats->getBpmAroundPosition(currentPosition, kLocalBpmSpan);
+        const auto snappedPosition = pBeats->snapToClosestBeat(currentPosition, 0.01);
+        localBpm = pBeats->getBpmAroundPosition(snappedPosition, kLocalBpmSpan);
         if (!localBpm.isValid()) {
             localBpm = pBeats->getBpm();
         }

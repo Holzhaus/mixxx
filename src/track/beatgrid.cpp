@@ -163,7 +163,7 @@ audio::FramePos BeatGrid::findClosestBeat(audio::FramePos position) const {
     }
     audio::FramePos prevBeatPosition;
     audio::FramePos nextBeatPosition;
-    findPrevNextBeats(position, &prevBeatPosition, &nextBeatPosition, true);
+    findPrevNextBeats(position, &prevBeatPosition, &nextBeatPosition, false);
     if (!prevBeatPosition.isValid()) {
         // If both positions are invalid, we correctly return an invalid position.
         return nextBeatPosition;

@@ -2,6 +2,24 @@
 
 namespace mixxx {
 
+mixxx::audio::FramePos Beats::snapToClosestBeat(
+        audio::FramePos position, double epsilonSeconds) const {
+    VERIFY_OR_DEBUG_ASSERT(position.isValid()) {
+        return mixxx::audio::kInvalidFramePos;
+    }
+    const mixxx::audio::FramePos beatPosition = findClosestBeat(position);
+    if (!beatPosition.isValid()) {
+        return position;
+    }
+
+    const mixxx::audio::FrameDiff_t epsilonFrames = getSampleRate() * epsilonSeconds;
+    if (std::abs(position - beatPosition) > epsilonFrames) {
+        return position;
+    }
+
+    return beatPosition;
+}
+
 int Beats::numBeatsInRange(audio::FramePos startPosition, audio::FramePos endPosition) const {
     audio::FramePos lastPosition = audio::kStartFramePos;
     int i = 1;

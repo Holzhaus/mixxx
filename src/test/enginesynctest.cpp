@@ -1985,18 +1985,22 @@ QVector<mixxx::audio::FramePos> createBeatVector(
 TEST_F(EngineSyncTest, HalfDoubleConsistency) {
     // half-double matching should be consistent
     mixxx::audio::FrameDiff_t beatLengthFrames = 60.0 * 44100 / 90.0;
-    constexpr auto startOffsetFrames = mixxx::audio::kStartFramePos;
     const int numBeats = 100;
     QVector<mixxx::audio::FramePos> beats1 =
-            createBeatVector(startOffsetFrames, numBeats, beatLengthFrames);
+            createBeatVector(mixxx::audio::kStartFramePos, numBeats, beatLengthFrames);
     auto pBeats1 = mixxx::BeatMap::makeBeatMap(m_pTrack1->getSampleRate(), QString(), beats1);
     m_pTrack1->trySetBeats(pBeats1);
 
     beatLengthFrames = 60.0 * 44100 / 145.0;
     QVector<mixxx::audio::FramePos> beats2 =
-            createBeatVector(startOffsetFrames, numBeats, beatLengthFrames);
+            createBeatVector(mixxx::audio::kStartFramePos, numBeats, beatLengthFrames);
     auto pBeats2 = mixxx::BeatMap::makeBeatMap(m_pTrack2->getSampleRate(), QString(), beats2);
     m_pTrack2->trySetBeats(pBeats2);
+
+    EXPECT_DOUBLE_EQ(90.0,
+            ControlObject::getControl(ConfigKey(m_sGroup1, "file_bpm"))->get());
+    EXPECT_DOUBLE_EQ(145.0,
+            ControlObject::getControl(ConfigKey(m_sGroup2, "file_bpm"))->get());
 
     ControlObject::getControl(ConfigKey(m_sGroup1, "play"))->set(1.0);
     ControlObject::getControl(ConfigKey(m_sGroup2, "sync_enabled"))->set(1);
