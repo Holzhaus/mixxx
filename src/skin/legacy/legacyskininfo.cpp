@@ -1,4 +1,4 @@
-#include "skin/legacy/legacyskin.h"
+#include "skin/legacy/legacyskininfo.h"
 
 #include "coreservices.h"
 #include "skin/legacy/legacyskinparser.h"
@@ -15,28 +15,28 @@ namespace skin {
 namespace legacy {
 
 // static
-SkinPointer LegacySkin::fromDirectory(const QDir& dir) {
+SkinInfoPointer LegacySkinInfo::fromDirectory(const QDir& dir) {
     if (dir.exists(kSkinManifestFileName)) {
-        return std::make_shared<LegacySkin>(QFileInfo(dir.absolutePath()));
+        return std::make_shared<LegacySkinInfo>(QFileInfo(dir.absolutePath()));
     }
     return nullptr;
 }
 
-LegacySkin::LegacySkin(const QFileInfo& path)
+LegacySkinInfo::LegacySkinInfo(const QFileInfo& path)
         : m_path(path) {
     DEBUG_ASSERT(isValid());
 }
 
-bool LegacySkin::isValid() const {
+bool LegacySkinInfo::isValid() const {
     return !m_path.filePath().isEmpty() && m_path.exists();
 }
 
-QFileInfo LegacySkin::path() const {
+QFileInfo LegacySkinInfo::path() const {
     DEBUG_ASSERT(isValid());
     return m_path;
 }
 
-QPixmap LegacySkin::preview(const QString& schemeName = QString()) const {
+QPixmap LegacySkinInfo::preview(const QString& schemeName = QString()) const {
     QPixmap preview;
     if (!schemeName.isEmpty()) {
         QString schemeNameUnformatted = schemeName;
@@ -54,22 +54,22 @@ QPixmap LegacySkin::preview(const QString& schemeName = QString()) const {
     return preview;
 }
 
-QFileInfo LegacySkin::skinFile() const {
+QFileInfo LegacySkinInfo::skinFile() const {
     DEBUG_ASSERT(isValid());
     return QFileInfo(path().absoluteFilePath() + QStringLiteral("/") + kSkinManifestFileName);
 }
 
-QString LegacySkin::name() const {
+QString LegacySkinInfo::name() const {
     DEBUG_ASSERT(isValid());
     return m_path.fileName();
 }
 
-QList<QString> LegacySkin::colorschemes() const {
+QList<QString> LegacySkinInfo::colorschemes() const {
     DEBUG_ASSERT(isValid());
     return LegacySkinParser::getSchemeList(path().absoluteFilePath());
 }
 
-QString LegacySkin::description() const {
+QString LegacySkinInfo::description() const {
     DEBUG_ASSERT(isValid());
     SkinManifest manifest = LegacySkinParser::getSkinManifest(
             LegacySkinParser::openSkin(path().absoluteFilePath()));
@@ -80,7 +80,7 @@ QString LegacySkin::description() const {
     return description;
 }
 
-bool LegacySkin::fitsScreenSize(const QScreen& screen) const {
+bool LegacySkinInfo::fitsScreenSize(const QScreen& screen) const {
     DEBUG_ASSERT(isValid());
     // Use the full resolution of the entire screen that is
     // available in full-screen mode.
@@ -111,7 +111,7 @@ bool LegacySkin::fitsScreenSize(const QScreen& screen) const {
             skinHeight.toInt() <= screenSize.height();
 }
 
-LaunchImage* LegacySkin::loadLaunchImage(QWidget* pParent, UserSettingsPointer pConfig) const {
+LaunchImage* LegacySkinInfo::loadLaunchImage(QWidget* pParent, UserSettingsPointer pConfig) const {
     VERIFY_OR_DEBUG_ASSERT(isValid()) {
         return nullptr;
     }
@@ -120,7 +120,7 @@ LaunchImage* LegacySkin::loadLaunchImage(QWidget* pParent, UserSettingsPointer p
     return pLaunchImage;
 }
 
-QWidget* LegacySkin::loadSkin(QWidget* pParent,
+QWidget* LegacySkinInfo::loadSkin(QWidget* pParent,
         UserSettingsPointer pConfig,
         QSet<ControlObject*>* pSkinCreatedControls,
         mixxx::CoreServices* pCoreServices) const {

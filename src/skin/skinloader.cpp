@@ -11,9 +11,9 @@
 #include "mixer/playermanager.h"
 #include "recording/recordingmanager.h"
 #include "skin/legacy/launchimage.h"
-#include "skin/legacy/legacyskin.h"
+#include "skin/legacy/legacyskininfo.h"
 #include "skin/legacy/legacyskinparser.h"
-#include "skin/qml/qmlskin.h"
+#include "skin/qml/qmlskininfo.h"
 #include "util/debug.h"
 #include "util/timer.h"
 #include "vinylcontrol/vinylcontrolmanager.h"
@@ -21,8 +21,8 @@
 namespace mixxx {
 namespace skin {
 
-using legacy::LegacySkin;
-using qml::QmlSkin;
+using legacy::LegacySkinInfo;
+using qml::QmlSkinInfo;
 
 SkinLoader::SkinLoader(UserSettingsPointer pConfig) :
         m_pConfig(pConfig) {
@@ -32,14 +32,14 @@ SkinLoader::~SkinLoader() {
     LegacySkinParser::clearSharedGroupStrings();
 }
 
-QList<SkinPointer> SkinLoader::getSkins() const {
+QList<SkinInfoPointer> SkinLoader::getSkins() const {
     const QList<QDir> skinSearchPaths = getSkinSearchPaths();
-    QList<SkinPointer> skins;
+    QList<SkinInfoPointer> skins;
     for (const QDir& dir : skinSearchPaths) {
         const QList<QFileInfo> fileInfos = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
         for (const QFileInfo& fileInfo : fileInfos) {
             QDir skinDir(fileInfo.absoluteFilePath());
-            SkinPointer pSkin = skinFromDirectory(skinDir);
+            SkinInfoPointer pSkin = skinFromDirectory(skinDir);
             if (pSkin) {
                 VERIFY_OR_DEBUG_ASSERT(pSkin->isValid()) {
                     continue;
@@ -73,11 +73,11 @@ QList<QDir> SkinLoader::getSkinSearchPaths() const {
     return searchPaths;
 }
 
-SkinPointer SkinLoader::getSkin(const QString& skinName) const {
+SkinInfoPointer SkinLoader::getSkin(const QString& skinName) const {
     const QList<QDir> skinSearchPaths = getSkinSearchPaths();
     for (QDir dir : skinSearchPaths) {
         if (dir.cd(skinName)) {
-            SkinPointer pSkin = skinFromDirectory(dir);
+            SkinInfoPointer pSkin = skinFromDirectory(dir);
             if (pSkin) {
                 VERIFY_OR_DEBUG_ASSERT(pSkin->isValid()) {
                     continue;
@@ -89,7 +89,7 @@ SkinPointer SkinLoader::getSkin(const QString& skinName) const {
     return nullptr;
 }
 
-SkinPointer SkinLoader::getConfiguredSkin() const {
+SkinInfoPointer SkinLoader::getConfiguredSkin() const {
     QString configSkin = m_pConfig->getValueString(ConfigKey("[Config]", "ResizableSkin"));
 
     // If we don't have a skin defined, we might be migrating from 1.11 and
@@ -108,7 +108,7 @@ SkinPointer SkinLoader::getConfiguredSkin() const {
 
     // Try to load the desired skin
     DEBUG_ASSERT(!configSkin.isEmpty());
-    SkinPointer pSkin = getSkin(configSkin);
+    SkinInfoPointer pSkin = getSkin(configSkin);
     if (pSkin && pSkin->isValid()) {
         qInfo() << "Loaded skin" << configSkin;
         return pSkin;
@@ -135,7 +135,7 @@ QWidget* SkinLoader::loadConfiguredSkin(QWidget* pParent,
         QSet<ControlObject*>* pSkinCreatedControls,
         mixxx::CoreServices* pCoreServices) {
     ScopedTimer timer("SkinLoader::loadConfiguredSkin");
-    SkinPointer pSkin = getConfiguredSkin();
+    SkinInfoPointer pSkin = getConfiguredSkin();
 
     // If we don't have a skin then fail. This makes sense here, because the
     // method above already tried to fall back to the default skin if the
@@ -179,7 +179,7 @@ QWidget* SkinLoader::loadConfiguredSkin(QWidget* pParent,
 }
 
 LaunchImage* SkinLoader::loadLaunchImage(QWidget* pParent) const {
-    SkinPointer pSkin = getConfiguredSkin();
+    SkinInfoPointer pSkin = getConfiguredSkin();
     VERIFY_OR_DEBUG_ASSERT(pSkin != nullptr && pSkin->isValid()) {
         return nullptr;
     }
@@ -206,14 +206,14 @@ QString SkinLoader::pickResizableSkin(const QString& oldSkin) const {
     return QString();
 }
 
-SkinPointer SkinLoader::skinFromDirectory(const QDir& dir) const {
-    SkinPointer pSkin = LegacySkin::fromDirectory(dir);
+SkinInfoPointer SkinLoader::skinFromDirectory(const QDir& dir) const {
+    SkinInfoPointer pSkin = LegacySkinInfo::fromDirectory(dir);
     if (pSkin && pSkin->isValid()) {
         return pSkin;
     }
 
     if (m_pConfig->getValue(ConfigKey("[Config]", "experimental_qml_skin_support"), false)) {
-        pSkin = QmlSkin::fromDirectory(dir);
+        pSkin = QmlSkinInfo::fromDirectory(dir);
         if (pSkin && pSkin->isValid()) {
             return pSkin;
         }

@@ -7,18 +7,18 @@
 #include <QScreen>
 #include <QString>
 
-#include "skin/skin.h"
+#include "skin/skininfo.h"
 
 namespace mixxx {
 namespace skin {
 namespace legacy {
 
-class LegacySkin : public mixxx::skin::Skin {
+class LegacySkinInfo : public mixxx::skin::SkinInfo {
   public:
-    LegacySkin() = default;
-    LegacySkin(const QFileInfo& path);
+    LegacySkinInfo() = default;
+    LegacySkinInfo(const QFileInfo& path);
 
-    static SkinPointer fromDirectory(const QDir& dir);
+    static SkinInfoPointer fromDirectory(const QDir& dir);
 
     mixxx::skin::SkinType type() const override {
         return mixxx::skin::SkinType::Legacy;

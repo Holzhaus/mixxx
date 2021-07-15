@@ -8,18 +8,18 @@
 #include <QSettings>
 #include <QString>
 
-#include "skin/skin.h"
+#include "skin/skininfo.h"
 
 namespace mixxx {
 namespace skin {
 namespace qml {
 
-class QmlSkin : public mixxx::skin::Skin {
+class QmlSkinInfo : public mixxx::skin::SkinInfo {
   public:
-    QmlSkin() = default;
-    QmlSkin(const QFileInfo& path);
+    QmlSkinInfo() = default;
+    QmlSkinInfo(const QFileInfo& path);
 
-    static SkinPointer fromDirectory(const QDir& dir);
+    static SkinInfoPointer fromDirectory(const QDir& dir);
 
     mixxx::skin::SkinType type() const override {
         return mixxx::skin::SkinType::QML;

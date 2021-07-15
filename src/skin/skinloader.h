@@ -6,7 +6,7 @@
 #include <QWidget>
 
 #include "preferences/usersettings.h"
-#include "skin/skin.h"
+#include "skin/skininfo.h"
 
 namespace mixxx {
 namespace skin {
@@ -22,15 +22,15 @@ class SkinLoader {
 
     LaunchImage* loadLaunchImage(QWidget* pParent) const;
 
-    SkinPointer getSkin(const QString& skinName) const;
-    SkinPointer getConfiguredSkin() const;
+    SkinInfoPointer getSkin(const QString& skinName) const;
+    SkinInfoPointer getConfiguredSkin() const;
     QString getDefaultSkinName() const;
     QList<QDir> getSkinSearchPaths() const;
-    QList<SkinPointer> getSkins() const;
+    QList<SkinInfoPointer> getSkins() const;
 
   private:
     QString pickResizableSkin(const QString& oldSkin) const;
-    SkinPointer skinFromDirectory(const QDir& dir) const;
+    SkinInfoPointer skinFromDirectory(const QDir& dir) const;
 
     UserSettingsPointer m_pConfig;
 };

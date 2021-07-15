@@ -25,9 +25,9 @@ enum class SkinType {
     QML,
 };
 
-class Skin {
+class SkinInfo {
   public:
-    virtual ~Skin() = default;
+    virtual ~SkinInfo() = default;
 
     virtual SkinType type() const = 0;
 
@@ -48,7 +48,7 @@ class Skin {
             mixxx::CoreServices* pCoreServices) const = 0;
 };
 
-typedef std::shared_ptr<Skin> SkinPointer;
+typedef std::shared_ptr<SkinInfo> SkinInfoPointer;
 
 } // namespace skin
 } // namespace mixxx

@@ -1,4 +1,4 @@
-#include "skin/qml/qmlskin.h"
+#include "skin/qml/qmlskininfo.h"
 
 #include <QQmlEngine>
 #include <QQuickWidget>
@@ -42,14 +42,14 @@ namespace skin {
 namespace qml {
 
 // static
-SkinPointer QmlSkin::fromDirectory(const QDir& dir) {
+SkinInfoPointer QmlSkinInfo::fromDirectory(const QDir& dir) {
     if (dir.exists(kSkinMetadataFileName) && dir.exists(kMainQmlFileName)) {
-        return std::make_shared<QmlSkin>(QFileInfo(dir.absolutePath()));
+        return std::make_shared<QmlSkinInfo>(QFileInfo(dir.absolutePath()));
     }
     return nullptr;
 }
 
-QmlSkin::QmlSkin(const QFileInfo& path)
+QmlSkinInfo::QmlSkinInfo(const QFileInfo& path)
         : m_path(path),
           m_settings(QDir(path.absoluteFilePath())
                              .absoluteFilePath(kSkinMetadataFileName),
@@ -57,20 +57,20 @@ QmlSkin::QmlSkin(const QFileInfo& path)
     DEBUG_ASSERT(isValid());
 }
 
-bool QmlSkin::isValid() const {
+bool QmlSkinInfo::isValid() const {
     return !m_path.filePath().isEmpty() && m_settings.status() == QSettings::NoError;
 }
 
-QFileInfo QmlSkin::path() const {
+QFileInfo QmlSkinInfo::path() const {
     DEBUG_ASSERT(isValid());
     return m_path;
 }
 
-QDir QmlSkin::dir() const {
+QDir QmlSkinInfo::dir() const {
     return QDir(path().absoluteFilePath());
 }
 
-QPixmap QmlSkin::preview(const QString& schemeName) const {
+QPixmap QmlSkinInfo::preview(const QString& schemeName) const {
     Q_UNUSED(schemeName);
     DEBUG_ASSERT(schemeName.isEmpty());
     DEBUG_ASSERT(isValid());
@@ -82,23 +82,23 @@ QPixmap QmlSkin::preview(const QString& schemeName) const {
     return preview;
 }
 
-QString QmlSkin::name() const {
+QString QmlSkinInfo::name() const {
     DEBUG_ASSERT(isValid());
     return m_path.fileName();
 }
 
-QList<QString> QmlSkin::colorschemes() const {
+QList<QString> QmlSkinInfo::colorschemes() const {
     DEBUG_ASSERT(isValid());
     // TODO: Implement this
     return {};
 }
 
-QString QmlSkin::description() const {
+QString QmlSkinInfo::description() const {
     DEBUG_ASSERT(isValid());
     return m_settings.value("Skin/description", QString()).toString();
 }
 
-bool QmlSkin::fitsScreenSize(const QScreen& screen) const {
+bool QmlSkinInfo::fitsScreenSize(const QScreen& screen) const {
     DEBUG_ASSERT(isValid());
     const auto screenSize = screen.size();
     const int minScreenWidth = m_settings.value("Skin/min_pixel_width", -1).toInt();
@@ -114,14 +114,14 @@ bool QmlSkin::fitsScreenSize(const QScreen& screen) const {
     return true;
 }
 
-LaunchImage* QmlSkin::loadLaunchImage(QWidget* pParent, UserSettingsPointer pConfig) const {
+LaunchImage* QmlSkinInfo::loadLaunchImage(QWidget* pParent, UserSettingsPointer pConfig) const {
     Q_UNUSED(pParent);
     Q_UNUSED(pConfig);
     // TODO: Add support for custom launch image.
     return nullptr;
 }
 
-QWidget* QmlSkin::loadSkin(QWidget* pParent,
+QWidget* QmlSkinInfo::loadSkin(QWidget* pParent,
         UserSettingsPointer pConfig,
         QSet<ControlObject*>* pSkinCreatedControls,
         mixxx::CoreServices* pCoreServices) const {

@@ -778,7 +778,7 @@ add_library(mixxx-lib STATIC EXCLUDE_FROM_ALL
   src/skin/legacy/launchimage.cpp
   src/skin/legacy/legacyskinparser.cpp
   src/skin/legacy/pixmapsource.cpp
-  src/skin/legacy/legacyskin.cpp
+  src/skin/legacy/legacyskininfo.cpp
   src/skin/qml/asyncimageprovider.cpp
   src/skin/qml/qmlcontrolproxy.cpp
   src/skin/qml/qmlconfigproxy.cpp
@@ -789,7 +789,7 @@ add_library(mixxx-lib STATIC EXCLUDE_FROM_ALL
   src/skin/qml/qmllibrarytracklistmodel.cpp
   src/skin/qml/qmlplayermanagerproxy.cpp
   src/skin/qml/qmlplayerproxy.cpp
-  src/skin/qml/qmlskin.cpp
+  src/skin/qml/qmlskininfo.cpp
   src/skin/qml/qmlvisibleeffectsmodel.cpp
   src/skin/qml/qmlwaveformoverview.cpp
   src/skin/legacy/skincontext.cpp
