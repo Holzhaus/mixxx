@@ -17,6 +17,7 @@
 #include "skin/legacy/legacyskinparser.h"
 #include "skin/skinloader.h"
 #include "util/screensaver.h"
+#include "util/screensavermanager.h"
 #include "util/widgethelper.h"
 
 using mixxx::skin::SkinInfoPointer;
@@ -25,11 +26,13 @@ using mixxx::skin::SkinManifest;
 DlgPrefInterface::DlgPrefInterface(
         QWidget* parent,
         MixxxMainWindow* mixxx,
+        std::shared_ptr<mixxx::ScreensaverManager> pScreensaverManager,
         std::shared_ptr<mixxx::skin::SkinLoader> pSkinLoader,
         UserSettingsPointer pConfig)
         : DlgPreferencePage(parent),
           m_pConfig(pConfig),
           m_mixxx(mixxx),
+          m_pScreensaverManager(pScreensaverManager),
           m_pSkinLoader(pSkinLoader),
           m_pSkinInfo(pSkinLoader->getConfiguredSkin()),
           m_dScaleFactorAuto(1.0),
@@ -164,7 +167,7 @@ DlgPrefInterface::DlgPrefInterface(
     comboBoxScreensaver->addItem(tr("Prevent screensaver while playing"),
             static_cast<int>(mixxx::ScreenSaverPreference::PREVENT_ON_PLAY));
 
-    int inhibitsettings = static_cast<int>(mixxx->getInhibitScreensaver());
+    int inhibitsettings = static_cast<int>(m_pScreensaverManager->status());
     comboBoxScreensaver->setCurrentIndex(comboBoxScreensaver->findData(inhibitsettings));
 
     // Tooltip configuration
@@ -260,7 +263,7 @@ void DlgPrefInterface::slotUpdate() {
 
     loadTooltipPreferenceFromConfig();
 
-    int inhibitsettings = static_cast<int>(m_mixxx->getInhibitScreensaver());
+    int inhibitsettings = static_cast<int>(m_pScreensaverManager->status());
     comboBoxScreensaver->setCurrentIndex(comboBoxScreensaver->findData(inhibitsettings));
 }
 
@@ -412,9 +415,9 @@ void DlgPrefInterface::slotApply() {
     // screensaver mode update
     int screensaverComboBoxState = comboBoxScreensaver->itemData(
             comboBoxScreensaver->currentIndex()).toInt();
-    int screensaverConfiguredState = static_cast<int>(m_mixxx->getInhibitScreensaver());
+    int screensaverConfiguredState = static_cast<int>(m_pScreensaverManager->status());
     if (screensaverComboBoxState != screensaverConfiguredState) {
-        m_mixxx->setInhibitScreensaver(
+        m_pScreensaverManager->setStatus(
                 static_cast<mixxx::ScreenSaverPreference>(screensaverComboBoxState));
     }
 
