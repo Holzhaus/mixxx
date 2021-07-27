@@ -52,6 +52,10 @@
 
 #include "util/duration.h"
 
+// TODO: Switch to std::chrono::high_resolution_clock and measure
+// durations in std::chrono::high_resolution_clock::duration
+// instead of using mixxx::Duration which serves a different
+// purpose and stores values as floating-point.
 class PerformanceTimer
 {
 public:
