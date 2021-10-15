@@ -2006,6 +2006,8 @@ TEST_F(EngineSyncTest, HalfDoubleConsistency) {
 
     ControlObject::getControl(ConfigKey(m_sGroup1, "play"))->set(1.0);
     ControlObject::getControl(ConfigKey(m_sGroup1, "sync_enabled"))->set(1);
+    EXPECT_DOUBLE_EQ(1.0,
+            ControlObject::getControl(ConfigKey(m_sGroup1, "rate_ratio"))->get());
     EXPECT_DOUBLE_EQ(90.0,
             ControlObject::getControl(ConfigKey(m_sGroup1, "bpm"))->get());
     EXPECT_DOUBLE_EQ(180.0,
@@ -2015,6 +2017,8 @@ TEST_F(EngineSyncTest, HalfDoubleConsistency) {
     ProcessBuffer();
     ControlObject::getControl(ConfigKey(m_sGroup1, "sync_enabled"))->set(1);
     ProcessBuffer();
+    EXPECT_DOUBLE_EQ(1.0,
+            ControlObject::getControl(ConfigKey(m_sGroup1, "rate_ratio"))->get());
     EXPECT_DOUBLE_EQ(90.0,
             ControlObject::getControl(ConfigKey(m_sGroup1, "bpm"))->get());
     EXPECT_DOUBLE_EQ(180.0,
