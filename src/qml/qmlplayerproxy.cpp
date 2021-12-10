@@ -27,7 +27,7 @@ namespace mixxx {
 namespace qml {
 
 QmlPlayerProxy::QmlPlayerProxy(BaseTrackPlayer* pTrackPlayer, QObject* parent)
-        : QObject(parent), m_pTrackPlayer(pTrackPlayer) {
+        : QObject(parent), m_pTrackPlayer(pTrackPlayer), m_pBeatsModel(new QmlBeatsModel(this)) {
     connect(m_pTrackPlayer,
             &BaseTrackPlayer::loadingTrack,
             this,
@@ -114,6 +114,11 @@ void QmlPlayerProxy::slotTrackLoaded(TrackPointer pTrack) {
                 &Track::waveformUpdated,
                 this,
                 &QmlPlayerProxy::slotWaveformChanged);
+        connect(pTrack.get(),
+                &Track::beatsUpdated,
+                this,
+                &QmlPlayerProxy::slotBeatsChanged);
+        slotBeatsChanged();
     }
     emit trackChanged();
     emit trackLoaded();
@@ -170,6 +175,22 @@ void QmlPlayerProxy::slotWaveformChanged() {
             m_waveformTexture = QImage(data, textureWidth, textureHeight, QImage::Format_RGBA8888);
             emit waveformTextureChanged();
         }
+    }
+}
+
+void QmlPlayerProxy::slotBeatsChanged() {
+    VERIFY_OR_DEBUG_ASSERT(m_pBeatsModel != nullptr) {
+        return;
+    }
+
+    const TrackPointer pTrack = m_pCurrentTrack;
+    if (pTrack) {
+        const auto trackEndPosition = mixxx::audio::FramePos{
+                pTrack->getDuration() * pTrack->getSampleRate()};
+        const auto pBeats = pTrack->getBeats();
+        m_pBeatsModel->setBeats(pBeats, trackEndPosition);
+    } else {
+        m_pBeatsModel->setBeats(nullptr, audio::kStartFramePos);
     }
 }
 
