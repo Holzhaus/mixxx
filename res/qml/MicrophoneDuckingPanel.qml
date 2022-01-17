@@ -13,23 +13,24 @@ Column {
     }
 
     Skin.ControlSlider {
+        //barColor: Theme.crossfaderBarColor
+        //barStart: 1
+        //fg: Theme.imgMicDuckingSliderHandle
+        //bg: Theme.imgMicDuckingSlider
+
         width: 50
         height: 26
         orientation: Qt.Horizontal
         group: "[Master]"
         key: "duckStrength"
-        barColor: Theme.crossfaderBarColor
-        barStart: 1
-        fg: Theme.imgMicDuckingSliderHandle
-        bg: Theme.imgMicDuckingSlider
     }
 
     Skin.Button {
         id: pflButton
 
         text: duckingControl.duckingModeName
-        activeColor: Theme.pflActiveButtonColor
-        highlight: duckingControl.duckingEnabled
+        //activeColor: Theme.pflActiveButtonColor
+        //highlight: duckingControl.duckingEnabled
         onClicked: duckingControl.nextMode()
 
         Mixxx.ControlProxy {

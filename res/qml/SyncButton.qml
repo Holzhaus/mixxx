@@ -23,16 +23,16 @@ Skin.Button {
         leaderControl.value = !leaderControl.value;
     }
 
-    activeColor: {
-        switch (mode) {
-        case SyncButton.SyncMode.ImplicitLeader:
-            return Theme.yellow;
-        case SyncButton.SyncMode.ExplicitLeader:
-            return Theme.red;
-        default:
-            return Theme.deckActiveColor;
-        }
-    }
+    //activeColor: {
+    //    switch (mode) {
+    //    case SyncButton.SyncMode.ImplicitLeader:
+    //        return Theme.yellow;
+    //    case SyncButton.SyncMode.ExplicitLeader:
+    //        return Theme.red;
+    //    default:
+    //        return Theme.deckActiveColor;
+    //    }
+    //}
     text: {
         switch (mode) {
         case SyncButton.SyncMode.ImplicitLeader:
@@ -42,7 +42,7 @@ Skin.Button {
             return "Sync";
         }
     }
-    highlight: enabledControl.value
+    //highlight: enabledControl.value
     onClicked: toggleSync()
     onPressAndHold: toggleLeader()
 

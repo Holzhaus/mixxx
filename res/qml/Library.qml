@@ -131,7 +131,7 @@ Item {
             highlight: Rectangle {
                 border.color: listView.activeFocus ? Theme.blue : Theme.deckTextColor
                 border.width: 1
-                color: "transparent"
+                color: Qt.color("transparent")
             }
 
         }

@@ -28,6 +28,8 @@ Row {
         radius: 5
 
         Skin.ControlKnob {
+            //color: Theme.gainKnobColor
+
             id: gainKnob
 
             anchors.centerIn: parent
@@ -36,7 +38,6 @@ Row {
             arcStart: Knob.ArcStart.Minimum
             group: root.group
             key: "pregain"
-            color: Theme.gainKnobColor
         }
 
     }
@@ -54,7 +55,7 @@ Row {
             group: root.group
             key: "pfl"
             text: "PFL"
-            activeColor: Theme.pflActiveButtonColor
+            //activeColor: Theme.pflActiveButtonColor
             toggleable: true
         }
 
@@ -67,6 +68,8 @@ Row {
         width: 56
 
         Skin.InfoBarButton {
+            //activeColor: Theme.deckActiveColor
+
             id: talkButton
 
             anchors.left: parent.left
@@ -75,7 +78,6 @@ Row {
             anchors.bottom: parent.verticalCenter
             group: root.group
             key: "talkover"
-            activeColor: Theme.deckActiveColor
 
             foreground: Skin.EmbeddedText {
                 anchors.centerIn: parent
@@ -85,6 +87,8 @@ Row {
         }
 
         Skin.InfoBarButton {
+            //activeColor: Theme.deckActiveColor
+
             id: fx1Button
 
             anchors.left: parent.left
@@ -93,7 +97,6 @@ Row {
             anchors.bottom: parent.bottom
             group: "[EffectRack1_EffectUnit1]"
             key: "group_" + root.group + "_enable"
-            activeColor: Theme.deckActiveColor
 
             foreground: Skin.EmbeddedText {
                 anchors.centerIn: parent
@@ -103,13 +106,14 @@ Row {
         }
 
         Skin.InfoBarButton {
+            //activeColor: Theme.deckActiveColor
+
             group: "[EffectRack1_EffectUnit2]"
             anchors.left: parent.horizontalCenter
             anchors.right: parent.right
             anchors.top: parent.verticalCenter
             anchors.bottom: parent.bottom
             key: "group_" + root.group + "_enable"
-            activeColor: Theme.deckActiveColor
 
             foreground: Skin.EmbeddedText {
                 anchors.centerIn: parent

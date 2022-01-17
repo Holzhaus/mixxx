@@ -4,15 +4,15 @@ import Mixxx 0.1 as Mixxx
 Skin.Button {
     id: root
 
-    property string group // required
-    property string key // required
+    property alias group: control.group
+    property alias key: control.key
     property bool toggleable: false
 
     function toggle() {
         control.value = !control.value;
     }
 
-    highlight: control.value
+    //highlight: control.value
     onPressed: {
         if (toggleable)
             toggle();
@@ -27,9 +27,6 @@ Skin.Button {
 
     Mixxx.ControlProxy {
         id: control
-
-        group: root.group
-        key: root.key
     }
 
 }

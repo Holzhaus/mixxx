@@ -11,40 +11,45 @@ Column {
     spacing: 4
 
     Skin.EqKnob {
+        //knob.color: Theme.eqHighColor
+
         statusKey: "button_parameter3"
         knob.group: "[EqualizerRack1_" + root.group + "_Effect1]"
         knob.key: "parameter3"
-        knob.color: Theme.eqHighColor
     }
 
     Skin.EqKnob {
+        //knob.color: Theme.eqMidColor
+
         statusKey: "button_parameter2"
         knob.group: "[EqualizerRack1_" + root.group + "_Effect1]"
         knob.key: "parameter2"
-        knob.color: Theme.eqMidColor
     }
 
     Skin.EqKnob {
+        //knob.color: Theme.eqLowColor
+
         knob.group: "[EqualizerRack1_" + root.group + "_Effect1]"
         knob.key: "parameter1"
         statusKey: "button_parameter1"
-        knob.color: Theme.eqLowColor
     }
 
     Skin.EqKnob {
+        //knob.color: Theme.eqFxColor
+
         knob.group: "[QuickEffectRack1_" + root.group + "]"
         knob.key: "super1"
         statusGroup: "[QuickEffectRack1_" + root.group + "_Effect1]"
         statusKey: "enabled"
         knob.arcStyle: ShapePath.DashLine
         knob.arcStylePattern: [2, 2]
-        knob.color: Theme.eqFxColor
     }
 
     Skin.OrientationToggleButton {
+        //color: Theme.crossfaderOrientationColor
+
         group: root.group
         key: "orientation"
-        color: Theme.crossfaderOrientationColor
     }
 
 }

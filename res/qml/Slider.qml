@@ -38,7 +38,7 @@ MixxxControls.Slider {
             height: parent.height + 5
             radius: 5
             verticalOffset: 5
-            color: "#80000000"
+            color: Qt.color("#80000000")
         }
 
     }

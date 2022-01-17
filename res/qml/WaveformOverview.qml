@@ -139,7 +139,7 @@ Item {
         id: passthroughContainer
 
         anchors.fill: parent
-        color: "transparent"
+        color: Qt.color("transparent")
 
         Skin.SectionText {
             anchors.centerIn: parent

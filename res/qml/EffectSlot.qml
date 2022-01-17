@@ -24,6 +24,8 @@ Item {
         width: Math.min(root.width, root.maxSelectorWidth)
 
         Skin.ControlButton {
+            //activeColor: Theme.effectColor
+
             id: effectEnableButton
 
             anchors.left: parent.left
@@ -35,7 +37,6 @@ Item {
             key: "enabled"
             toggleable: true
             text: "ON"
-            activeColor: Theme.effectColor
         }
 
         Skin.ComboBox {
@@ -75,6 +76,8 @@ Item {
         }
 
         Skin.ControlMiniKnob {
+            //color: Theme.effectColor
+
             id: effectMetaKnob
 
             anchors.right: parent.right
@@ -85,7 +88,6 @@ Item {
             width: 40
             group: root.group
             key: "meta"
-            color: Theme.effectColor
         }
 
     }
@@ -133,7 +135,7 @@ Item {
                 arcStart: 0
                 group: root.group
                 key: parameter.key
-                color: Theme.effectColor
+                //color: Theme.effectColor
                 visible: parameter.isKnob
 
                 Mixxx.ControlProxy {
@@ -155,7 +157,7 @@ Item {
                 anchors.centerIn: parent
                 group: root.group
                 key: parameter.key
-                activeColor: Theme.effectColor
+                //activeColor: Theme.effectColor
                 visible: parameter.isButton
                 toggleable: true
                 text: "ON"

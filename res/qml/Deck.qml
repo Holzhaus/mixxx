@@ -4,11 +4,31 @@ import QtQuick 2.12
 import "Theme"
 
 Item {
+    //Skin.ControlSlider {
+    //    id: rateSlider
+    //    visible: !root.minimized
+    //    anchors.topMargin: 5
+    //    anchors.rightMargin: 5
+    //    anchors.bottomMargin: 5
+    //    anchors.top: infoBar.bottom
+    //    anchors.right: parent.right
+    //    anchors.bottom: buttonBar.top
+    //    width: syncButton.width
+    //    group: root.group
+    //    key: "rate"
+    //    barStart: 0.5
+    //    barColor: Theme.bpmSliderBarColor
+    //    bg: Theme.imgBpmSliderBackground
+    //    FadeBehavior on visible {
+    //        fadeTarget: rateSlider
+    //    }
+    //}
+
     id: root
 
     property string group // required
     property bool minimized: false
-    property var deckPlayer: Mixxx.PlayerManager.getPlayer(group)
+    property var deckPlayer: Mixxx.PlayerManager.getPlayer(this.group)
 
     Drag.active: dragArea.drag.active
     Drag.dragType: Drag.Automatic
@@ -48,30 +68,15 @@ Item {
         rightColumnWidth: rateSlider.width
     }
 
-    Skin.ControlSlider {
-        id: rateSlider
-
-        visible: !root.minimized
-        anchors.topMargin: 5
-        anchors.rightMargin: 5
-        anchors.bottomMargin: 5
-        anchors.top: infoBar.bottom
-        anchors.right: parent.right
-        anchors.bottom: buttonBar.top
-        width: syncButton.width
-        group: root.group
-        key: "rate"
-        barStart: 0.5
-        barColor: Theme.bpmSliderBarColor
-        bg: Theme.imgBpmSliderBackground
-
-        FadeBehavior on visible {
-            fadeTarget: rateSlider
-        }
-
-    }
-
     Rectangle {
+        //Skin.WaveformOverview {
+        //    group: root.group
+        //    anchors.top: parent.top
+        //    anchors.left: parent.left
+        //    anchors.right: parent.right
+        //    height: parent.height - 26
+        //}
+
         id: overview
 
         visible: !root.minimized
@@ -85,14 +90,6 @@ Item {
         radius: 5
         color: Theme.deckBackgroundColor
         height: 56
-
-        Skin.WaveformOverview {
-            group: root.group
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: parent.height - 26
-        }
 
         Item {
             id: waveformBar
@@ -115,6 +112,8 @@ Item {
             }
 
             InfoBarButton {
+                //activeColor: Theme.deckActiveColor
+
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
@@ -122,7 +121,6 @@ Item {
                 width: rateSlider.width
                 group: "[EffectRack1_EffectUnit1]"
                 key: "group_" + root.group + "_enable"
-                activeColor: Theme.deckActiveColor
 
                 foreground: Skin.EmbeddedText {
                     anchors.centerIn: parent
@@ -143,13 +141,14 @@ Item {
             }
 
             InfoBarButton {
+                //activeColor: Theme.deckActiveColor
+
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: waveformBarHSeparator1.left
                 width: rateSlider.width
                 group: "[EffectRack1_EffectUnit2]"
                 key: "group_" + root.group + "_enable"
-                activeColor: Theme.deckActiveColor
 
                 foreground: Skin.EmbeddedText {
                     anchors.centerIn: parent
@@ -238,13 +237,14 @@ Item {
             }
 
             InfoBarButton {
+                //activeColor: Theme.deckActiveColor
+
                 anchors.top: waveformBarVSeparator.bottom
                 anchors.bottom: waveformBar.bottom
                 anchors.left: waveformBarRightSpace.left
                 anchors.right: waveformBarRightSpace.right
                 group: root.group
                 key: "quantize"
-                activeColor: Theme.deckActiveColor
 
                 foreground: Image {
                     anchors.centerIn: parent
@@ -274,13 +274,14 @@ Item {
             }
 
             InfoBarButton {
+                //activeColor: Theme.deckActiveColor
+
                 anchors.top: waveformBarVSeparator.bottom
                 anchors.bottom: waveformBar.bottom
                 anchors.left: waveformBarLeftSpace.left
                 anchors.right: waveformBarLeftSpace.right
                 group: root.group
                 key: "passthrough"
-                activeColor: Theme.deckActiveColor
 
                 foreground: Image {
                     anchors.centerIn: parent
@@ -310,6 +311,8 @@ Item {
         visible: !root.minimized
 
         Skin.ControlButton {
+            //activeColor: Theme.deckActiveColor
+
             id: cueButton
 
             anchors.left: parent.left
@@ -318,10 +321,11 @@ Item {
             group: root.group
             key: "cue_default"
             text: "Cue"
-            activeColor: Theme.deckActiveColor
         }
 
         Skin.ControlButton {
+            //activeColor: Theme.deckActiveColor
+
             id: playButton
 
             anchors.left: parent.left
@@ -331,7 +335,6 @@ Item {
             key: "play"
             text: "Play"
             toggleable: true
-            activeColor: Theme.deckActiveColor
         }
 
         Row {

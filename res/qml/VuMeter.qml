@@ -11,7 +11,7 @@ Rectangle {
     property color barColor // required
 
     radius: width / 2
-    color: "black"
+    color: Qt.color("black")
 
     Mixxx.ControlProxy {
         id: control

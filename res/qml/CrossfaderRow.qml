@@ -53,6 +53,11 @@ Item {
         height: crossfaderSlider.height + 20
 
         Skin.ControlSlider {
+            //barColor: Theme.crossfaderBarColor
+            //barStart: 0.5
+            //fg: Theme.imgCrossfaderHandle
+            //bg: Theme.imgCrossfaderBackground
+
             id: crossfaderSlider
 
             anchors.left: parent.left
@@ -63,10 +68,6 @@ Item {
             orientation: Qt.Horizontal
             group: "[Master]"
             key: "crossfader"
-            barColor: Theme.crossfaderBarColor
-            barStart: 0.5
-            fg: Theme.imgCrossfaderHandle
-            bg: Theme.imgCrossfaderBackground
         }
 
     }

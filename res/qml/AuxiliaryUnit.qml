@@ -28,6 +28,8 @@ Row {
         radius: 5
 
         Skin.ControlKnob {
+            //color: Theme.gainKnobColor
+
             id: gainKnob
 
             anchors.centerIn: parent
@@ -36,7 +38,6 @@ Row {
             arcStart: Knob.ArcStart.Minimum
             group: root.group
             key: "pregain"
-            color: Theme.gainKnobColor
         }
 
     }
@@ -54,7 +55,7 @@ Row {
             group: root.group
             key: "pfl"
             text: "PFL"
-            activeColor: Theme.pflActiveButtonColor
+            //activeColor: Theme.pflActiveButtonColor
             toggleable: true
         }
 

@@ -25,9 +25,9 @@ Slider {
         ShapePath {
             id: barPath
 
-            strokeColor: "transparent"
+            strokeColor: Qt.color("transparent")
             strokeWidth: 2
-            fillColor: "transparent"
+            fillColor: Qt.color("transparent")
             startX: barShape.width * (root.horizontal ? (1 - root.barStart) : 0.5)
             startY: barShape.height * (root.vertical ? (1 - root.barStart) : 0.5)
 

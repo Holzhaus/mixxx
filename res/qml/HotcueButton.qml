@@ -2,14 +2,15 @@ import "." as Skin
 import QtQuick 2.12
 
 Skin.Button {
+    //activeColor: hotcue.color
+    //highlight: hotcue.isSet
+
     id: root
 
     property int hotcueNumber // required
     property string group // required
 
     text: hotcueNumber
-    activeColor: hotcue.color
-    highlight: hotcue.isSet
 
     Skin.Hotcue {
         id: hotcue
