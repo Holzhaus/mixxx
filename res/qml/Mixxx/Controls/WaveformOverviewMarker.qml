@@ -8,7 +8,7 @@ Item {
 
     property string group // required
     property string key // required
-    property string color: "white"
+    property string color: Qt.color("white")
 
     Shape {
         id: shape

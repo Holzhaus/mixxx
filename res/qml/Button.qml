@@ -1,6 +1,4 @@
-import "." as Skin
 import Qt5Compat.GraphicalEffects
-import QtQml 2.12
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import "Theme"
@@ -9,7 +7,7 @@ AbstractButton {
     id: root
 
     property color normalColor: Theme.buttonNormalColor
-    property color activeColor // required
+    property color activeColor: Theme.buttonNormalColor // required
     property color pressedColor: activeColor
     property bool highlight: false
 

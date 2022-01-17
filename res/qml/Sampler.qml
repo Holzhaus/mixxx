@@ -54,6 +54,8 @@ Rectangle {
     }
 
     Skin.ControlMiniKnob {
+        //color: Theme.samplerColor
+
         id: gainKnob
 
         anchors.margins: 5
@@ -63,21 +65,21 @@ Rectangle {
         width: 40
         group: root.group
         key: "pregain"
-        color: Theme.samplerColor
     }
 
     Skin.ControlButton {
+        //highlight: playControl.playing
+
         id: playButton
 
         anchors.top: embedded.top
         anchors.left: embedded.left
-        activeColor: Theme.samplerColor
+        //activeColor: Theme.samplerColor
         width: 40
         height: 40
         text: "Play"
         group: root.group
         key: "cue_gotoandplay"
-        highlight: playControl.playing
     }
 
     Text {
@@ -103,7 +105,7 @@ Rectangle {
         anchors.bottom: embedded.bottom
         height: 5
         radius: height / 2
-        color: "transparent"
+        color: Qt.color("transparent")
         border.color: Theme.deckLineColor
         border.width: 1
 

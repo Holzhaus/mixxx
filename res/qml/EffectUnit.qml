@@ -147,7 +147,7 @@ Item {
                     id: expandButton
 
                     anchors.fill: parent
-                    activeColor: Theme.effectUnitColor
+                    //activeColor: Theme.effectUnitColor
                     text: "▼"
                     checkable: true
                 }
@@ -162,7 +162,7 @@ Item {
                 arcStart: Knob.ArcStart.Minimum
                 group: "[EffectRack1_EffectUnit" + root.unitNumber + "]"
                 key: "super1"
-                color: Theme.effectUnitColor
+                //color: Theme.effectUnitColor
                 visible: false
 
                 Skin.FadeBehavior on visible {
@@ -179,7 +179,7 @@ Item {
                 arcStart: Knob.ArcStart.Minimum
                 group: "[EffectRack1_EffectUnit" + root.unitNumber + "]"
                 key: "mix"
-                color: Theme.effectUnitColor
+                //color: Theme.effectUnitColor
                 visible: false
 
                 Skin.FadeBehavior on visible {

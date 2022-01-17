@@ -1,5 +1,4 @@
 import Mixxx 0.1 as Mixxx
-import QtQml.Models 2.12
 import QtQuick 2.12
 import "Theme"
 
@@ -132,7 +131,7 @@ Item {
             highlight: Rectangle {
                 border.color: listView.activeFocus ? Theme.blue : Theme.deckTextColor
                 border.width: 1
-                color: "transparent"
+                color: Qt.color("transparent")
             }
 
         }

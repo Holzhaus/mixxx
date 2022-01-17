@@ -8,7 +8,7 @@ Item {
     property string group // required
     property string key // required
     property alias orientation: orientationSlider.value
-    property color color: "white"
+    property color color: Qt.color("white")
 
     implicitWidth: 56
     implicitHeight: 26

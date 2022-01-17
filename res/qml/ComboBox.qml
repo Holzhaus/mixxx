@@ -27,7 +27,7 @@ ComboBox {
             radius: 5
             border.width: itemDlgt.highlighted ? 1 : 0
             border.color: Theme.deckLineColor
-            color: "transparent"
+            color: Qt.color("transparent")
         }
 
     }

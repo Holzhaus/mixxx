@@ -51,7 +51,7 @@ Rectangle {
         radius: height / 2
         border.width: 2
         border.color: Theme.deckLineColor
-        color: "transparent"
+        color: Qt.color("transparent")
     }
 
     Item {

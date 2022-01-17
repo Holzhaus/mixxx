@@ -51,7 +51,7 @@ Popup {
         anchors.left: parent.left
         anchors.topMargin: 5
         text: "Clear"
-        activeColor: Theme.deckActiveColor
+        //activeColor: Theme.deckActiveColor
         onDownChanged: (down) => {
             root.hotcue.clear = down;
         }

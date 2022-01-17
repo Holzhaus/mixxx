@@ -19,6 +19,11 @@ ApplicationWindow {
     visible: true
 
     Column {
+        //Skin.Library {
+        //    width: parent.width
+        //    height: parent.height - y
+        //}
+
         anchors.fill: parent
 
         Rectangle {
@@ -37,7 +42,7 @@ ApplicationWindow {
                     id: show4DecksButton
 
                     text: "4 Decks"
-                    activeColor: Theme.white
+                    //activeColor: Theme.white
                     checkable: true
                 }
 
@@ -45,7 +50,7 @@ ApplicationWindow {
                     id: maximizeLibraryButton
 
                     text: "Library"
-                    activeColor: Theme.white
+                    //activeColor: Theme.white
                     checkable: true
                 }
 
@@ -53,7 +58,7 @@ ApplicationWindow {
                     id: showEffectsButton
 
                     text: "Effects"
-                    activeColor: Theme.white
+                    //activeColor: Theme.white
                     checkable: true
                 }
 
@@ -61,7 +66,7 @@ ApplicationWindow {
                     id: showSamplersButton
 
                     text: "Sampler"
-                    activeColor: Theme.white
+                    //activeColor: Theme.white
                     checkable: true
                 }
 
@@ -69,7 +74,7 @@ ApplicationWindow {
                     id: showPreferencesButton
 
                     text: "Prefs"
-                    activeColor: Theme.white
+                    //activeColor: Theme.white
                     onClicked: {
                         Mixxx.PreferencesDialog.show();
                     }
@@ -79,7 +84,7 @@ ApplicationWindow {
                     id: showDevToolsButton
 
                     text: "Develop"
-                    activeColor: Theme.white
+                    //activeColor: Theme.white
                     checkable: true
                     checked: devToolsWindow.visible
                     onClicked: {
@@ -161,11 +166,6 @@ ApplicationWindow {
                 fadeTarget: effects
             }
 
-        }
-
-        Library {
-            width: parent.width
-            height: parent.height - y
         }
 
         move: Transition {

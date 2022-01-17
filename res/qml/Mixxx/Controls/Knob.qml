@@ -67,9 +67,9 @@ Item {
         ShapePath {
             id: arcPath
 
-            strokeColor: "transparent"
+            strokeColor: Qt.color("transparent")
             strokeWidth: 2
-            fillColor: "transparent"
+            fillColor: Qt.color("transparent")
 
             PathAngleArc {
                 startAngle: root.angleFrom(root.arcStartValue - root.valueCenter) - 90

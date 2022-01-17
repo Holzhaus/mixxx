@@ -9,7 +9,9 @@ Skin.Knob {
     property alias key: control.key
 
     value: control.parameter
-    onTurned: control.parameter = value
+    onTurned: (value) => {
+        control.parameter = value;
+    }
 
     Mixxx.ControlProxy {
         id: control

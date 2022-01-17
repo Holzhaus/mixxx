@@ -2,8 +2,8 @@ import "." as Skin
 import "Theme"
 
 Skin.Knob {
-    id: root
+    //shadowSource: Theme.imgKnobMiniShadow
+    //backgroundSource: Theme.imgKnobMini
 
-    shadowSource: Theme.imgKnobMiniShadow
-    backgroundSource: Theme.imgKnobMini
+    id: root
 }
