@@ -46,12 +46,6 @@ tools/debian_buildenv.sh setup` respectively), then run:
 There should now be a `mixxx` executable in the current directory that you can
 run. Alternatively, can generate a package using `cpack`.
 
-More Information can be found on the [wiki]:
-
-- [Compiling on Linux]
-- [Compiling on macOS]
-- [Compiling on Windows]
-
 ## Documentation
 
 For help using Mixxx, there are a variety of options:
