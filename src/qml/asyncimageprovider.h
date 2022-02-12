@@ -4,8 +4,10 @@
 #include <QSize>
 #include <QString>
 #include <QThreadPool>
+#include <memory>
 
 #include "library/coverart.h"
+#include "library/trackcollectionmanager.h"
 
 namespace mixxx {
 namespace qml {
@@ -13,17 +15,22 @@ namespace qml {
 class AsyncImageResponse : public QQuickImageResponse, public QRunnable {
     Q_OBJECT
   public:
-    AsyncImageResponse(const QString& id, const QSize& requestedSize);
+    AsyncImageResponse(const QString& id,
+            const QSize& requestedSize,
+            std::shared_ptr<TrackCollectionManager> pTrackCollectionManager);
     QQuickTextureFactory* textureFactory() const override;
     void run() override;
 
     QString m_id;
     QSize m_requestedSize;
     QImage m_image;
+    std::shared_ptr<TrackCollectionManager> m_pTrackCollectionManager;
 };
 
 class AsyncImageProvider : public QQuickAsyncImageProvider {
   public:
+    AsyncImageProvider(std::shared_ptr<TrackCollectionManager> pTrackCollectionManager);
+
     QQuickImageResponse* requestImageResponse(
             const QString& id, const QSize& requestedSize) override;
 
@@ -33,6 +40,7 @@ class AsyncImageProvider : public QQuickAsyncImageProvider {
 
   private:
     QThreadPool pool;
+    std::shared_ptr<TrackCollectionManager> m_pTrackCollectionManager;
 };
 
 } // namespace qml

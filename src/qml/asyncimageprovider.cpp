@@ -9,8 +9,12 @@ const QString kCoverArtPrefix = QStringLiteral("coverart/");
 namespace mixxx {
 namespace qml {
 
-AsyncImageResponse::AsyncImageResponse(const QString& id, const QSize& requestedSize)
-        : m_id(id), m_requestedSize(requestedSize) {
+AsyncImageResponse::AsyncImageResponse(const QString& id,
+        const QSize& requestedSize,
+        std::shared_ptr<TrackCollectionManager> pTrackCollectionManager)
+        : m_id(id),
+          m_requestedSize(requestedSize),
+          m_pTrackCollectionManager(pTrackCollectionManager) {
     setAutoDelete(false);
 }
 
@@ -21,6 +25,10 @@ QQuickTextureFactory* AsyncImageResponse::textureFactory() const {
 void AsyncImageResponse::run() {
     if (m_id.startsWith(kCoverArtPrefix)) {
         QString trackLocation = AsyncImageProvider::coverArtUrlIdToTrackLocation(m_id);
+
+        const auto trackRef = TrackRef::fromFilePath(trackLocation);
+        const auto pTrack = m_pTrackCollectionManager->getTrackByRef(trackRef);
+        Q_UNUSED(pTrack);
 
         // TODO: This code does not allow to override embedded cover art with
         // a custom image, which is possible in Mixxx. We need to access the
@@ -49,9 +57,16 @@ void AsyncImageResponse::run() {
     emit finished();
 }
 
+AsyncImageProvider::AsyncImageProvider(
+        std::shared_ptr<TrackCollectionManager> pTrackCollectionManager)
+        : QQuickAsyncImageProvider(),
+          m_pTrackCollectionManager(pTrackCollectionManager) {
+}
+
 QQuickImageResponse* AsyncImageProvider::requestImageResponse(
         const QString& id, const QSize& requestedSize) {
-    AsyncImageResponse* response = new AsyncImageResponse(id, requestedSize);
+    AsyncImageResponse* response = new AsyncImageResponse(
+            id, requestedSize, m_pTrackCollectionManager);
     pool.start(response);
     return response;
 }
