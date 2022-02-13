@@ -15,16 +15,21 @@ namespace qml {
 class AsyncImageResponse : public QQuickImageResponse, public QRunnable {
     Q_OBJECT
   public:
-    AsyncImageResponse(const QString& id,
-            const QSize& requestedSize,
+    AsyncImageResponse(
+            QString id,
+            QSize requestedSize,
             std::shared_ptr<TrackCollectionManager> pTrackCollectionManager);
+
     QQuickTextureFactory* textureFactory() const override;
+
     void run() override;
 
+  private:
     QString m_id;
     QSize m_requestedSize;
-    QImage m_image;
     std::shared_ptr<TrackCollectionManager> m_pTrackCollectionManager;
+
+    QImage m_image;
 };
 
 class AsyncImageProvider : public QQuickAsyncImageProvider {
