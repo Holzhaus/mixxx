@@ -66,7 +66,7 @@ Rectangle {
         Mixxx.ControlProxy {
             group: root.group
             key: "play"
-            onValueChanged: (value) => {
+            onValueChanged: value => {
                 spinnyIndicator.indicatorVisible = (value > 0);
             }
         }
@@ -88,11 +88,8 @@ Rectangle {
                     height: parent.height / 2
                     color: Theme.deckTextColor
                 }
-
             }
-
         }
-
     }
 
     Skin.EmbeddedText {
@@ -181,7 +178,6 @@ Rectangle {
             group: root.group
             key: "bpm"
         }
-
     }
 
     Skin.EmbeddedText {
@@ -202,7 +198,6 @@ Rectangle {
             group: root.group
             key: "rate_ratio"
         }
-
     }
 
     gradient: Gradient {
@@ -214,7 +209,6 @@ Rectangle {
                 const trackColor = root.deckPlayer.color;
                 if (!trackColor.valid)
                     return Theme.deckBackgroundColor;
-
                 return Qt.darker(root.deckPlayer.color, 2);
             }
         }
@@ -223,7 +217,5 @@ Rectangle {
             position: 1
             color: Theme.deckBackgroundColor
         }
-
     }
-
 }

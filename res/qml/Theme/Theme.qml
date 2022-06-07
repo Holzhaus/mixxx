@@ -1,5 +1,5 @@
-import QtQuick 2.12
 pragma Singleton
+import QtQuick 2.12
 
 QtObject {
     property color white: "#e3d7fb"

@@ -10,13 +10,13 @@ Item {
         LibraryControl {
             id: libraryControl
 
-            onMoveVertical: (offset) => {
+            onMoveVertical: offset => {
                 listView.moveSelectionVertical(offset);
             }
             onLoadSelectedTrack: (group, play) => {
                 listView.loadSelectedTrack(group, play);
             }
-            onLoadSelectedTrackIntoNextAvailableDeck: (play) => {
+            onLoadSelectedTrackIntoNextAvailableDeck: play => {
                 listView.loadSelectedTrackIntoNextAvailableDeck(play);
             }
             onFocusWidgetChanged: {
@@ -33,32 +33,27 @@ Item {
 
             function moveSelectionVertical(value) {
                 if (value == 0)
-                    return ;
-
+                    return;
                 const rowCount = model.rowCount();
                 if (rowCount == 0)
-                    return ;
-
+                    return;
                 currentIndex = Mixxx.MathUtils.positiveModulo(currentIndex + value, rowCount);
             }
 
             function loadSelectedTrackIntoNextAvailableDeck(play) {
                 const url = model.get(currentIndex).fileUrl;
                 if (!url)
-                    return ;
-
+                    return;
                 Mixxx.PlayerManager.loadLocationUrlIntoNextAvailableDeck(url, play);
             }
 
             function loadSelectedTrack(group, play) {
                 const url = model.get(currentIndex).fileUrl;
                 if (!url)
-                    return ;
-
+                    return;
                 const player = Mixxx.PlayerManager.getPlayer(group);
                 if (!player)
-                    return ;
-
+                    return;
                 player.loadTrackFromLocationUrl(url, play);
             }
 
@@ -69,7 +64,7 @@ Item {
             highlightMoveDuration: 250
             highlightResizeDuration: 50
             model: Mixxx.Library.model
-            Keys.onPressed: (event) => {
+            Keys.onPressed: event => {
                 switch (event.key) {
                 case Qt.Key_Enter:
                 case Qt.Key_Return:
@@ -94,13 +89,11 @@ Item {
                     text: itemDlgt.artist + " - " + itemDlgt.title
                     color: (listView.currentIndex == itemDlgt.index && listView.activeFocus) ? Theme.blue : Theme.deckTextColor
 
-                    Behavior on color {
+                    Behavior on color  {
                         ColorAnimation {
                             duration: listView.highlightMoveDuration
                         }
-
                     }
-
                 }
 
                 Image {
@@ -124,13 +117,12 @@ Item {
                     onPressed: {
                         listView.forceActiveFocus();
                         listView.currentIndex = itemDlgt.index;
-                        parent.grabToImage((result) => {
-                            dragItem.Drag.imageSource = result.url;
-                        });
+                        parent.grabToImage(result => {
+                                dragItem.Drag.imageSource = result.url;
+                            });
                     }
                     onDoubleClicked: listView.loadSelectedTrackIntoNextAvailableDeck(false)
                 }
-
             }
 
             highlight: Rectangle {
@@ -138,9 +130,6 @@ Item {
                 border.width: 1
                 color: "transparent"
             }
-
         }
-
     }
-
 }

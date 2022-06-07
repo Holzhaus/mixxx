@@ -14,7 +14,6 @@ Rectangle {
         const trackColor = root.deckPlayer.color;
         if (!trackColor.valid)
             return Theme.backgroundColor;
-
         return Qt.darker(root.deckPlayer.color, 2);
     }
     implicitHeight: gainKnob.height + 10
@@ -28,7 +27,6 @@ Rectangle {
         const trackLocationUrl = deckPlayer.trackLocationUrl;
         if (trackLocationUrl)
             data["text/uri-list"] = trackLocationUrl;
-
         return data;
     }
 
@@ -120,23 +118,20 @@ Rectangle {
                 group: root.group
                 key: "playposition"
             }
-
         }
 
         MouseArea {
             anchors.fill: progressContainer
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
-            onPressed: (mouse) => {
+            onPressed: mouse => {
                 playPositionControl.value = mouse.x / width;
             }
-            onPositionChanged: (mouse) => {
+            onPositionChanged: mouse => {
                 if (containsPress)
                     playPositionControl.value = mouse.x / width;
-
             }
         }
-
     }
 
     Skin.VuMeter {
@@ -189,5 +184,4 @@ Rectangle {
         anchors.fill: parent
         group: root.group
     }
-
 }

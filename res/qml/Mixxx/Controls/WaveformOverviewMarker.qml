@@ -33,9 +33,7 @@ Item {
                 x: 0
                 y: root.height
             }
-
         }
-
     }
 
     Mixxx.ControlProxy {
@@ -43,10 +41,9 @@ Item {
 
         group: root.group
         key: root.key
-        onValueChanged: (value) => {
+        onValueChanged: value => {
             // Math.round saves tons of CPU by avoiding redrawing for fractional pixel positions.
             marker.x = Math.round(root.width * value * Screen.devicePixelRatio) / Screen.devicePixelRatio;
         }
     }
-
 }

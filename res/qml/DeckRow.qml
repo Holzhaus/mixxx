@@ -33,7 +33,6 @@ Item {
                 target: rightDeck
                 anchors.left: mixer.horizontalCenter
             }
-
         },
         State {
             // This State can't be deduplicated by making the first one
@@ -63,7 +62,6 @@ Item {
                 target: rightDeck
                 anchors.left: mixer.right
             }
-
         }
     ]
 
@@ -85,10 +83,9 @@ Item {
         leftDeckGroup: root.leftDeckGroup
         rightDeckGroup: root.rightDeckGroup
 
-        FadeBehavior on visible {
+        FadeBehavior on visible  {
             fadeTarget: mixer
         }
-
     }
 
     Deck {
@@ -116,9 +113,6 @@ Item {
                 property: "implicitHeight"
                 duration: 150
             }
-
         }
-
     }
-
 }
