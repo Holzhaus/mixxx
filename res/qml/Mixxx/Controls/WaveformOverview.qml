@@ -14,7 +14,7 @@ Mixxx.WaveformOverview {
 
         group: root.group
         key: "track_loaded"
-        onValueChanged: (value) => {
+        onValueChanged: value => {
             markers.visible = value;
         }
     }
@@ -42,7 +42,6 @@ Mixxx.WaveformOverview {
                 group: root.group // qmllint disable unqualified
                 hotcueNumber: this.index + 1
             }
-
         }
 
         MixxxControls.WaveformOverviewMarker {
@@ -52,21 +51,18 @@ Mixxx.WaveformOverview {
             group: root.group
             key: "playposition"
         }
-
     }
 
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
-        onPressed: (mouse) => {
+        onPressed: mouse => {
             playPositionControl.value = mouse.x / this.width;
         }
-        onPositionChanged: (mouse) => {
+        onPositionChanged: mouse => {
             if (this.containsPress)
                 playPositionControl.value = mouse.x / this.width;
-
         }
     }
-
 }
