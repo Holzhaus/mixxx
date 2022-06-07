@@ -30,7 +30,7 @@ Mixxx.WaveformOverview {
         id: markers
 
         anchors.fill: parent
-        visible: trackLoadedControl.value
+        visible: trackLoadedControl.value != 0
 
         Repeater {
             model: 8
