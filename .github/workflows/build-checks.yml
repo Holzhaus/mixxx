@@ -15,6 +15,12 @@ jobs:
           - name: clang-tidy
     runs-on: ubuntu-20.04
     name: ${{ matrix.name }}
+    env:
+      # The official GitHub Actions runner images sometimes set these
+      # variables, but we don't want to use vcpkg from the runner. If we use
+      # vcpkg, we use our own prebuilt environment, not the one from the image.
+      VCPKG_INSTALLATION_ROOT: ""
+      VCPKG_ROOT: ""
     steps:
     - name: Check out repository
       uses: actions/checkout@v3

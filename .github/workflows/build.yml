@@ -110,6 +110,11 @@ jobs:
       APPLE_CODESIGN_IDENTITY: 2C2B5D3EDCE82BA55E22E9A67F16F8D03E390870
       MACOS_CODESIGN_OPENSSL_PASSWORD: ${{ secrets.MACOS_CODESIGN_OPENSSL_PASSWORD }}
       MACOS_CODESIGN_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CODESIGN_CERTIFICATE_PASSWORD }}
+      # The official GitHub Actions runner images sometimes set these
+      # variables, but we don't want to use vcpkg from the runner. If we use
+      # vcpkg, we use our own prebuilt environment, not the one from the image.
+      VCPKG_INSTALLATION_ROOT: ""
+      VCPKG_ROOT: ""
 
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
