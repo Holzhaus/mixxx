@@ -45,21 +45,10 @@ if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
 
-# Check if any relevant env vars were set from the build env scripts
-if(DEFINED ENV{X_VCPKG_APPLOCAL_DEPS_INSTALL} AND NOT DEFINED X_VCPKG_APPLOCAL_DEPS_INSTALL)
-  set(X_VCPKG_APPLOCAL_DEPS_INSTALL "$ENV{X_VCPKG_APPLOCAL_DEPS_INSTALL}" CACHE BOOL "")
-endif()
-
-# Set the timestamp of extracted files to the time of the extraction instead of
-# the archived timestamp to make sure that dependent files are rebuilt if the
-# URL changes.
-if(POLICY CMP0135)
-  cmake_policy(SET CMP0135 NEW)
-endif()
-
 # Set up vcpkg
-if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED VCPKG_ROOT)
-    set(VCPKG_ROOT "$ENV{VCPKG_ROOT}")
+if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED VCPKG_ROOT AND NOT "$ENV{VCPKG_ROOT}" STREQUAL "")
+  message(STATUS "Setting VCKG_ROOT from environment: $ENV{VCPKG_ROOT}")
+  set(VCPKG_ROOT "$ENV{VCPKG_ROOT}")
 endif()
 
 if(DEFINED VCPKG_ROOT)
