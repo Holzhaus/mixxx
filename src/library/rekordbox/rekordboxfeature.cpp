@@ -1,6 +1,7 @@
 #include "library/rekordbox/rekordboxfeature.h"
 
 #include <mp3guessenc.h>
+#include <rekordcrate.h>
 
 #include <QMap>
 #include <QMessageBox>
@@ -1497,6 +1498,8 @@ void RekordboxFeature::refreshLibraryModels() {
 
 void RekordboxFeature::activate() {
     qDebug() << "RekordboxFeature::activate()";
+
+    rekordcrate_hello();
 
     // Let a worker thread do the XML parsing
     m_devicesFuture = QtConcurrent::run(findRekordboxDevices);
