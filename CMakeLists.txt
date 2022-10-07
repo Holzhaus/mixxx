@@ -2134,6 +2134,29 @@ target_include_directories(Kaitai SYSTEM PUBLIC lib/kaitai)
 target_compile_definitions(Kaitai PRIVATE KS_STR_ENCODING_NONE)
 target_link_libraries(mixxx-lib PRIVATE Kaitai)
 
+include(FetchContent)
+FetchContent_Declare(
+    Corrosion
+    GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
+    GIT_TAG v0.2.2
+)
+FetchContent_Declare(
+  rekordcrate
+  GIT_REPOSITORY https://github.com/Holzhaus/rekordcrate.git
+  GIT_TAG 4ac2324809c3ddad454c28f81dfe018fd218fb18
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+)
+FetchContent_MakeAvailable(Corrosion rekordcrate)
+
+corrosion_import_crate(
+  MANIFEST_PATH "${rekordcrate_SOURCE_DIR}/Cargo.toml"
+  NO_DEFAULT_FEATURES
+  CRATES rekordcrate-ffi
+)
+target_include_directories(rekordcrate-ffi SYSTEM INTERFACE "${rekordcrate_SOURCE_DIR}/rekordcrate-ffi/target/include")
+target_link_libraries(mixxx-lib PUBLIC rekordcrate-ffi)
+
 # For determining MP3 timing offset cases in Rekordbox library feature
 add_library(MP3GuessEnc STATIC EXCLUDE_FROM_ALL
   lib/mp3guessenc-0.27.4/mp3guessenc.c
