@@ -1095,6 +1095,7 @@ if(QT6)
     src/qml/qmlplayerproxy.cpp
     src/qml/qmlvisibleeffectsmodel.cpp
     src/qml/qmlwaveformoverview.cpp
+    src/qml/qmlwaveform.cpp
   )
 else()
   target_sources(mixxx-lib PRIVATE
