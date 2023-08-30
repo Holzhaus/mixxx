@@ -321,7 +321,7 @@ jobs:
 
       - name: "Test"
         if: matrix.crosscompile != true
-        run: ctest --timeout 45 ${{ matrix.ctest_args }}
+        run: ctest --timeout 45 --output-junit junit.xml ${{ matrix.ctest_args }}
         working-directory: build
         env:
           # Render analyzer waveform tests to an offscreen buffer
@@ -330,6 +330,13 @@ jobs:
           # Windows tests fail randomly if run in parallel
           CTEST_PARALLEL_LEVEL: 1
           CTEST_OUTPUT_ON_FAILURE: 1
+
+      - name: "Upload Test Results"
+        if: always() && matrix.crosscompile != true
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.name}}
+          path: build/junit.xml
 
       - name: Benchmark
         if: matrix.crosscompile != true
