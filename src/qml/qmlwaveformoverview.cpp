@@ -17,7 +17,11 @@ QmlWaveformOverview::QmlWaveformOverview(QQuickItem* parent)
           m_renderer(Renderer::RGB),
           m_colorHigh(0xFF0000),
           m_colorMid(0x00FF00),
-          m_colorLow(0x0000FF) {
+          m_colorLow(0x0000FF),
+          m_gainLow(1.0),
+          m_gainMid(1.0),
+          m_gainHigh(1.0),
+          m_gainAll(1.0) {
 }
 
 QmlPlayerProxy* QmlWaveformOverview::getPlayer() const {
@@ -214,29 +218,33 @@ void QmlWaveformOverview::drawFiltered(QPainter* pPainter,
     if (channels.testFlag(ChannelFlag::LeftChannel)) {
         const uint8_t leftHigh = pWaveform->getHigh(completion);
         pPainter->setPen(m_colorHigh);
-        pPainter->drawLine(QPointF(offsetX, 2 * -leftHigh), QPointF(offsetX, 0.0));
+        pPainter->drawLine(QPointF(offsetX, m_gainAll * m_gainHigh * -leftHigh),
+                QPointF(offsetX, 0.0));
 
         const uint8_t leftMid = pWaveform->getMid(completion);
         pPainter->setPen(m_colorMid);
-        pPainter->drawLine(QPointF(offsetX, 1.5 * -leftMid), QPointF(offsetX, 0.0));
+        pPainter->drawLine(QPointF(offsetX, m_gainAll * m_gainMid * -leftMid),
+                QPointF(offsetX, 0.0));
 
         const uint8_t leftLow = pWaveform->getLow(completion);
         pPainter->setPen(m_colorLow);
-        pPainter->drawLine(QPointF(offsetX, -leftLow), QPointF(offsetX, 0.0));
+        pPainter->drawLine(QPointF(offsetX, m_gainAll * m_gainLow * -leftLow),
+                QPointF(offsetX, 0.0));
     }
 
     if (channels.testFlag(ChannelFlag::RightChannel)) {
         const uint8_t rightHigh = pWaveform->getHigh(completion + 1);
         pPainter->setPen(m_colorHigh);
-        pPainter->drawLine(QPointF(offsetX, 0), QPointF(offsetX, 2 * rightHigh));
+        pPainter->drawLine(QPointF(offsetX, 0),
+                QPointF(offsetX, m_gainAll * m_gainHigh * rightHigh));
 
-        const uint8_t rightMid = pWaveform->getMid(completion + 1) * 2;
+        const uint8_t rightMid = pWaveform->getMid(completion + 1) * m_gainAll * m_gainHigh;
         pPainter->setPen(m_colorMid);
-        pPainter->drawLine(QPointF(offsetX, 0), QPointF(offsetX, 1.5 * rightMid));
+        pPainter->drawLine(QPointF(offsetX, 0), QPointF(offsetX, m_gainAll * m_gainMid * rightMid));
 
         const uint8_t rightLow = pWaveform->getLow(completion + 1);
         pPainter->setPen(m_colorLow);
-        pPainter->drawLine(QPointF(offsetX, 0), QPointF(offsetX, rightLow));
+        pPainter->drawLine(QPointF(offsetX, 0), QPointF(offsetX, m_gainAll * m_gainLow * rightLow));
     }
 }
 

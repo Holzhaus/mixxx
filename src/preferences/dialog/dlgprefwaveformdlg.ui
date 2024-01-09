@@ -7,17 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>677</width>
-    <height>528</height>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Waveform Preferences</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
-
      <item row="0" column="0">
       <widget class="QLabel" name="waveformTypeLabel">
        <property name="sizePolicy">
@@ -40,7 +38,6 @@
        </property>
       </widget>
      </item>
-
      <item row="1" column="0">
       <widget class="QLabel" name="waveformOverviewLabel">
        <property name="toolTip">
@@ -59,7 +56,6 @@ Select from different types of displays for the waveform overview, which differ 
        </property>
       </widget>
      </item>
-
      <item row="0" column="1" colspan="3">
       <widget class="QComboBox" name="waveformTypeComboBox">
        <property name="toolTip">
@@ -68,7 +64,6 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="2" column="0">
       <widget class="QLabel" name="frameRateLabel">
        <property name="text">
@@ -129,7 +124,6 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="3" column="0">
       <widget class="QLabel" name="endOfTrackWarningTimeLabel">
        <property name="text">
@@ -156,6 +150,9 @@ Select from different types of displays for the waveform, which differ primarily
          <width>16777215</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Highlight the waveforms when the last seconds of a track remains.</string>
        </property>
        <property name="minimum">
         <number>0</number>
@@ -190,7 +187,6 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="4" column="0">
       <widget class="QLabel" name="BeatgridWaveform">
        <property name="toolTip">
@@ -236,19 +232,15 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="5" column="0">
       <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Play marker position</string>
-      </property>
+       <property name="text">
+        <string>Play marker position</string>
+       </property>
       </widget>
-      </item>
+     </item>
      <item row="5" column="1" colspan="3">
       <widget class="QSlider" name="playMarkerPositionSlider">
-       <property name="toolTip">
-        <string>Moves the play marker position on the waveforms to the left, right or center (default).</string>
-       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -260,6 +252,9 @@ Select from different types of displays for the waveform, which differ primarily
          <width>16777215</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Moves the play marker position on the waveforms to the left, right or center (default).</string>
        </property>
        <property name="minimum">
         <number>0</number>
@@ -275,7 +270,6 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="6" column="0">
       <widget class="QLabel" name="defaultZoomLabel">
        <property name="text">
@@ -292,7 +286,6 @@ Select from different types of displays for the waveform, which differ primarily
      <item row="6" column="1" colspan="3">
       <widget class="QComboBox" name="defaultZoomComboBox"/>
      </item>
-
      <item row="7" column="1" colspan="3">
       <widget class="QCheckBox" name="synchronizeZoomCheckBox">
        <property name="toolTip">
@@ -303,7 +296,6 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="9" column="1">
       <widget class="QCheckBox" name="normalizeOverviewCheckBox">
        <property name="text">
@@ -311,7 +303,6 @@ Select from different types of displays for the waveform, which differ primarily
        </property>
       </widget>
      </item>
-
      <item row="10" column="0">
       <widget class="QLabel" name="visualGainLabel">
        <property name="text">
@@ -457,7 +448,6 @@ Select from different types of displays for the waveform, which differ primarily
        </item>
       </layout>
      </item>
-
      <item row="11" column="0">
       <widget class="QLabel" name="cachedWaveforms">
        <property name="text">
@@ -489,17 +479,17 @@ Select from different types of displays for the waveform, which differ primarily
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="waveformDiskUsage">
-         <property name="text">
-          <string notr="true">PLACEHOLDER FOR DISK USAGE</string>
-         </property>z
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="text">
+          <string notr="true">PLACEHOLDER FOR DISK USAGE</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -519,67 +509,75 @@ Select from different types of displays for the waveform, which differ primarily
        </item>
       </layout>
      </item>
-
      <item row="13" column="0" colspan="4">
       <widget class="QGroupBox" name="openGLStatus">
        <property name="title">
         <string>OpenGL status</string>
        </property>
        <layout class="QGridLayout" name="GridLayout1">
-
         <item row="0" column="0" colspan="3">
          <widget class="QLabel" name="openGlStatusData">
-         <property name="toolTip">
-          <string>Displays which OpenGL version is supported by the current platform.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-
-       <item row="1" column="0">
-        <widget class="QLabel" name="openGlStatusLabel_2">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Average frame rate</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="2">
-        <widget class="QLabel" name="frameRateAverage">
-         <property name="toolTip">
-          <string>Displays the actual frame rate.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-
-     </widget>
-    </item>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Displays which OpenGL version is supported by the current platform.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="openGlStatusLabel">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Average frame rate</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QLabel" name="frameRateAverage">
+          <property name="toolTip">
+           <string>Displays the actual frame rate.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QCheckBox" name="constantScrollingRateCheckBox">
+       <property name="toolTip">
+        <string>Waveform will always scroll at the same speed. This means that if the track play rate is changed, the zoom level will be adjusted to keep the scrolling pace. If disabled, playback ratio will change the scrolling speed.</string>
+       </property>
+       <property name="text">
+        <string>Waveform always scroll at the same speed</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-
    <item row="1" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -593,7 +591,6 @@ Select from different types of displays for the waveform, which differ primarily
      </property>
     </spacer>
    </item>
-
   </layout>
  </widget>
  <tabstops>

@@ -16,19 +16,29 @@ ShaderEffect {
     property color highColor: "#0000FF"
     property color midColor: "#00FF00"
     property color lowColor: "#FF0000"
-    property real highGain: filterWaveformEnableControl.value ? (filterHighKillControl.value ? 0 : filterHighControl.value) : 1
-    property real midGain: filterWaveformEnableControl.value ? (filterMidKillControl.value ? 0 : filterMidControl.value) : 1
-    property real lowGain: filterWaveformEnableControl.value ? (filterLowKillControl.value ? 0 : filterLowControl.value) : 1
-    property real allGain: pregainControl.value
+
+    property var visualGainAll: Mixxx.Config.getDouble("[Waveform]", "VisualGain_0", 1.0)
+    property var visualGainLow: Mixxx.Config.getDouble("[Waveform]", "VisualGain_1", 1.0)
+    property var visualGainMid: Mixxx.Config.getDouble("[Waveform]", "VisualGain_2", 1.0)
+    property var visualGainHigh: Mixxx.Config.getDouble("[Waveform]", "VisualGain_3", 1.0)
+
+    property real highGain: (filterWaveformEnableControl.value ? (filterHighKillControl.value ? 0 : filterHighControl.value) : 1) * visualGainHigh
+    property real midGain: (filterWaveformEnableControl.value ? (filterMidKillControl.value ? 0 : filterMidControl.value) : 1) * visualGainMid
+    property real lowGain: (filterWaveformEnableControl.value ? (filterLowKillControl.value ? 0 : filterLowControl.value) : 1) * visualGainLow
+    property real allGain: gainControl.value * 2.0 * visualGainAll // See WaveformWidgetRenderer::getGain()
+
+    Component.onCompleted: () => {
+        console.warn(`visualGainAll: ${visualGainAll}, visualGainLow: ${visualGainLow}, visualGainMid: ${visualGainMid}, visualGainHigh: ${visualGainHigh}`)
+    }
     property Image waveformTexture
 
     fragmentShader: "qrc:/shaders/rgbsignal_qml.frag.qsb"
 
     Mixxx.ControlProxy {
-        id: pregainControl
+        id: gainControl
 
         group: root.group
-        key: "pregain"
+        key: "total_gain"
     }
 
     Mixxx.ControlProxy {

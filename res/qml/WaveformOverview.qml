@@ -124,6 +124,10 @@ Item {
             colorHigh: Theme.white
             colorMid: Theme.blue
             colorLow: Theme.green
+            gainHigh: Mixxx.Config.getDouble("[Waveform]", "VisualGain_3", 1.0)
+            gainAll: Mixxx.Config.getDouble("[Waveform]", "VisualGain_0", 1.0)
+            gainLow: Mixxx.Config.getDouble("[Waveform]", "VisualGain_1", 1.0)
+            gainMid: Mixxx.Config.getDouble("[Waveform]", "VisualGain_2", 1.0)
             group: root.group
         }
     }

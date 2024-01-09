@@ -39,6 +39,22 @@ int QmlConfigProxy::getMultiSamplingLevel() {
     return m_pConfig->getValue(ConfigKey(kPreferencesGroup, kMultiSamplingKey), 0);
 }
 
+QString QmlConfigProxy::getString(QString group, QString item, QString defaultValue) {
+    return m_pConfig->getValue(ConfigKey(group, item), defaultValue);
+}
+
+int QmlConfigProxy::getInt(QString group, QString item, int defaultValue) {
+    return m_pConfig->getValue(ConfigKey(group, item), defaultValue);
+}
+
+bool QmlConfigProxy::getBool(QString group, QString item, bool defaultValue) {
+    return m_pConfig->getValue(ConfigKey(group, item), defaultValue);
+}
+
+double QmlConfigProxy::getDouble(QString group, QString item, double defaultValue) {
+    return m_pConfig->getValue(ConfigKey(group, item), defaultValue);
+}
+
 // static
 QmlConfigProxy* QmlConfigProxy::create(QQmlEngine* pQmlEngine, QJSEngine* pJsEngine) {
     // The implementation of this method is mostly taken from the code example
