@@ -103,7 +103,7 @@ ApplicationWindow {
 
             group: "[Channel3]"
             width: root.width
-            height: 60
+            height: root.show4decks ? 60 : 92
             visible: root.show4decks && !root.maximizeLibrary
 
             FadeBehavior on visible {
@@ -116,7 +116,7 @@ ApplicationWindow {
 
             group: "[Channel1]"
             width: root.width
-            height: 60
+            height: root.show4decks ? 60 : 92
             visible: !root.maximizeLibrary
 
             FadeBehavior on visible {
@@ -129,7 +129,7 @@ ApplicationWindow {
 
             group: "[Channel2]"
             width: root.width
-            height: 60
+            height: root.show4decks ? 60 : 92
             visible: !root.maximizeLibrary
 
             FadeBehavior on visible {
@@ -142,7 +142,7 @@ ApplicationWindow {
 
             group: "[Channel4]"
             width: root.width
-            height: 60
+            height: root.show4decks ? 60 : 92
             visible: root.show4decks && !root.maximizeLibrary
 
             FadeBehavior on visible {

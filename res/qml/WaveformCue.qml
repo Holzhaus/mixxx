@@ -14,12 +14,14 @@ Item {
 
     property real markerHeight: root.height
     property color labelColor: Theme.waveformMarkerLabel
-    property real radiusSize: 4
+    property real radiusSize: 2
     property string cueLabel: qsTr("CUE")
 
     FontMetrics {
         id: fontMetrics
         font.family: Theme.fontFamily
+        font.pixelSize: 12
+        font.weight: Font.Normal
     }
 
     property rect contentRect: fontMetrics.tightBoundingRect(cueLabel)
@@ -32,23 +34,28 @@ Item {
             strokeStyle: ShapePath.SolidLine
             startX: -1; startY: 0
 
-            PathLine { x: 8; y: 0 }
-            PathLine { x: 8 - radiusSize + contentRect.width; y: 0 }
             PathArc {
-                x: 8 + contentRect.width
-                y: radiusSize
+                x: 2
+                y: radiusSize /2
+                radiusX: radiusSize /2; radiusY: radiusSize /2
+                direction: PathArc.Clockwise
+            }
+            PathLine { x: 4 - radiusSize + contentRect.width; y: radiusSize /2 }
+            PathArc {
+                x: 4 + contentRect.width
+                y: radiusSize * 1.5
                 radiusX: radiusSize; radiusY: radiusSize
                 direction: PathArc.Clockwise
             }
-            PathLine { x: 8 + contentRect.width; y: 16 - radiusSize }
+            PathLine { x: 4 + contentRect.width; y: 16 - radiusSize /2 }
             PathArc {
-                x: 8 - radiusSize + contentRect.width
-                y: 16
+                x: 4 - radiusSize + contentRect.width
+                y: 16 + radiusSize /2
                 radiusX: radiusSize; radiusY: radiusSize
                 direction: PathArc.Clockwise
             }
-            PathLine { x: 8; y: 16 }
-            PathLine { x: 2; y: 16 }
+            PathLine { x: 4; y: 16 + radiusSize /2 }
+            PathLine { x: 2; y: 16 + radiusSize /2 }
             PathLine { x: 2; y: markerHeight }
             PathLine { x: -1; y: markerHeight }
             PathLine { x: -1; y: 0 }
@@ -59,11 +66,11 @@ Item {
             fillColor: labelColor
             strokeColor: labelColor
             PathText {
-                x: 3
-                y: 3
+                x: 2
+                y: 4
                 font.family: Theme.fontFamily
-                font.pixelSize: 13
-                font.weight: Font.Bold
+                font.pixelSize: 12
+                font.weight: Font.Normal
                 text: cueLabel
             }
         }

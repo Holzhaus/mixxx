@@ -1,18 +1,22 @@
 import Mixxx 1.0 as Mixxx
 import QtQuick 2.12
 
+import "Theme"
+
 ShaderEffect {
     id: root
 
-    property string group // required
+    required property string group
+
     property var deckPlayer: Mixxx.PlayerManager.getPlayer(group)
-    property size framebufferSize: Qt.size(width, height)
+    property size framebufferSize: Qt.size(width, height*oversamplingFactor)
     property int waveformLength: root.deckPlayer.waveformLength
     property int textureSize: root.deckPlayer.waveformTextureSize
     property int textureStride: root.deckPlayer.waveformTextureStride
     property real firstVisualIndex: 1
+    property int oversamplingFactor: Math.max(Mixxx.Config.getMultiSamplingLevel(), 1)
     property real lastVisualIndex: root.deckPlayer.waveformLength / 2
-    property color axesColor: "#FFFFFF"
+    property color axesColor: Theme.waveformBeatColor
     property color highColor: "#0000FF"
     property color midColor: "#00FF00"
     property color lowColor: "#FF0000"
@@ -27,9 +31,9 @@ ShaderEffect {
     property real lowGain: (filterWaveformEnableControl.value ? (filterLowKillControl.value ? 0 : filterLowControl.value) : 1) * visualGainLow
     property real allGain: gainControl.value * 2.0 * visualGainAll // See WaveformWidgetRenderer::getGain()
 
-    Component.onCompleted: () => {
-        console.warn(`visualGainAll: ${visualGainAll}, visualGainLow: ${visualGainLow}, visualGainMid: ${visualGainMid}, visualGainHigh: ${visualGainHigh}`)
-    }
+    // Component.onCompleted: () => {
+    //     console.warn(`highGain: ${highGain}, midGain: ${midGain}, lowGain: ${lowGain}, allGain: ${allGain}(${gainControl.value},${visualGainAll}), framebufferSize: ${framebufferSize}`)
+    // }
     property Image waveformTexture
 
     fragmentShader: "qrc:/shaders/rgbsignal_qml.frag.qsb"

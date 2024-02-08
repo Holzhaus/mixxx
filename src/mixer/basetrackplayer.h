@@ -165,6 +165,7 @@ class BaseTrackPlayerImpl : public BaseTrackPlayer {
 
     // Waveform display related controls
     std::unique_ptr<ControlObject> m_pWaveformZoom;
+    std::unique_ptr<ControlProxy> m_pGlobalWaveformZoom;
     std::unique_ptr<ControlPushButton> m_pWaveformZoomUp;
     std::unique_ptr<ControlPushButton> m_pWaveformZoomDown;
     std::unique_ptr<ControlPushButton> m_pWaveformZoomSetDefault;

@@ -16,7 +16,7 @@ Item {
     property real disabledOpacity: 0.5
 
     property real markerHeight: root.height
-    property real radiusSize: 4
+    property real radiusSize: 2
     property bool enabled: true
 
     Rectangle {

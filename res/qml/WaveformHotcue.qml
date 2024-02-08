@@ -25,12 +25,14 @@ Item {
 
     property real markerHeight: root.height
     property color labelColor: Theme.waveformMarkerLabel
-    property real radiusSize: 4
+    property real radiusSize: 2
     property string hotcueLabel: label != "" ? `${hotcueNumber}: ${label}` : `${hotcueNumber}`
 
     FontMetrics {
         id: fontMetrics
         font.family: Theme.fontFamily
+        font.pixelSize: 12
+        font.weight: Font.Normal
     }
 
     property rect contentRect: fontMetrics.tightBoundingRect(hotcueLabel)
@@ -50,17 +52,24 @@ Item {
             startX: -1; startY: 0
 
             PathLine { x: 1; y: 0 }
-            PathLine { x: 1; y: markerHeight - 16 }
-            PathLine { x: 8 - radiusSize + contentRect.width; y: markerHeight - 16 }
+            PathLine { x: 1; y: markerHeight - 16 - radiusSize }
+            PathLine { x: 8 - radiusSize + contentRect.width; y: markerHeight - 16 - radiusSize }
             PathArc {
                 x: 8 + contentRect.width
-                y: markerHeight - 16 + radiusSize
+                y: markerHeight - 16
                 radiusX: radiusSize; radiusY: radiusSize
                 direction: PathArc.Clockwise
             }
-            PathLine { x: 8 + contentRect.width; y: markerHeight - radiusSize }
+            PathLine { x: 8 + contentRect.width; y: markerHeight - 2 * radiusSize }
             PathArc {
                 x: 8 - radiusSize + contentRect.width
+                y: markerHeight - radiusSize
+                radiusX: radiusSize; radiusY: radiusSize
+                direction: PathArc.Clockwise
+            }
+            PathLine { x: 1 + radiusSize; y: markerHeight - radiusSize }
+            PathArc {
+                x: 1
                 y: markerHeight
                 radiusX: radiusSize; radiusY: radiusSize
                 direction: PathArc.Clockwise
@@ -89,10 +98,10 @@ Item {
             strokeColor: labelColor
             PathText {
                 x: 3
-                y: markerHeight - 13
+                y: markerHeight - 13 - radiusSize
                 font.family: Theme.fontFamily
-                font.pixelSize: 13
-                font.weight: Font.Medium
+                font.pixelSize: 12
+                font.weight: Font.Normal
                 text: hotcueLabel
             }
         }

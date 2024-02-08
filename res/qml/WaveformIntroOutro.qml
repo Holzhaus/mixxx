@@ -14,7 +14,7 @@ Item {
     property bool isIntro: true
 
     property real markerHeight: root.height
-    property real radiusSize: 4
+    property real radiusSize: 2
 
     Rectangle {
         anchors.fill: parent
@@ -24,7 +24,7 @@ Item {
     Shape {
         ShapePath {
             strokeWidth: 0
-            strokeColor: 'transparent'
+            strokeColor: '#3f85df'
             fillColor: root.mainColor
             strokeStyle: ShapePath.SolidLine
             startX: -1; startY: 0
@@ -52,7 +52,7 @@ Item {
         visible: root.width != 0
         ShapePath {
             strokeWidth: 0
-            strokeColor: 'transparent'
+            strokeColor: '#3f85df'
             fillColor: root.mainColor
             strokeStyle: ShapePath.SolidLine
             startX: root.width - 1; startY: 0

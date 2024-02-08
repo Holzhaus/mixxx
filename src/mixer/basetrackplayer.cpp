@@ -147,6 +147,10 @@ BaseTrackPlayerImpl::BaseTrackPlayerImpl(
     m_pWaveformZoom->connectValueChangeRequest(this,
             &BaseTrackPlayerImpl::slotWaveformZoomValueChangeRequest,
             Qt::DirectConnection);
+    // The following CO is used to indicate what zoom level should be ably if
+    // waveform zoom is sync across channels
+    m_pGlobalWaveformZoom =
+            std::make_unique<ControlProxy>(ConfigKey("[App]", "waveform_zoom"));
     m_pWaveformZoom->set(1.0);
     m_pWaveformZoomUp = std::make_unique<ControlPushButton>(
             ConfigKey(getGroup(), "waveform_zoom_up"));
@@ -853,6 +857,7 @@ void BaseTrackPlayerImpl::slotWaveformZoomValueChangeRequest(double v) {
     if (v <= WaveformWidgetRenderer::s_waveformMaxZoom
             && v >= WaveformWidgetRenderer::s_waveformMinZoom) {
         m_pWaveformZoom->setAndConfirm(v);
+        m_pGlobalWaveformZoom->set(v);
     }
 }
 

@@ -183,7 +183,6 @@ DlgPrefWaveform::~DlgPrefWaveform() {
 }
 
 void DlgPrefWaveform::slotUpdate() {
-    WaveformWidgetFactory* factory = WaveformWidgetFactory::instance();
     int currentIndex = -1;
 
 #ifdef MIXXX_USE_QML
@@ -194,6 +193,7 @@ void DlgPrefWaveform::slotUpdate() {
     } else
 #endif
     {
+        WaveformWidgetFactory* factory = WaveformWidgetFactory::instance();
         if (factory->isOpenGlAvailable() || factory->isOpenGlesAvailable()) {
             openGlStatusData->setText(factory->getOpenGLVersion());
         } else {
@@ -260,6 +260,7 @@ void DlgPrefWaveform::slotUpdate() {
     } else
 #endif
     {
+        WaveformWidgetFactory* factory = WaveformWidgetFactory::instance();
         frameRateSpinBox->setValue(factory->getFrameRate());
         frameRateSlider->setValue(factory->getFrameRate());
         endOfTrackWarningTimeSpinBox->setValue(factory->getEndOfTrackWarningTime());

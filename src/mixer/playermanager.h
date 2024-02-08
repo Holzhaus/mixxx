@@ -277,6 +277,7 @@ class PlayerManager : public QObject, public PlayerManagerInterface {
     EngineMixer* m_pEngine;
     SamplerBank* m_pSamplerBank;
     std::unique_ptr<ControlObject> m_pCONumDecks;
+    std::unique_ptr<ControlObject> m_pCOWaveformZoom;
     std::unique_ptr<ControlObject> m_pCONumSamplers;
     std::unique_ptr<ControlObject> m_pCONumPreviewDecks;
     std::unique_ptr<ControlObject> m_pCONumMicrophones;

@@ -131,6 +131,7 @@ void QmlPlayerProxy::slotTrackLoaded(TrackPointer pTrack) {
                 &QmlPlayerProxy::slotHotcuesChanged);
         slotBeatsChanged();
         slotHotcuesChanged();
+        slotWaveformChanged();
     }
     emit trackChanged();
     emit trackLoaded();
@@ -190,9 +191,9 @@ void QmlPlayerProxy::slotWaveformChanged() {
     const TrackPointer pTrack = m_pCurrentTrack;
     if (pTrack) {
         const ConstWaveformPointer pWaveform = pTrack->getWaveform();
-        const int textureWidth = pWaveform->getTextureStride();
-        const int textureHeight = pWaveform->getTextureSize() / pWaveform->getTextureStride();
         if (pWaveform) {
+            const int textureWidth = pWaveform->getTextureStride();
+            const int textureHeight = pWaveform->getTextureSize() / pWaveform->getTextureStride();
             const uchar* data = reinterpret_cast<const uchar*>(pWaveform->data());
             m_waveformTexture = QImage(data, textureWidth, textureHeight, QImage::Format_RGBA8888);
             emit waveformTextureChanged();
