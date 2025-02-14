@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+#
+# This workflow check pull requests and fail if no milestone is set. This is
+# done to make sure that every PR has a milestone set.
+
+name: "Enforce Milestones"
+on:
+  pull_request:
+    types: [opened, reopened, milestoned, demilestoned]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    permissions:
+      contents: read # for actions/labeler to determine modified files
+      pull-requests: read # for actions/labeler to add labels to PRs
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: jq -e .milestone <<< "${PULL_REQUEST_OBJ}"
+        env:
+          PULL_REQUEST_OBJ: ${{ toJSON(pull_request) }}
